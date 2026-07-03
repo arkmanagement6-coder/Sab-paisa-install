@@ -1,0 +1,9 @@
+# Ignore large reference files
+reference_site.html
+reference_products.json
+
+# Local files
+.DS_Store
+Thumbs.db
+node_modules/
+scratch/

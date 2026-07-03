@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | IKKO DIGITAL</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .account-page-layout {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            font-family: var(--font-body);
+        }
+        .account-header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .account-header h1 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--primary);
+            margin: 0;
+        }
+        .logout-link-btn {
+            background: transparent;
+            border: 1px solid #d3d3d3;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            color: var(--text-muted);
+        }
+        .logout-link-btn:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+            background-color: rgba(229, 46, 46, 0.02);
+        }
+        .account-grid {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 40px;
+        }
+        .profile-summary-card {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .profile-summary-card h2 {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+        .profile-detail-item {
+            margin-bottom: 16px;
+        }
+        .profile-detail-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .profile-detail-value {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+        .orders-history-card {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .orders-history-card h2 {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+        .login-box-card {
+            max-width: 450px;
+            margin: 60px auto;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: var(--shadow-sm);
+        }
+        .login-box-card h2 {
+            font-family: var(--font-heading);
+            font-size: 1.75rem;
+            color: var(--primary);
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .login-box-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .account-form-group {
+            margin-bottom: 20px;
+        }
+        .account-form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: var(--primary);
+        }
+        .account-form-group input {
+            width: 100%;
+            padding: 11px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            outline: none;
+            box-sizing: border-box;
+            transition: var(--transition-fast);
+        }
+        .account-form-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(229, 46, 46, 0.1);
+        }
+        .order-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .order-history-item {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .order-item-header {
+            background-color: var(--bg-main);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .order-header-left {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .order-header-meta {
+            font-size: 0.8rem;
+        }
+        .order-meta-label {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+        .order-meta-val {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .order-status-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            border: 1px solid transparent;
+        }
+        .status-paid {
+            background-color: #ebf8ff;
+            color: #2b6cb0;
+            border-color: #bee3f8;
+        }
+        .status-cancelled {
+            background-color: #fff5f5;
+            color: #c53030;
+            border-color: #fed7d7;
+        }
+        .status-pending {
+            background-color: #fffaf0;
+            color: #dd6b20;
+            border-color: #feebc8;
+        }
+        .order-item-body {
+            padding: 20px;
+        }
+        .order-product-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .order-product-row:last-child {
+            margin-bottom: 0;
+        }
+        .order-product-row img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+        .order-product-info {
+            flex: 1;
+        }
+        .order-product-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            display: block;
+        }
+        .order-product-qty {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .order-product-price {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .no-orders-box {
+            text-align: center;
+            padding: 40px 0;
+        }
+        .no-orders-box p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+        .btn-action-primary-orange {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: inline-block;
+            text-decoration: none;
+            box-shadow: var(--shadow-glow);
+        }
+        .btn-action-primary-orange:hover {
+            background-color: #c42424;
+            transform: translateY(-1px);
+        }
+        @media (max-width: 768px) {
+            .account-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header will be rendered here by app-core.js?v=11.0 -->
+    <div id="header-placeholder"></div>
+
+    <main class="account-page-layout" id="account-main-content">
+        <!-- Rendered dynamically based on auth status -->
+    </main>
+
+    <!-- Footer will be rendered here by app-core.js?v=11.0 -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Core Scripts -->
+    <script src="app-core.js?v=11.0"></script>
+    <script>
+        function checkAndRenderAccount() {
+            const container = document.getElementById('account-main-content');
+            if (!container) return;
+
+            const customer = JSON.parse(localStorage.getItem('ikko_customer'));
+
+            if (!customer) {
+                // Render Login Form
+                container.innerHTML = `
+                    <div class="login-box-card">
+                        <h2>Sign In / Register</h2>
+                        <p>Access your personal orders, cart history, and speed up checkout by saving your details.</p>
+                        <form id="customer-login-form" onsubmit="handleCustomerLogin(event)">
+                            <div class="account-form-group">
+                                <label for="login-name">Full Name *</label>
+                                <input type="text" id="login-name" required placeholder="e.g. John Doe">
+                            </div>
+                            <div class="account-form-group">
+                                <label for="login-phone">Mobile Number *</label>
+                                <input type="tel" id="login-phone" required pattern="[0-9]{10}" title="Enter a valid 10-digit mobile number" placeholder="e.g. 9876543210">
+                            </div>
+                            <div class="account-form-group">
+                                <label for="login-email">Email Address *</label>
+                                <input type="email" id="login-email" required placeholder="e.g. customer@example.com">
+                            </div>
+                            <button type="submit" class="btn-action-primary-orange" style="width: 100%; margin-top: 10px;">Login / Register</button>
+                        </form>
+                    </div>
+                `;
+            } else {
+                // Render Customer Dashboard
+                const orders = getOrders();
+                // Filter orders matching customer phone or email
+                const customerOrders = orders.filter(o => 
+                    o.customer && 
+                    (o.customer.phone === customer.phone || o.customer.email === customer.email)
+                ).sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                let ordersHtml = '';
+                if (customerOrders.length === 0) {
+                    ordersHtml = `
+                        <div class="no-orders-box">
+                            <p>You haven't placed any orders yet.</p>
+                            <a href="index.html" class="btn-action-primary-orange">Start Shopping</a>
+                        </div>
+                    `;
+                } else {
+                    ordersHtml = `
+                        <div class="order-history-list">
+                            ${customerOrders.map(o => {
+                                let statusClass = 'status-pending';
+                                let statusLabel = 'Awaiting Status';
+                                if (o.status === 'pending') {
+                                    statusClass = 'status-paid';
+                                    statusLabel = 'Paid & Confirmed';
+                                } else if (o.status === 'cancelled') {
+                                    statusClass = 'status-cancelled';
+                                    statusLabel = 'Payment Failed';
+                                } else if (o.status === 'delivered') {
+                                    statusClass = 'status-paid';
+                                    statusLabel = 'Delivered';
+                                }
+
+                                const dateStr = new Date(o.date).toLocaleDateString('en-IN', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                });
+
+                                return `
+                                    <div class="order-history-item">
+                                        <div class="order-item-header">
+                                            <div class="order-header-left">
+                                                <div class="order-header-meta">
+                                                    <div class="order-number-wrapper" style="margin-bottom: 2px;">
+                                                        <div class="order-meta-label">Order Number</div>
+                                                        <div class="order-meta-val" style="font-family: monospace; font-size: 0.9rem;">${o.id}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="order-header-meta">
+                                                    <div class="order-meta-label">Date Placed</div>
+                                                    <div class="order-meta-val">${dateStr}</div>
+                                                </div>
+                                                <div class="order-header-meta">
+                                                    <div class="order-meta-label">Total Amount</div>
+                                                    <div class="order-meta-val">${formatPrice(o.total)}</div>
+                                                </div>
+                                            </div>
+                                            <span class="order-status-badge ${statusClass}">${statusLabel}</span>
+                                        </div>
+                                        <div class="order-item-body">
+                                            ${o.items.map(item => `
+                                                <div class="order-product-row">
+                                                    <img src="${item.image}" alt="${item.title}">
+                                                    <div class="order-product-info">
+                                                        <span class="order-product-title">${item.title}</span>
+                                                        <span class="order-product-qty">Qty: ${item.qty}</span>
+                                                    </div>
+                                                    <span class="order-product-price">${item.price}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                }
+
+                container.innerHTML = `
+                    <div class="account-header">
+                        <h1>My Account Portal</h1>
+                        <button class="logout-link-btn" onclick="handleCustomerLogout()">Sign Out</button>
+                    </div>
+                    <div class="account-grid">
+                        <div class="profile-summary-card">
+                            <h2>My Profile</h2>
+                            <div class="profile-detail-item">
+                                <span class="profile-detail-label">Name</span>
+                                <span class="profile-detail-value">${customer.name}</span>
+                            </div>
+                            <div class="profile-detail-item">
+                                <span class="profile-detail-label">Mobile</span>
+                                <span class="profile-detail-value">+91 ${customer.phone}</span>
+                            </div>
+                            <div class="profile-detail-item">
+                                <span class="profile-detail-label">Email</span>
+                                <span class="profile-detail-value">${customer.email}</span>
+                            </div>
+                        </div>
+                        <div class="orders-history-card">
+                            <h2>My Order History</h2>
+                            ${ordersHtml}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function handleCustomerLogin(e) {
+            e.preventDefault();
+            const name = document.getElementById('login-name').value.trim();
+            const phone = document.getElementById('login-phone').value.trim();
+            const email = document.getElementById('login-email').value.trim();
+
+            if (!name || !phone || !email) {
+                alert('Please fill out all mandatory fields.');
+                return;
+            }
+
+            if (phone.length !== 10 || isNaN(phone)) {
+                alert('Please enter a valid 10-digit mobile number.');
+                return;
+            }
+
+            const customer = {
+                name,
+                phone,
+                email
+            };
+
+            localStorage.setItem('ikko_customer', JSON.stringify(customer));
+            
+            // Re-render header dynamically to update text from "LOGIN" to "ACCOUNT"
+            renderHeader();
+            
+            // Re-render account portal
+            checkAndRenderAccount();
+        }
+
+        function handleCustomerLogout() {
+            if (confirm('Are you sure you want to sign out?')) {
+                localStorage.removeItem('ikko_customer');
+                
+                // Re-render header
+                renderHeader();
+                
+                // Re-render account portal
+                checkAndRenderAccount();
+            }
+        }
+
+        window.addEventListener('load', () => {
+            checkAndRenderAccount();
+        });
+    </script>
+</body>
+</html>

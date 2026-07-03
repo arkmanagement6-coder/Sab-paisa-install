@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collections | IKKO DIGITAL</title>
+    <link rel="stylesheet" href="style.css?v=2.4">
+    <style>
+        .collections-container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .collections-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .breadcrumbs {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+        .breadcrumbs a:hover {
+            color: var(--accent);
+        }
+        .collections-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .collections-title {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+        .collections-count {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .collections-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 40px;
+        }
+        .collections-sidebar-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary);
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+        .collections-sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .collections-sidebar-link {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: var(--transition-fast);
+            display: block;
+            padding: 5px 0;
+        }
+        .collections-sidebar-link:hover, .collections-sidebar-link.active {
+            color: var(--accent);
+            padding-left: 5px;
+        }
+        
+        .collections-toolbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            background-color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+        .toolbar-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+        .toolbar-select {
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+            background-color: white;
+        }
+        
+        @media (max-width: 992px) {
+            .collections-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .collections-sidebar {
+                display: block;
+                margin-bottom: 5px;
+            }
+            .collections-sidebar-title {
+                display: none;
+            }
+            .collections-sidebar-menu {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 10px 5px;
+                gap: 12px;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none; /* Firefox */
+            }
+            .collections-sidebar-menu::-webkit-scrollbar {
+                display: none; /* Chrome, Safari, Opera */
+            }
+            .collections-sidebar-menu li {
+                flex-shrink: 0;
+            }
+            .collections-sidebar-link {
+                background: #ffffff;
+                border: 1px solid rgba(0, 0, 0, 0.05);
+                padding: 8px 20px;
+                font-family: var(--font-heading);
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: var(--text-muted);
+                border-radius: 30px;
+                white-space: nowrap;
+                transition: var(--transition-premium);
+                box-shadow: 0 2px 6px rgba(0,0,0,0.01);
+                display: inline-block;
+            }
+            .collections-sidebar-link:hover, 
+            .collections-sidebar-link.active {
+                padding-left: 20px !important; /* Override vertical layout's padding-left shift */
+            }
+            .collections-sidebar-link:hover {
+                color: var(--primary);
+                border-color: rgba(0, 0, 0, 0.1);
+                background-color: #f8fafc;
+            }
+            .collections-sidebar-link.active {
+                background-color: var(--primary);
+                color: #ffffff;
+                border-color: var(--primary);
+                box-shadow: 0 4px 15px rgba(18, 28, 48, 0.12);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header will be rendered here by app-core.js?v=11.0 -->
+    <div id="header-placeholder"></div>
+
+    <main class="collections-container">
+        <!-- Collection Title Header -->
+        <div class="collections-header">
+            <div class="breadcrumbs">
+                <a href="index.html">Home</a> &nbsp;/&nbsp; <a href="collections.html?type=all">Collections</a> &nbsp;/&nbsp; <span id="breadcrumb-current">All Products</span>
+            </div>
+            <div class="collections-title-row">
+                <h1 class="collections-title" id="page-title">All Products</h1>
+                <span class="collections-count" id="product-count-badge">0 products</span>
+            </div>
+        </div>
+
+        <!-- Collections Two-Column Layout -->
+        <div class="collections-layout">
+            <!-- Sidebar Filters -->
+            <aside class="collections-sidebar">
+                <div class="collections-sidebar-title">Collections</div>
+                <ul class="collections-sidebar-menu">
+                    <li><a href="collections.html?type=all" class="collections-sidebar-link" id="side-all">All Products</a></li>
+                    <li><a href="collections.html?type=tablets" class="collections-sidebar-link" id="side-tablets">iPads & Tablets</a></li>
+                    <li><a href="collections.html?type=audio" class="collections-sidebar-link" id="side-audio">Audio & Earbuds</a></li>
+                    <li><a href="collections.html?type=smart-phone" class="collections-sidebar-link" id="side-smart-phone">Smart Phones</a></li>
+                </ul>
+            </aside>
+
+            <!-- Products Display Column -->
+            <div class="collections-content">
+                <!-- Sorting Toolbar -->
+                <div class="collections-toolbar">
+                    <span class="toolbar-label">Sort by:</span>
+                    <select id="sort-selector" class="toolbar-select" onchange="handleSortChange()">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="title-az">Alphabetically: A-Z</option>
+                    </select>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="products-grid" id="collections-grid-container">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer will be rendered here by app-core.js?v=11.0 -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Core Scripts -->
+    <script src="app-core.js?v=11.0"></script>
+    <script>
+        let currentType = 'all';
+        let sortedProducts = [];
+
+        // Categorize helper
+        function getProductCategory(product) {
+            if (product.category) return product.category;
+            const title = product.title.toLowerCase();
+            if (title.includes('ipad') || title.includes('tab')) {
+                return 'tablets';
+            }
+            if (title.includes('airdopes') || title.includes('ufo') || title.includes('earbuds') || title.includes('audio') || title.includes('tws')) {
+                return 'audio';
+            }
+            if (title.includes('smartphone') || title.includes('phone') || product.id === '8270415000010') {
+                return 'smart-phone';
+            }
+            return 'gadgets';
+        }
+
+        function getCollectionTitle(type) {
+            switch(type) {
+                case 'tablets': return 'iPads & Tablets';
+                case 'audio': return 'Audio & Earbuds';
+                case 'smart-phone': return 'Smart Phones';
+                case 'all':
+                default:
+                    return 'All Products';
+            }
+        }
+
+        async function loadCollectionData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            currentType = urlParams.get('type') || 'all';
+
+            // Update Page Titles and Breadcrumbs
+            const title = getCollectionTitle(currentType);
+            document.getElementById('page-title').innerText = title;
+            document.getElementById('breadcrumb-current').innerText = title;
+            document.title = `${title} | IKKO DIGITAL`;
+
+            // Active Sidebar Item Highlight
+            document.querySelectorAll('.collections-sidebar-link').forEach(link => link.classList.remove('active'));
+            const activeSidebarLink = document.getElementById(`side-${currentType}`);
+            if (activeSidebarLink) activeSidebarLink.classList.add('active');
+
+            // Get products
+            const allProducts = await getProducts();
+            
+            // Filter by type
+            if (currentType === 'all') {
+                sortedProducts = [...allProducts];
+            } else {
+                sortedProducts = allProducts.filter(p => getProductCategory(p) === currentType);
+            }
+
+            // Update count
+            document.getElementById('product-count-badge').innerText = `${sortedProducts.length} products`;
+
+            // Initial sort
+            handleSortChange();
+        }
+
+        async function handleSortChange() {
+            const sortVal = document.getElementById('sort-selector').value;
+
+            if (sortVal === 'price-low') {
+                sortedProducts.sort((a, b) => {
+                    const priceA = parsePrice(a.price) || 999;
+                    const priceB = parsePrice(b.price) || 999;
+                    return priceA - priceB;
+                });
+            } else if (sortVal === 'price-high') {
+                sortedProducts.sort((a, b) => {
+                    const priceA = parsePrice(a.price) || 999;
+                    const priceB = parsePrice(b.price) || 999;
+                    return priceB - priceA;
+                });
+            } else if (sortVal === 'title-az') {
+                sortedProducts.sort((a, b) => a.title.localeCompare(b.title));
+            } else {
+                // Featured (default load order)
+                const allProducts = await getProducts();
+                if (currentType === 'all') {
+                    sortedProducts = [...allProducts];
+                } else {
+                    sortedProducts = allProducts.filter(p => getProductCategory(p) === currentType);
+                }
+            }
+
+            renderGrid();
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('collections-grid-container');
+            if (!grid) return;
+
+            if (sortedProducts.length === 0) {
+                grid.innerHTML = '<div class="no-products-msg" style="grid-column: span 3; text-align: center; padding: 40px; color: var(--text-muted);">No products found in this collection.</div>';
+                return;
+            }
+
+            grid.innerHTML = sortedProducts.map(p => {
+                const priceNum = parsePrice(p.price) || 999;
+                const compareNum = parsePrice(p.comparePrice) || 59900;
+                const percentSaved = Math.round(((compareNum - priceNum) / compareNum) * 100);
+
+                let badgeHtml = '';
+                if (p.stockStatus === 'out-of-stock') {
+                    badgeHtml = `<span class="card-badge-soldout">Sold Out</span>`;
+                } else if (p.badge) {
+                    badgeHtml = `<span class="card-badge-sale">${p.badge}</span>`;
+                } else {
+                    badgeHtml = `<span class="card-badge-sale">Save ${percentSaved}%</span>`;
+                }
+
+                const buttonHtml = p.stockStatus === 'out-of-stock'
+                    ? `<button class="add-to-cart-btn" disabled>Sold Out</button>`
+                    : `<button class="add-to-cart-btn" onclick="addToCart('${p.id}')">Add to Cart</button>`;
+
+                return `
+                    <article class="product-card" id="card-${p.id}">
+                        ${badgeHtml}
+                        <a href="product.html?id=${p.id}" class="product-card-img-wrapper">
+                            <img src="${p.image}" alt="${p.title}" loading="lazy">
+                        </a>
+                        <div class="product-card-info">
+                            <div class="product-card-prices">
+                                <span class="product-card-sale-price">${p.price}</span>
+                                <span class="product-card-compare-price">${p.comparePrice}</span>
+                            </div>
+                            <h2 class="product-card-title">
+                                <a href="product.html?id=${p.id}">${p.title}</a>
+                            </h2>
+                            <div class="product-card-actions">
+                                ${buttonHtml}
+                                <a href="product.html?id=${p.id}" class="view-details-btn" title="View Details">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        window.addEventListener('load', () => {
+            loadCollectionData();
+        });
+        window.addEventListener('products-synced', () => {
+            loadCollectionData();
+        });
+    </script>
+</body>
+</html>

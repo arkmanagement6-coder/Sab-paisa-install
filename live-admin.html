@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Administrator Panel | IKKO DIGITAL</title>
+    <link rel="stylesheet" href="style.css?v=2.4">
+    <style>
+        /* Specific layout overrides for Admin Panel */
+        body {
+            background-color: var(--bg-main);
+        }
+        .admin-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+        }
+        .admin-header h2 {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.4rem;
+        }
+        .admin-header .exit-link {
+            font-size: 0.9rem;
+            background-color: rgba(255,255,255,0.1);
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: var(--transition-fast);
+        }
+        .admin-header .exit-link:hover {
+            background-color: var(--accent);
+        }
+
+        /* WYSIWYG Editor Toolbar Styles */
+        .wysiwyg-toolbar {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            background: #f1f5f9;
+            padding: 6px;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            align-items: center;
+        }
+        .wysiwyg-toolbar button {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #475569;
+            transition: all 0.1s ease;
+        }
+        .wysiwyg-toolbar button:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .wysiwyg-toolbar select {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            padding: 3px 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: #475569;
+        }
+        .has-toolbar {
+            border-top-left-radius: 0 !important;
+            border-top-right-radius: 0 !important;
+        }
+        .image-url-row, .desc-image-url-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+            background: #f8fafc;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Admin Top Header Bar -->
+    <header class="admin-header">
+        <h2>IKKO DIGITAL &mdash; Admin Portal</h2>
+        <a href="index.html" class="exit-link">← Return to Storefront</a>
+    </header>
+
+    <!-- Main Workspace Grid -->
+    <main class="admin-container">
+        <!-- Sidebar Navigation Menu -->
+        <aside class="admin-sidebar">
+            <div class="admin-sidebar-title">Management Menu</div>
+            <ul class="admin-menu-list">
+                <li class="admin-menu-item active" id="menu-dash">
+                    <button onclick="switchTab('dash')">
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                        Dashboard
+                    </button>
+                </li>
+                <li class="admin-menu-item" id="menu-orders">
+                    <button onclick="switchTab('orders')">
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        Orders List
+                    </button>
+                </li>
+                <li class="admin-menu-item" id="menu-inventory">
+                    <button onclick="switchTab('inventory')">
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        Product Inventory
+                    </button>
+                </li>
+                <li class="admin-menu-item" id="menu-settings">
+                    <button onclick="switchTab('settings')">
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        Store Settings
+                    </button>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Dynamic Content Panel -->
+        <section class="admin-content">
+            
+            <!-- DASHBOARD TAB -->
+            <div class="admin-tab-section active" id="tab-section-dash">
+                <div class="admin-tab-header">
+                    <h1>Store Metrics Dashboard</h1>
+                </div>
+                
+                <!-- KPI metrics cards row -->
+                <div class="kpi-cards-grid">
+                    <div class="kpi-card">
+                        <span class="kpi-title">Total Revenue</span>
+                        <span class="kpi-value" id="kpi-revenue">Rs. 0.00</span>
+                        <span class="kpi-footer">From completed deliveries</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-title">Total Orders</span>
+                        <span class="kpi-value" id="kpi-orders-count">0</span>
+                        <span class="kpi-footer">Placed in checkout</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-title">Active Inventory</span>
+                        <span class="kpi-value" id="kpi-products-count">0</span>
+                        <span class="kpi-footer">Products listed on store</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-title">Pending Orders</span>
+                        <span class="kpi-value" id="kpi-pending-count" style="color: var(--accent-amber);">0</span>
+                        <span class="kpi-footer">Awaiting processing</span>
+                    </div>
+                </div>
+
+                <h3>Recent Orders Activity</h3>
+                <div class="table-wrapper" style="margin-top: 15px;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer Name</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-orders-list">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ORDERS TAB -->
+            <div class="admin-tab-section" id="tab-section-orders">
+                <div class="admin-tab-header">
+                    <h1>Customer Orders Tracking</h1>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Customer Details</th>
+                                <th>Items Ordered</th>
+                                <th>Total Price</th>
+                                <th>Order Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-orders-list">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PRODUCT INVENTORY TAB -->
+            <div class="admin-tab-section" id="tab-section-inventory">
+                <div class="admin-tab-header">
+                    <h1>Store Inventory</h1>
+                    <button class="btn btn-primary" onclick="openAddProductModal()">+ Add New Product</button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Product Title</th>
+                                <th>Selling Price</th>
+                                <th>Compare Price</th>
+                                <th>Category</th>
+                                <th>Payment Link</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-products-list">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SETTINGS TAB -->
+            <div class="admin-tab-section" id="tab-section-settings">
+                <div class="admin-tab-header">
+                    <h1>Payment & Store Settings</h1>
+                </div>
+
+                <!-- Global Settings Sync Notification/Alert -->
+                <div class="settings-sync-alert" style="background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; border-radius: 4px; max-width: 600px; margin-top: 20px; font-size: 0.9rem; color: #1e3a8a; line-height: 1.5; font-family: var(--font-body); box-sizing: border-box;">
+                    <strong>📢 Note for Global Configuration Sync:</strong><br>
+                    Settings updated below will only apply to your local browser session. To publish these settings (UPI details, payment keys, or Firebase configuration) live to all customers globally, please copy the configuration parameters and save them in the <strong><a href="file:///e:/Websites/chiragbhai/settings.json" style="color: #2563eb; font-weight: bold; text-decoration: underline;">settings.json</a></strong> file in your codebase and redeploy the site.
+                </div>
+
+                <div class="settings-card" style="background-color: white; border-radius: 8px; border: 1px solid var(--border-color); padding: 30px; max-width: 600px; margin-top: 20px; box-shadow: var(--shadow-sm);">
+                    <form id="store-settings-form" onsubmit="handleSaveSettings(event)">
+                        <!-- SabPaisa Gateway Config -->
+                        <h2 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--primary); margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">SabPaisa Payment Gateway</h2>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; font-size: 0.95rem; color: var(--primary);">
+                                <input type="checkbox" id="setting-sabpaisa-enabled" style="width: 18px; height: 18px;">
+                                Enable SabPaisa Checkout Integration
+                            </label>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; margin-left: 28px;">If enabled, checkout routing will redirect to the SabPaisa PG.</p>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="setting-sabpaisa-merchantid" style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; color: var(--primary);">Client Code / Merchant ID *</label>
+                            <input type="text" id="setting-sabpaisa-merchantid" required placeholder="e.g. LUCK1" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.95rem; box-sizing: border-box;">
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="setting-sabpaisa-apikey" style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; color: var(--primary);">API Key *</label>
+                            <input type="text" id="setting-sabpaisa-apikey" required placeholder="e.g. sp_..." style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.95rem; box-sizing: border-box;">
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label for="setting-sabpaisa-secretkey" style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; color: var(--primary);">Secret Key *</label>
+                            <input type="text" id="setting-sabpaisa-secretkey" required placeholder="e.g. sec_..." style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.95rem; box-sizing: border-box;">
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <label for="setting-sabpaisa-mode" style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; color: var(--primary);">Environment Mode *</label>
+                            <select id="setting-sabpaisa-mode" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.95rem; box-sizing: border-box; background: white;">
+                                <option value="test">Sandbox / Testing (UAT)</option>
+                                <option value="live">Production / Live</option>
+                            </select>
+                        </div>
+
+                        <h2 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--primary); margin-top: 30px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Firebase Real-Time Database</h2>
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; font-size: 0.95rem; color: var(--primary);">
+                                <input type="checkbox" id="setting-firebase-enabled" style="width: 18px; height: 18px;">
+                                Enable Firebase Cloud Database (Real-time Sync)
+                            </label>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; margin-left: 28px;">If enabled, product inventory will read/write from/to Firestore instead of local storage.</p>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label for="setting-firebase-config" style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; color: var(--primary);">Firebase Web App Configuration (JSON object)</label>
+                            <textarea id="setting-firebase-config" placeholder='e.g. {&#10;  "apiKey": "AIzaSy...",&#10;  "projectId": "ikko-digital",&#10;  ...&#10;}' rows="5" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9rem; box-sizing: border-box; font-family: monospace;"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="padding: 10px 25px; font-size: 0.95rem; font-weight: 700; margin-top: 15px;">Save Settings</button>
+                    </form>
+                </div>
+
+                <div class="settings-card" style="background-color: white; border-radius: 8px; border: 1px solid var(--border-color); padding: 30px; max-width: 600px; margin-top: 20px; box-shadow: var(--shadow-sm); box-sizing: border-box; font-family: var(--font-body);">
+                    <h2 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--primary); margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Local Database Backups</h2>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5;">
+                        If the Firebase database is offline or daily free limits are hit, you can save your changes locally by exporting them as JSON files. Place the files in your project directory (as <code>products.json</code> and <code>settings.json</code>) and deploy the code.
+                    </p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button type="button" onclick="downloadBackup('products')" class="btn" style="background-color: var(--primary); color: white; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px; cursor: pointer;">Export products.json</button>
+                        <button type="button" onclick="downloadBackup('settings')" class="btn" style="background-color: var(--primary); color: white; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px; cursor: pointer;">Export settings.json</button>
+                        <button type="button" onclick="restoreServerCatalog()" class="btn" style="background-color: #16a34a; color: white; padding: 10px 20px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 4px; cursor: pointer;">Restore Server Catalog to Firestore</button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- PRODUCT MODAL FORM (ADD/EDIT) -->
+    <div class="modal-overlay" id="product-modal-element">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-title-text">Add New Product</h3>
+                <button class="modal-close-btn" onclick="closeProductModal()">&times;</button>
+            </div>
+            <form id="product-form" onsubmit="handleSaveProduct(event)">
+                <input type="hidden" id="form-product-id">
+                <div class="modal-body">
+                    <div class="form-grid" style="grid-template-columns: 1fr;">
+                        <div class="form-group">
+                            <label for="form-title">Product Title *</label>
+                            <input type="text" id="form-title" required placeholder="e.g. Apple iPad Air 11″ (M2) 256GB">
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid" style="margin-top: 15px;">
+                        <div class="form-group">
+                            <label for="form-price">Selling Price (Rs.) *</label>
+                            <input type="number" id="form-price" required min="1" placeholder="999">
+                        </div>
+                        <div class="form-group">
+                            <label for="form-compare">Compare-at Price (Rs.)</label>
+                            <input type="number" id="form-compare" min="1" placeholder="59900">
+                        </div>
+                    </div>
+
+                    <div class="form-grid" style="margin-top: 15px;">
+                        <div class="form-group">
+                            <label for="form-badge">Custom Discount Badge / Label</label>
+                            <input type="text" id="form-badge" placeholder="e.g. Save 98%, Hot Product (Leave blank to auto-calculate)">
+                        </div>
+                        <div class="form-group">
+                            <label for="form-stock">Stock Availability *</label>
+                            <select id="form-stock" required>
+                                <option value="in-stock">In Stock</option>
+                                <option value="out-of-stock">Out of Stock</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grid" style="grid-template-columns: 1fr; margin-top: 15px;">
+                        <div class="form-group">
+                            <label for="form-category">Category *</label>
+                            <select id="form-category" required>
+                                <option value="tablets">iPads & Tablets</option>
+                                <option value="audio">Audio & Earbuds</option>
+                                <option value="smart-phone">Smart Phones</option>
+                                <option value="gadgets">General Gadgets</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Dynamic Product Images Section -->
+                    <div class="form-grid" style="grid-template-columns: 1fr; margin-top: 15px;">
+                        <div class="form-group">
+                            <label>Product Images (Upload) *</label>
+                            <div id="image-urls-container">
+                                <!-- Populated dynamically -->
+                            </div>
+                            <button type="button" class="btn btn-secondary" onclick="addImageInputRow()" style="margin-top: 8px; width: 100%; border: 1px dashed var(--border-color); background-color: var(--bg-main);">+ Add Another Image</button>
+                        </div>
+                    </div>
+
+                    <!-- Description Feature Images Section -->
+                    <div class="form-grid" style="grid-template-columns: 1fr; margin-top: 15px;">
+                        <div class="form-group">
+                            <label>Description Feature Images (Upload extra images for bottom of description)</label>
+                            <div id="desc-image-urls-container">
+                                <!-- Populated dynamically -->
+                            </div>
+                            <button type="button" class="btn btn-secondary" onclick="addDescImageInputRow()" style="margin-top: 8px; width: 100%; border: 1px dashed var(--border-color); background-color: var(--bg-main);">+ Add Another Description Image</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid" style="grid-template-columns: 1fr; margin-top: 15px;">
+                        <div class="form-group">
+                            <label for="form-desc">Product Description *</label>
+                            <div class="wysiwyg-toolbar">
+                                <button type="button" onclick="insertAtCursor('form-desc', '<h1>', '</h1>')" title="Heading 1">H1</button>
+                                <button type="button" onclick="insertAtCursor('form-desc', '<h2>', '</h2>')" title="Heading 2">H2</button>
+                                <button type="button" onclick="insertAtCursor('form-desc', '<strong>', '</strong>')" style="font-weight:bold;" title="Bold">B</button>
+                                <button type="button" onclick="insertAtCursor('form-desc', '<em>', '</em>')" style="font-style:italic;" title="Italic">I</button>
+                                <button type="button" onclick="insertAtCursor('form-desc', '<u>', '</u>')" style="text-decoration:underline;" title="Underline">U</button>
+                                <select onchange="if(this.value) { insertAtCursor('form-desc', `<span style=&quot;font-family: ${this.value};&quot;>`, '</span>'); this.value = ''; }" title="Font Family">
+                                    <option value="">Font</option>
+                                    <option value="Outfit, sans-serif">Outfit</option>
+                                    <option value="Arial, sans-serif">Arial</option>
+                                    <option value="Georgia, serif">Georgia</option>
+                                    <option value="Courier New, monospace">Monospace</option>
+                                </select>
+                                <select onchange="if(this.value) { insertAtCursor('form-desc', `<span style=&quot;font-size: ${this.value};&quot;>`, '</span>'); this.value = ''; }" title="Font Size">
+                                    <option value="">Size</option>
+                                    <option value="0.8rem">Small</option>
+                                    <option value="1rem">Normal</option>
+                                    <option value="1.25rem">Medium</option>
+                                    <option value="1.5rem">Large</option>
+                                    <option value="2rem">X-Large</option>
+                                </select>
+                                <select onchange="if(this.value) { insertAtCursor('form-desc', `<span style=&quot;color: ${this.value};&quot;>`, '</span>'); this.value = ''; }" title="Text Color">
+                                    <option value="">Color</option>
+                                    <option value="#0f172a">Dark Slate</option>
+                                    <option value="#dc2626">Red</option>
+                                    <option value="#2563eb">Blue</option>
+                                    <option value="#16a34a">Green</option>
+                                    <option value="#ea580c">Orange</option>
+                                    <option value="#4f46e5">Indigo</option>
+                                </select>
+                                <button type="button" onclick="insertAtCursor('form-desc', '<ul>\n  <li>', '</li>\n</ul>')" title="Bullet List">List</button>
+                                <button type="button" onclick="insertAtCursor('form-desc', '<table class=&quot;specs-table&quot; style=&quot;width:100%; border-collapse:collapse; margin: 15px 0;&quot;>\n  <tbody>\n    <tr>\n      <td style=&quot;border:1px solid #cbd5e1; padding:8px; font-weight:bold;&quot;>Label</td>\n      <td style=&quot;border:1px solid #cbd5e1; padding:8px;&quot;>Value</td>\n    </tr>\n  </tbody>\n</table>', '')" title="Table">Table</button>
+                            </div>
+                            <textarea id="form-desc" class="has-toolbar" rows="6" required placeholder="Describe the product features, specs overview, warranty..." style="border-radius: 0 0 4px 4px; border-top: none;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-grid" style="grid-template-columns: 1fr; margin-top: 15px;">
+                        <div class="form-group">
+                            <label for="form-specs">Technical Specifications</label>
+                            <div class="wysiwyg-toolbar">
+                                <button type="button" onclick="insertAtCursor('form-specs', '<strong>', '</strong>')" style="font-weight:bold;" title="Bold">B</button>
+                                <button type="button" onclick="insertAtCursor('form-specs', '<em>', '</em>')" style="font-style:italic;" title="Italic">I</button>
+                                <select onchange="if(this.value) { insertAtCursor('form-specs', `<span style=&quot;font-family: ${this.value};&quot;>`, '</span>'); this.value = ''; }" title="Font Family">
+                                    <option value="">Font</option>
+                                    <option value="Outfit, sans-serif">Outfit</option>
+                                    <option value="Arial, sans-serif">Arial</option>
+                                    <option value="Georgia, serif">Georgia</option>
+                                    <option value="Courier New, monospace">Monospace</option>
+                                </select>
+                                <select onchange="if(this.value) { insertAtCursor('form-specs', `<span style=&quot;font-size: ${this.value};&quot;>`, '</span>'); this.value = ''; }" title="Font Size">
+                                    <option value="">Size</option>
+                                    <option value="0.8rem">Small</option>
+                                    <option value="1rem">Normal</option>
+                                    <option value="1.25rem">Medium</option>
+                                    <option value="1.5rem">Large</option>
+                                </select>
+                                <select onchange="if(this.value) { insertAtCursor('form-specs', `<span style=&quot;color: ${this.value};&quot;>`, '</span>'); this.value = ''; }" title="Text Color">
+                                    <option value="">Color</option>
+                                    <option value="#0f172a">Dark Slate</option>
+                                    <option value="#dc2626">Red</option>
+                                    <option value="#2563eb">Blue</option>
+                                    <option value="#16a34a">Green</option>
+                                </select>
+                            </div>
+                            <textarea id="form-specs" class="has-toolbar" rows="4" placeholder="Enter one specification per line in format Name: Value, e.g.&#10;Processor: Apple M2 Chip&#10;Storage: 256GB ROM" style="border-radius: 0 0 4px 4px; border-top: none;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-grid" style="grid-template-columns: 1fr; margin-top: 15px;">
+                        <div class="form-group">
+                            <label for="form-payment-link">Razorpay Payment Link *</label>
+                            <input type="url" id="form-payment-link" required placeholder="https://razorpay.me/@username" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.95rem; box-sizing: border-box;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="form-submit-btn">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="app-core.js?v=11.0"></script>
+    <script>
+        let currentAdminTab = 'dash';
+        let isEditing = false;
+
+        function switchTab(tab) {
+            currentAdminTab = tab;
+            
+            // Toggle active sidebar item
+            document.querySelectorAll('.admin-menu-item').forEach(el => el.classList.remove('active'));
+            if (tab === 'dash') document.getElementById('menu-dash').classList.add('active');
+            if (tab === 'orders') document.getElementById('menu-orders').classList.add('active');
+            if (tab === 'inventory') document.getElementById('menu-inventory').classList.add('active');
+            if (tab === 'settings') document.getElementById('menu-settings').classList.add('active');
+            
+            // Toggle active content section
+            document.querySelectorAll('.admin-tab-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-section-${tab}`).classList.add('active');
+
+            if (tab === 'dash') renderDashboard();
+            if (tab === 'orders') renderOrders();
+            if (tab === 'inventory') renderInventory();
+            if (tab === 'settings') renderSettings();
+        }
+
+        function renderSettings() {
+            const settings = getSettings();
+            
+            // SabPaisa Configurations
+            document.getElementById('setting-sabpaisa-enabled').checked = !!settings.sabpaisaEnabled;
+            document.getElementById('setting-sabpaisa-merchantid').value = settings.sabpaisaMerchantId || '';
+            document.getElementById('setting-sabpaisa-apikey').value = settings.sabpaisaApiKey || '';
+            document.getElementById('setting-sabpaisa-secretkey').value = settings.sabpaisaSecretKey || '';
+            document.getElementById('setting-sabpaisa-mode').value = settings.sabpaisaMode || 'live';
+
+            // Firebase Configurations
+            document.getElementById('setting-firebase-enabled').checked = !!settings.firebaseEnabled;
+            let configStr = '';
+            if (settings.firebaseConfig) {
+                if (typeof settings.firebaseConfig === 'object') {
+                    configStr = JSON.stringify(settings.firebaseConfig, null, 2);
+                } else {
+                    configStr = settings.firebaseConfig;
+                }
+            }
+            document.getElementById('setting-firebase-config').value = configStr;
+        }
+
+        async function handleSaveSettings(e) {
+            e.preventDefault();
+            
+            const sabpaisaEnabled = document.getElementById('setting-sabpaisa-enabled').checked;
+            const sabpaisaMerchantId = document.getElementById('setting-sabpaisa-merchantid').value.trim();
+            const sabpaisaApiKey = document.getElementById('setting-sabpaisa-apikey').value.trim();
+            const sabpaisaSecretKey = document.getElementById('setting-sabpaisa-secretkey').value.trim();
+            const sabpaisaMode = document.getElementById('setting-sabpaisa-mode').value;
+
+            const firebaseEnabled = document.getElementById('setting-firebase-enabled').checked;
+            let firebaseConfig = document.getElementById('setting-firebase-config').value.trim();
+            if (firebaseConfig) {
+                try {
+                    firebaseConfig = JSON.parse(firebaseConfig);
+                } catch (err) {
+                    try {
+                        firebaseConfig = Function("return (" + firebaseConfig + ")")();
+                    } catch (err2) {
+                        alert('Warning: Firebase configuration is not valid JSON or JavaScript object. Storing as raw text.');
+                    }
+                }
+            }
+
+            await saveSettings({
+                sabpaisaEnabled,
+                sabpaisaMerchantId,
+                sabpaisaApiKey,
+                sabpaisaSecretKey,
+                sabpaisaMode,
+                firebaseEnabled,
+                firebaseConfig
+            });
+
+            alert('Settings saved successfully!');
+            location.reload();
+        }
+
+        let globalOrders = null;
+        function getAdminOrders() {
+            return globalOrders || getOrders();
+        }
+
+        // Dashboard Metrics Calculator
+        async function renderDashboard() {
+            const orders = getAdminOrders();
+            const products = await getProducts(true);
+
+            // Calculate metrics
+            const totalOrders = orders.length;
+            const activeProducts = products.length;
+            
+            // Revenue only from Delivered orders
+            const totalRevenue = orders
+                .filter(o => o.status === 'delivered')
+                .reduce((sum, o) => sum + o.total, 0);
+
+            const pendingOrders = orders.filter(o => o.status === 'pending').length;
+
+            document.getElementById('kpi-revenue').innerText = formatPrice(totalRevenue);
+            document.getElementById('kpi-orders-count').innerText = totalOrders;
+            document.getElementById('kpi-products-count').innerText = activeProducts;
+            document.getElementById('kpi-pending-count').innerText = pendingOrders;
+
+            // Render 5 recent activity orders
+            const recentContainer = document.getElementById('recent-orders-list');
+            if (orders.length === 0) {
+                recentContainer.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No order activity yet</td></tr>';
+                return;
+            }
+
+            const sortedRecent = [...orders]
+                .sort((a,b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 5);
+
+            recentContainer.innerHTML = sortedRecent.map(o => `
+                <tr>
+                    <td><strong>${o.id}</strong></td>
+                    <td>${o.customer.name}</td>
+                    <td>${formatPrice(o.total)}</td>
+                    <td><span class="badge badge-${o.status}">${o.status}</span></td>
+                    <td>${new Date(o.date).toLocaleDateString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Orders Tab Renderer
+        function renderOrders() {
+            const container = document.getElementById('admin-orders-list');
+            if (!container) return;
+
+            const orders = getAdminOrders();
+            if (orders.length === 0) {
+                container.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 40px;">No customer orders placed yet</td></tr>';
+                return;
+            }
+
+            // Sort orders by date descending
+            const sortedOrders = [...orders].sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            container.innerHTML = sortedOrders.map(o => {
+                const itemsHtml = o.items.map(item => `
+                    <div style="font-size: 0.8rem; margin-bottom: 4px;">
+                        • ${item.title} <strong>x ${item.qty}</strong>
+                    </div>
+                `).join('');
+
+                const providerLabel = o.upiProvider ? (o.upiProvider === 'phonepe' ? 'PhonePe' : (o.upiProvider === 'paytm' ? 'Paytm' : 'SCAN PAY')) : 'UPI QR';
+
+                const customerHtml = `
+                    <strong>${o.customer.name}</strong><br>
+                    📞 ${o.customer.phone}<br>
+                    🏠 ${o.customer.address}, ${o.customer.city}, ${o.customer.state} - ${o.customer.pin}
+                    ${o.paymentMethod === 'upi' ? `
+                        <div style="margin-top: 6px; padding: 4px 8px; background-color: ${(o.utr === 'Real-Time Verified' || o.utr === 'Auto-Verified') ? '#c6f6d5' : '#feebc8'}; color: ${(o.utr === 'Real-Time Verified' || o.utr === 'Auto-Verified') ? '#22543d' : '#c05621'}; font-size: 0.8rem; border-radius: 4px; font-weight: 700; border: 1px solid ${(o.utr === 'Real-Time Verified' || o.utr === 'Auto-Verified') ? '#9ae6b4' : '#fbd38d'};">
+                            ${(o.utr === 'Real-Time Verified' || o.utr === 'Auto-Verified') ? `✅ Payment Confirmed (${providerLabel})` : `${providerLabel} UTR: ${o.utr || 'N/A'}`}
+                        </div>
+                    ` : ''}
+                `;
+
+                // Render dynamic status changes
+                let actionsHtml = '';
+                if (o.status === 'pending') {
+                    actionsHtml = `
+                        <button class="btn btn-secondary" onclick="updateOrderStatus('${o.id}', 'delivered')" style="background-color: var(--accent-green); color: white; border: none; margin-right: 5px; padding: 6px 12px;">Ship & Deliver</button>
+                        <button class="btn btn-danger" onclick="updateOrderStatus('${o.id}', 'cancelled')" style="padding: 6px 12px;">Cancel</button>
+                    `;
+                } else {
+                    actionsHtml = `<span style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">No actions required</span>`;
+                }
+
+                return `
+                    <tr>
+                        <td>
+                            <strong>${o.id}</strong><br>
+                            <span style="font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; font-weight: 700; background-color: ${o.paymentMethod === 'upi' ? '#ebf8ff' : '#f7fafc'}; color: ${o.paymentMethod === 'upi' ? '#2b6cb0' : '#4a5568'}; display: inline-block; margin-top: 4px; border: 1px solid ${o.paymentMethod === 'upi' ? '#bee3f8' : '#e2e8f0'}; text-transform: uppercase;">
+                                ${o.paymentMethod === 'upi' ? providerLabel : 'COD'}
+                            </span>
+                        </td>
+                        <td>${new Date(o.date).toLocaleString()}</td>
+                        <td>${customerHtml}</td>
+                        <td>${itemsHtml}</td>
+                        <td>${formatPrice(o.total)}</td>
+                        <td><span class="badge badge-${o.status}">${o.status}</span></td>
+                        <td><div style="display: flex; gap: 5px;">${actionsHtml}</div></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        async function updateOrderStatus(orderId, newStatus) {
+            if (typeof window.updateOrderStatusInDb === 'function') {
+                await window.updateOrderStatusInDb(orderId, newStatus);
+            } else {
+                const orders = getOrders();
+                const orderIndex = orders.findIndex(o => o.id === orderId);
+                if (orderIndex !== -1) {
+                    orders[orderIndex].status = newStatus;
+                    localStorage.setItem('ikko_orders', JSON.stringify(orders));
+                }
+            }
+            
+            // Re-render the active tab
+            if (currentAdminTab === 'dash') renderDashboard();
+            if (currentAdminTab === 'orders') renderOrders();
+        }
+
+        // Categorize helper
+        function getProductCategory(product) {
+            if (product.category) return product.category;
+            const title = product.title.toLowerCase();
+            if (title.includes('ipad') || title.includes('tab')) {
+                return 'tablets';
+            }
+            if (title.includes('airdopes') || title.includes('ufo') || title.includes('earbuds') || title.includes('audio') || title.includes('tws')) {
+                return 'audio';
+            }
+            if (title.includes('smartphone') || title.includes('phone') || product.id === '8270415000010') {
+                return 'smart-phone';
+            }
+            return 'gadgets';
+        }
+
+        // Dynamic image input row builder
+        function addImageInputRow(url = '') {
+            const container = document.getElementById('image-urls-container');
+            const row = document.createElement('div');
+            row.className = 'image-url-row';
+            
+            // Check if it's an existing image url (starts with http)
+            const isExisting = url && url.startsWith('http');
+            
+            row.innerHTML = `
+                <div class="image-preview-thumbnail" style="width: 44px; height: 44px; border-radius: 4px; border: 1px solid var(--border-color); overflow: hidden; background-color: #f7fafc; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <img src="${url}" style="width: 100%; height: 100%; object-fit: cover; ${url ? '' : 'display: none;'}">
+                    <span style="font-size: 1.2rem; ${url ? 'display: none;' : ''}">🖼️</span>
+                </div>
+                <input type="hidden" class="image-data-value" value="${url}">
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                    ${isExisting ? `
+                        <span class="existing-image-label" style="font-size: 0.8rem; color: var(--text-muted); word-break: break-all; max-height: 36px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">Existing Shopify URL</span>
+                    ` : ''}
+                    <input type="file" class="image-file-input" accept="image/*" onchange="handleFileChange(this)" style="font-size: 0.85rem;" ${url ? '' : 'required'}>
+                </div>
+                <button type="button" class="btn-remove-row" onclick="removeImageInputRow(this)">&times;</button>
+            `;
+            container.appendChild(row);
+        }
+
+        function handleFileChange(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const rawImg = new Image();
+                rawImg.onload = function() {
+                    // Compress using canvas to prevent localStorage limit issues
+                    const canvas = document.createElement('canvas');
+                    const maxDim = 600; // max width/height
+                    let width = rawImg.width;
+                    let height = rawImg.height;
+                    
+                    if (width > height) {
+                        if (width > maxDim) {
+                            height = Math.round((height * maxDim) / width);
+                            width = maxDim;
+                        }
+                    } else {
+                        if (height > maxDim) {
+                            width = Math.round((width * maxDim) / height);
+                            height = maxDim;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(rawImg, 0, 0, width, height);
+                    
+                    // Convert to JPEG at 0.7 quality to keep size around 20-30kb
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                    
+                    const row = input.closest('.image-url-row');
+                    const hiddenInput = row.querySelector('.image-data-value');
+                    hiddenInput.value = compressedDataUrl;
+                    
+                    const imgPreview = row.querySelector('.image-preview-thumbnail img');
+                    const placeholder = row.querySelector('.image-preview-thumbnail span');
+                    
+                    imgPreview.src = compressedDataUrl;
+                    imgPreview.style.display = '';
+                    placeholder.style.display = 'none';
+
+                    const label = row.querySelector('.existing-image-label');
+                    if (label) {
+                        label.innerText = 'Uploaded: ' + file.name;
+                    }
+                    
+                    // Remove required constraint since they have uploaded an image now
+                    input.required = false;
+                };
+                rawImg.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImageInputRow(button) {
+            const row = button.closest('.image-url-row');
+            if (row) {
+                row.remove();
+                // Ensure there is at least one image input
+                const container = document.getElementById('image-urls-container');
+                if (container.children.length === 0) {
+                    addImageInputRow('');
+                }
+            }
+        }
+
+        // WYSIWYG insert at cursor position helper
+        function insertAtCursor(fieldId, beforeText, afterText = '') {
+            const textarea = document.getElementById(fieldId);
+            if (!textarea) return;
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const selected = text.substring(start, end);
+            const replacement = beforeText + selected + afterText;
+            textarea.value = text.substring(0, start) + replacement + text.substring(end);
+            textarea.focus();
+            
+            // Restore selection
+            const selectionOffset = start + beforeText.length;
+            textarea.setSelectionRange(selectionOffset, selectionOffset + selected.length);
+            // Trigger input event
+            textarea.dispatchEvent(new Event('input'));
+        }
+
+        // Dynamic description image input row builder
+        function addDescImageInputRow(url = '') {
+            const container = document.getElementById('desc-image-urls-container');
+            const row = document.createElement('div');
+            row.className = 'desc-image-url-row';
+            
+            // Check if it's an existing image url
+            const isExisting = url && (url.startsWith('http') || url.startsWith('Image/'));
+            
+            row.innerHTML = `
+                <div class="image-preview-thumbnail" style="width: 44px; height: 44px; border-radius: 4px; border: 1px solid var(--border-color); overflow: hidden; background-color: #f7fafc; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <img src="${url}" style="width: 100%; height: 100%; object-fit: cover; ${url ? '' : 'display: none;'}">
+                    <span style="font-size: 1.2rem; ${url ? 'display: none;' : ''}">🖼️</span>
+                </div>
+                <input type="hidden" class="desc-image-data-value" value="${url}">
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                    ${isExisting ? `
+                        <span class="existing-image-label" style="font-size: 0.8rem; color: var(--text-muted); word-break: break-all; max-height: 36px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">Existing Image</span>
+                    ` : ''}
+                    <input type="file" class="image-file-input" accept="image/*" onchange="handleDescFileChange(this)" style="font-size: 0.85rem;">
+                </div>
+                <button type="button" class="btn-remove-row" onclick="this.closest('.desc-image-url-row').remove()">&times;</button>
+            `;
+            container.appendChild(row);
+        }
+
+        function handleDescFileChange(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const rawImg = new Image();
+                rawImg.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const maxDim = 800; // max size for description layout images
+                    let width = rawImg.width;
+                    let height = rawImg.height;
+                    
+                    if (width > height) {
+                        if (width > maxDim) {
+                            height = Math.round((height * maxDim) / width);
+                            width = maxDim;
+                        }
+                    } else {
+                        if (height > maxDim) {
+                            width = Math.round((width * maxDim) / height);
+                            height = maxDim;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(rawImg, 0, 0, width, height);
+                    
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                    
+                    const row = input.closest('.desc-image-url-row');
+                    const hiddenInput = row.querySelector('.desc-image-data-value');
+                    hiddenInput.value = compressedDataUrl;
+                    
+                    const imgPreview = row.querySelector('.image-preview-thumbnail img');
+                    const placeholder = row.querySelector('.image-preview-thumbnail span');
+                    
+                    imgPreview.src = compressedDataUrl;
+                    imgPreview.style.display = '';
+                    placeholder.style.display = 'none';
+
+                    const label = row.querySelector('.existing-image-label');
+                    if (label) {
+                        label.innerText = 'Uploaded: ' + file.name;
+                    }
+                };
+                rawImg.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Inventory Tab Renderer
+        async function renderInventory() {
+            const container = document.getElementById('admin-products-list');
+            if (!container) return;
+
+            const products = await getProducts(true);
+
+            container.innerHTML = products.map(p => {
+                const isOutOfStock = p.stockStatus === 'out-of-stock';
+                const stockBadge = isOutOfStock 
+                    ? `<span style="background-color: #ef4444; color: white; font-size: 0.7rem; font-weight: 700; padding: 3px 6px; border-radius: 4px; margin-right: 8px; text-transform: uppercase; display: inline-block; vertical-align: middle; line-height: 1;">Out of Stock</span>` 
+                    : '';
+                return `
+                <tr>
+                    <td><img src="${p.image}" class="admin-product-img" alt=""></td>
+                    <td style="font-weight: 600; max-width: 350px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${p.title}">
+                        ${stockBadge}${p.title}
+                    </td>
+                    <td style="color: var(--accent); font-weight: 700;">${p.price}</td>
+                    <td style="color: var(--text-muted); text-decoration: line-through;">${p.comparePrice}</td>
+                    <td style="text-transform: capitalize;">${getProductCategory(p)}</td>
+                    <td style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><a href="${p.paymentLink || '#'}" target="_blank" style="color: #2563eb; font-weight: 600; text-decoration: none;">${p.paymentLink || 'N/A'}</a></td>
+                    <td>
+                        <button class="btn btn-edit" onclick="openEditProductModal('${p.id}')">Edit</button>
+                        <button class="btn btn-danger" onclick="handleDeleteProduct('${p.id}')">Delete</button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        // Product Modal Controllers
+        function openAddProductModal() {
+            isEditing = false;
+            document.getElementById('modal-title-text').innerText = 'Add New Product';
+            document.getElementById('form-submit-btn').innerText = 'Save Product';
+            
+            // Clear inputs
+            document.getElementById('product-form').reset();
+            document.getElementById('form-product-id').value = '';
+            document.getElementById('form-payment-link').value = 'https://rzp.io/rzp/tHlmofq';
+            
+            // Clear image urls container and add a default row
+            const container = document.getElementById('image-urls-container');
+            container.innerHTML = '';
+            addImageInputRow('');
+
+            // Clear description feature images container
+            const descContainer = document.getElementById('desc-image-urls-container');
+            descContainer.innerHTML = '';
+
+            document.getElementById('product-modal-element').classList.add('active');
+        }
+
+        async function openEditProductModal(productId) {
+            isEditing = true;
+            document.getElementById('modal-title-text').innerText = 'Edit Product Details';
+            document.getElementById('form-submit-btn').innerText = 'Update Product';
+
+            const products = await getProducts();
+            const product = products.find(p => String(p.id) === String(productId));
+            if (!product) return;
+
+            // Fill inputs
+            document.getElementById('form-product-id').value = product.id;
+            document.getElementById('form-title').value = product.title;
+            
+            // Strip non-numerical values for easy editing
+            const priceVal = parsePrice(product.price) || 999;
+            const compareVal = parsePrice(product.comparePrice) || 59900;
+            
+            document.getElementById('form-price').value = priceVal;
+            document.getElementById('form-compare').value = compareVal;
+            document.getElementById('form-badge').value = product.badge || '';
+            document.getElementById('form-stock').value = product.stockStatus || 'in-stock';
+            document.getElementById('form-category').value = product.category || getProductCategory(product);
+            document.getElementById('form-desc').value = product.description || '';
+            document.getElementById('form-payment-link').value = product.paymentLink || 'https://rzp.io/rzp/tHlmofq';
+
+            // Handle specs field
+            if (product.specs && Array.isArray(product.specs)) {
+                document.getElementById('form-specs').value = product.specs.map(s => `${s.name}: ${s.value}`).join('\n');
+            } else {
+                document.getElementById('form-specs').value = '';
+            }
+
+            // Populate images container
+            const container = document.getElementById('image-urls-container');
+            container.innerHTML = '';
+            if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+                product.images.forEach(img => addImageInputRow(img));
+            } else if (product.image) {
+                addImageInputRow(product.image);
+            } else {
+                addImageInputRow('');
+            }
+
+            // Populate description feature images container
+            const descContainer = document.getElementById('desc-image-urls-container');
+            descContainer.innerHTML = '';
+            if (product.descriptionImages && Array.isArray(product.descriptionImages) && product.descriptionImages.length > 0) {
+                product.descriptionImages.forEach(img => addDescImageInputRow(img));
+            }
+
+            document.getElementById('product-modal-element').classList.add('active');
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal-element').classList.remove('active');
+        }
+
+        async function handleSaveProduct(e) {
+            e.preventDefault();
+
+            try {
+                const id = document.getElementById('form-product-id').value;
+                const title = document.getElementById('form-title').value.trim();
+                const priceVal = parseFloat(document.getElementById('form-price').value);
+                const compareVal = parseFloat(document.getElementById('form-compare').value);
+                const category = document.getElementById('form-category').value;
+                const badge = document.getElementById('form-badge').value.trim();
+                const stockStatus = document.getElementById('form-stock').value;
+                const desc = document.getElementById('form-desc').value.trim();
+                const paymentLink = document.getElementById('form-payment-link').value.trim() || 'https://rzp.io/rzp/tHlmofq';
+
+                // Parse specifications
+                const specsText = document.getElementById('form-specs').value.trim();
+                const specs = [];
+                if (specsText) {
+                    const lines = specsText.split('\n');
+                    lines.forEach(line => {
+                        const colonIndex = line.indexOf(':');
+                        if (colonIndex !== -1) {
+                            const name = line.substring(0, colonIndex).trim();
+                            const value = line.substring(colonIndex + 1).trim();
+                            if (name && value) {
+                                specs.push({ name, value });
+                            }
+                        }
+                    });
+                }
+
+                // Parse images
+                const imageDataInputs = document.querySelectorAll('.image-data-value');
+                const images = [];
+                imageDataInputs.forEach(input => {
+                    const val = input.value.trim();
+                    if (val) {
+                        images.push(val);
+                    }
+                });
+
+                // Fallback image
+                const image = images.length > 0 ? images[0] : 'https://look-10287.myshopify.com/cdn/shop/files/22_87148f00-12f9-4e5e-9951-8717bdcb21de_512x512.jpg?v=1781259482';
+                if (images.length === 0) {
+                    images.push(image);
+                }
+
+                // Parse description feature images
+                const descImageDataInputs = document.querySelectorAll('.desc-image-data-value');
+                const descriptionImages = [];
+                descImageDataInputs.forEach(input => {
+                    const val = input.value.trim();
+                    if (val) {
+                        descriptionImages.push(val);
+                    }
+                });
+
+                const products = await getProducts();
+                
+                const price = 'Rs. ' + priceVal.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+                const comparePrice = compareVal ? 'Rs. ' + compareVal.toLocaleString('en-IN', { minimumFractionDigits: 2 }) : 'Rs. ' + (priceVal * 1.5).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+
+                const handle = title.toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/(^-|-$)/g, '');
+
+                let savedProduct = null;
+                if (isEditing) {
+                    const idx = products.findIndex(p => String(p.id) === String(id));
+                    if (idx !== -1) {
+                        products[idx] = {
+                            ...products[idx],
+                            title,
+                            handle,
+                            price,
+                            comparePrice,
+                            image,
+                            images,
+                            category,
+                            badge,
+                            stockStatus,
+                            description: desc,
+                            paymentLink: paymentLink,
+                            specs: specs.length > 0 ? specs : undefined,
+                            descriptionImages: descriptionImages.length > 0 ? descriptionImages : undefined
+                        };
+                        savedProduct = products[idx];
+                    } else {
+                        throw new Error("Product with ID " + id + " was not found in the inventory. Available: " + JSON.stringify(products.map(p => ({ id: p.id, type: typeof p.id }))));
+                    }
+                } else {
+                    const newId = (Date.now() + Math.floor(Math.random() * 1000)).toString();
+                    savedProduct = {
+                        id: newId,
+                        title,
+                        handle,
+                        url: `/products/${handle}`,
+                        price,
+                        comparePrice,
+                        image,
+                        images,
+                        category,
+                        badge,
+                        stockStatus,
+                        description: desc,
+                        paymentLink: paymentLink,
+                        specs: specs.length > 0 ? specs : undefined,
+                        descriptionImages: descriptionImages.length > 0 ? descriptionImages : undefined
+                    };
+                    products.push(savedProduct);
+                }
+
+                await saveProducts(products, savedProduct);
+                closeProductModal();
+                await renderInventory();
+                alert("Product saved and synced successfully!");
+            } catch (err) {
+                console.error("Save product failed:", err);
+                alert("Error: " + err.message);
+            }
+        }
+
+        async function handleDeleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product from the inventory? This cannot be undone.')) {
+                await deleteProduct(productId);
+                await renderInventory();
+            }
+        }
+
+        // Load dashboard stats automatically
+        window.addEventListener('load', async () => {
+            // Wait for settings to load
+            if (window.settingsLoadingPromise) {
+                try {
+                    await window.settingsLoadingPromise;
+                } catch (e) {
+                    console.error("Error waiting for settings loading:", e);
+                }
+            }
+            
+            // Check if Firebase order subscription is available
+            if (typeof window.subscribeToFirestoreOrders === 'function') {
+                window.subscribeToFirestoreOrders((orders) => {
+                    if (orders) {
+                        globalOrders = orders;
+                        console.log(`[Firebase Admin] Synced ${orders.length} orders from Firestore.`);
+                    } else {
+                        globalOrders = null;
+                    }
+                    renderDashboard();
+                    if (currentAdminTab === 'orders') renderOrders();
+                });
+            }
+            
+            await renderDashboard();
+        });
+
+        // Listen for Firestore background product sync and refresh inventory view
+        window.addEventListener('products-synced', () => {
+            renderInventory();
+        });
+
+        // Backup Export Helper
+        function downloadBackup(type) {
+            const key = type === 'products' ? 'ikko_products' : 'ikko_settings';
+            const filename = type === 'products' ? 'products.json' : 'settings.json';
+            const data = localStorage.getItem(key);
+            if (!data) {
+                alert(`No ${type} data found in local storage to export!`);
+                return;
+            }
+            
+            let formatted = data;
+            try {
+                formatted = JSON.stringify(JSON.parse(data), null, 2);
+            } catch (e) {}
+
+            const blob = new Blob([formatted], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Restore Server Catalog Helper
+        async function restoreServerCatalog() {
+            if (confirm("Are you sure you want to load products.json from the server and overwrite the Firestore database? This will restore the latest catalog updates.")) {
+                try {
+                    const res = await fetch('/products.json?v=' + Date.now());
+                    if (!res.ok) throw new Error("HTTP error " + res.status);
+                    const products = await res.json();
+                    
+                    if (products && products.length > 0) {
+                        await saveProducts(products);
+                        alert("Successfully restored the latest " + products.length + " products to Firestore!");
+                        location.reload();
+                    } else {
+                        alert("Error: products.json is empty or invalid!");
+                    }
+                } catch (e) {
+                    alert("Failed to restore database: " + e.message);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

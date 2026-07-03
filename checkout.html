@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments | IKKO DIGITAL</title>
+    <link rel="stylesheet" href="style.css?v=2.4">
+</head>
+<body>
+
+    <!-- Header will be rendered here by app-core.js?v=11.0 -->
+    <div id="header-placeholder"></div>
+
+    <main class="checkout-container">
+        
+        <!-- Progress Stepper Tracker -->
+        <div class="checkout-progress-wrapper">
+            <div class="progress-bar-container">
+                <div class="progress-step active" id="step-indicator-address">
+                    <span class="step-icon">1</span>
+                    <span class="step-label">Address Details</span>
+                </div>
+                <div class="progress-line" id="line-1"></div>
+                <div class="progress-step" id="step-indicator-payment">
+                    <span class="step-icon">2</span>
+                    <span class="step-label">Payment & Summary</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="checkout-layout-grid">
+            
+            <!-- Wizard Step 1: Address Details Container -->
+            <div class="checkout-main-content" id="wizard-step-address">
+                <div class="checkout-card">
+                    <h2 class="section-title">Shipping & Delivery Details</h2>
+                    <form id="address-form" onsubmit="handleProceedToPayment(event)">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="cust-name">Full Name *</label>
+                                <input type="text" id="cust-name" placeholder="John Doe" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cust-phone">Mobile Number *</label>
+                                <input type="tel" id="cust-phone" placeholder="9876543210" pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number" required>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="cust-address">Delivery Address *</label>
+                                <input type="text" id="cust-address" placeholder="Flat, House no., Building, Company, Apartment" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cust-city">City *</label>
+                                <input type="text" id="cust-city" placeholder="Mumbai" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cust-state">State *</label>
+                                <input type="text" id="cust-state" placeholder="Maharashtra" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cust-pin">PIN Code *</label>
+                                <input type="text" id="cust-pin" placeholder="400001" pattern="[0-9]{6}" title="Please enter a valid 6-digit PIN code" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary-action-orange" style="margin-top: 30px; width: 100%;">Proceed to Payment</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Wizard Step 2: Payment Selector & Summary (Matches screenshot layout) -->
+            <div class="checkout-main-content" id="wizard-step-payment" style="display: none;">
+                
+                <!-- Promotional Yellow Banner -->
+                <div class="promo-discount-banner">
+                    <div class="banner-decor left">
+                        <svg viewBox="0 0 100 100" width="36" height="36">
+                            <path d="M20,60 C20,80 80,80 80,60 C80,60 70,65 50,65 C30,65 20,60 20,60 Z" fill="#d35400"/>
+                            <path d="M25,60 C35,63 65,63 75,60" stroke="#f1c40f" stroke-width="2" fill="none"/>
+                            <path d="M50,25 C55,42 60,47 50,62 C40,47 45,42 50,25 Z" fill="#f1c40f"/>
+                            <path d="M50,33 C52,43 54,46 50,56 C46,43 48,43 50,33 Z" fill="#e74c3c"/>
+                        </svg>
+                    </div>
+                    <div class="banner-message">
+                        Get up to 80% Discount on All UPI Payments
+                    </div>
+                    <div class="banner-decor right">
+                        <svg viewBox="0 0 100 100" width="36" height="36">
+                            <polygon points="50,20 62,35 38,35" fill="#e74c3c"/>
+                            <rect x="43" y="35" width="14" height="28" fill="#3498db"/>
+                            <line x1="50" y1="63" x2="50" y2="78" stroke="#f1c40f" stroke-width="3"/>
+                            <path d="M48,78 L42,86 M52,78 L58,86 M50,78 L50,90" stroke="#e67e22" stroke-width="2"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Choose Payment Method Card -->
+                <div class="checkout-card" style="margin-top: 20px;">
+                    <h2 class="section-title">Choose Payment Method</h2>
+                    
+                    <div class="payment-method-options-list">
+                        
+                        <!-- SabPaisa Payment Gateway Option -->
+                        <div class="payment-app-row-card active" id="card-sabpaisa" onclick="selectPaymentMethod('sabpaisa', true)">
+                            <div class="app-info-left">
+                                <div class="app-logo" style="display: flex; align-items: center; justify-content: center; background-color: #1e3a8a; border-radius: 4px; color: white; font-weight: 800; font-family: var(--font-heading); font-size: 0.95rem; width: 44px; height: 44px;">
+                                    SP
+                                </div>
+                                <div class="app-texts">
+                                    <span class="app-name">SabPaisa Gateway</span>
+                                    <span class="app-sub">Pay using UPI, Debit/Credit Card, NetBanking</span>
+                                </div>
+                            </div>
+                            <div class="app-arrow-right">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="3.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </div>
+
+                        <!-- Paytm Option -->
+                        <div class="payment-app-row-card" id="card-paytm" onclick="selectPaymentMethod('paytm', true)">
+                            <div class="app-info-left">
+                                <div class="app-logo">
+                                    <img src="Image/paytm-logo.svg" alt="Paytm" style="width: 100%; height: 100%; object-fit: contain;">
+                                </div>
+                                <div class="app-texts">
+                                    <span class="app-name">Paytm / UPI</span>
+                                    <span class="app-sub">Pay securely using Paytm UPI or Wallet</span>
+                                </div>
+                            </div>
+                            <div class="app-arrow-right">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="3.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </div>
+
+                        <!-- GPay Option -->
+                        <div class="payment-app-row-card" id="card-gpay" onclick="selectPaymentMethod('gpay', true)">
+                            <div class="app-info-left">
+                                <div class="app-logo">
+                                    <img src="Image/google-pay-logo.svg" alt="Google Pay" style="width: 100%; height: 100%; object-fit: contain;">
+                                </div>
+                                <div class="app-texts">
+                                    <span class="app-name">Google Pay (GPay)</span>
+                                    <span class="app-sub">Pay using GPay UPI app</span>
+                                </div>
+                            </div>
+                            <div class="app-arrow-right">
+                                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="3.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Price Details Block (Matches screenshot block) -->
+                <div class="checkout-card" style="margin-top: 20px;">
+                    <h3 class="price-details-title">Price Details</h3>
+                    <div class="price-details-rows">
+                        <div class="price-row">
+                            <span class="price-row-label">Original Price</span>
+                            <span class="price-row-value" id="price-original-sum">Rs. 0.00</span>
+                        </div>
+                        <div class="price-row highlight-green">
+                            <span class="price-row-label">Product Discount</span>
+                            <span class="price-row-value" id="price-discount-sum">-Rs. 0.00</span>
+                        </div>
+                        <div class="price-row">
+                            <span class="price-row-label">Delivery Charges</span>
+                            <span class="price-row-value text-green">FREE</span>
+                        </div>
+                        <div class="price-row total-row" style="margin-top: 12px; padding-top: 12px; border-top: 1.5px dashed var(--border-color); margin-bottom: 20px;">
+                            <span class="price-row-label">Total Amount</span>
+                            <span class="price-row-value" id="price-final-total" style="font-weight: 800; font-size: 1.1rem; color: var(--primary);">Rs. 0.00</span>
+                        </div>
+                    </div>
+                    <!-- Desktop checkout action button inside the card -->
+                    <div class="desktop-checkout-action-wrap">
+                        <button class="btn-primary-action-orange" onclick="handleOrangeOrderNowClick()">Order Now</button>
+                    </div>
+                </div>
+
+                <!-- Inline Edit Address Option -->
+                <div style="text-align: center; margin-top: 15px; display: block;">
+                    <button type="button" class="link-edit-btn" onclick="showWizardStep(1)">✏️ Edit Shipping Address</button>
+                </div>
+            </div>
+
+            <!-- Sidebar Order Summary Block -->
+            <div class="checkout-sidebar-summary">
+                <div class="checkout-card">
+                    <h2 class="section-title">Order Items</h2>
+                    <div class="checkout-summary-list" id="checkout-items-summary">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Payment Loading Redirect Overlay -->
+    <div class="verification-modal-overlay" id="payment-loading-overlay" style="display: none;">
+        <div class="verification-modal" style="max-width: 320px; text-align: center; padding: 30px; border-radius: 12px;">
+            <div class="bank-verification-loader">
+                <div class="verification-spinner"></div>
+            </div>
+            <h4 style="margin-top: 20px; font-family: var(--font-heading); font-size: 1.1rem; color: var(--primary); margin-bottom: 5px;">Redirecting to UPI Secure Payment...</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Please do not refresh or click back.</p>
+        </div>
+    </div>
+
+    <!-- Sticky Bottom Bar (For Mobile Layout) -->
+    <div class="mobile-sticky-checkout-bar" id="sticky-bottom-action-bar" style="display: none;">
+        <div class="price-summary-left">
+            <span class="strikethrough-original" id="sticky-original-price">Rs. 0.00</span>
+            <span class="final-price-bold" id="sticky-final-price">Rs. 0.00</span>
+        </div>
+        <button class="btn-orange-submit" onclick="handleOrangeOrderNowClick()">Order Now</button>
+    </div>
+
+    <!-- Footer will be rendered here by app-core.js?v=11.0 -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Core Scripts -->
+    <script src="app-core.js?v=11.0"></script>
+    <script>
+        let selectedPaymentMethod = ''; // 'sabpaisa'
+        let currentWizardStep = 1;
+
+        // Form wizard navigation
+        function showWizardStep(step) {
+            currentWizardStep = step;
+            const addressSec = document.getElementById('wizard-step-address');
+            const paymentSec = document.getElementById('wizard-step-payment');
+            const stickyBar = document.getElementById('sticky-bottom-action-bar');
+            
+            const indAddress = document.getElementById('step-indicator-address');
+            const indPayment = document.getElementById('step-indicator-payment');
+            
+            if (step === 1) {
+                addressSec.style.display = 'block';
+                paymentSec.style.display = 'none';
+                stickyBar.classList.remove('active-step2');
+                
+                indAddress.classList.add('active');
+                indAddress.classList.remove('completed');
+                indAddress.querySelector('.step-icon').innerText = '1';
+                indPayment.classList.remove('active');
+            } else if (step === 2) {
+                addressSec.style.display = 'none';
+                paymentSec.style.display = 'block';
+                stickyBar.classList.add('active-step2');
+                
+                indAddress.classList.remove('active');
+                indAddress.classList.add('completed');
+                indAddress.querySelector('.step-icon').innerHTML = `
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                `;
+                indPayment.classList.add('active');
+                
+                // Calculate pricing
+                renderCheckoutSummary();
+
+                // Pre-select SabPaisa by default
+                selectPaymentMethod('sabpaisa');
+            }
+        }
+
+        function handleProceedToPayment(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+            const city = document.getElementById('cust-city').value.trim();
+            const state = document.getElementById('cust-state').value.trim();
+            const pin = document.getElementById('cust-pin').value.trim();
+            
+            if (!name || !phone || !address || !city || !state || !pin) {
+                alert('Please fill out all shipping details.');
+                return;
+            }
+            if (phone.length !== 10 || isNaN(phone)) {
+                alert('Please enter a valid 10-digit mobile number.');
+                return;
+            }
+            if (pin.length !== 6 || isNaN(pin)) {
+                alert('Please enter a valid 6-digit PIN code.');
+                return;
+            }
+            
+            // Save customer details to localStorage for future checkout convenience
+            try {
+                const customerDetails = {
+                    name,
+                    phone,
+                    address,
+                    city,
+                    state,
+                    pin
+                };
+                localStorage.setItem('ikko_customer', JSON.stringify(customerDetails));
+            } catch (e) {
+                console.error("Error saving ikko_customer to localStorage:", e);
+            }
+            
+            showWizardStep(2);
+        }
+
+        // Selection of SabPaisa, Paytm, SCAN PAY
+        function selectPaymentMethod(method, autoRedirect = false) {
+            selectedPaymentMethod = method;
+            
+            // Toggle active card styles
+            document.querySelectorAll('.payment-app-row-card').forEach(card => card.classList.remove('active'));
+            
+            let cardId = '';
+            if (method === 'sabpaisa') cardId = 'card-sabpaisa';
+            else if (method === 'paytm') cardId = 'card-paytm';
+            else if (method === 'scanpay') cardId = 'card-scanpay';
+            else if (method === 'gpay') cardId = 'card-gpay';
+            
+            const selectedCard = document.getElementById(cardId);
+            if (selectedCard) selectedCard.classList.add('active');
+            
+            // Immediately initiate payment redirection if explicitly clicked by user
+            if (autoRedirect) {
+                setTimeout(() => {
+                    handleOrangeOrderNowClick();
+                }, 250);
+            }
+        }
+
+        // Calculate and render original price, discount, and total
+        function getOriginalTotal() {
+            const cart = getCart();
+            return cart.reduce((total, item) => {
+                const originalPriceStr = item.comparePrice || item.price;
+                return total + (parsePrice(originalPriceStr) * item.qty);
+            }, 0);
+        }
+
+        function renderCheckoutSummary() {
+            const summaryContainer = document.getElementById('checkout-items-summary');
+            if (!summaryContainer) return;
+
+            const cart = getCart();
+            if (cart.length === 0) {
+                alert('Your cart is empty. Please add products before checking out.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Render summary items
+            summaryContainer.innerHTML = cart.map(item => `
+                <div class="checkout-summary-item">
+                    <img src="${item.image}" alt="${item.title}">
+                    <div class="checkout-summary-item-info">
+                        <span class="checkout-summary-item-title">${item.title}</span>
+                        <span class="checkout-summary-item-qty">Qty: ${item.qty}</span>
+                    </div>
+                    <span class="checkout-summary-item-price">${item.price}</span>
+                </div>
+            `).join('');
+
+            const originalTotal = getOriginalTotal();
+            const finalTotal = getCartTotal();
+            const discount = originalTotal - finalTotal;
+
+            // Update main details
+            document.getElementById('price-original-sum').innerText = formatPrice(originalTotal);
+            document.getElementById('price-discount-sum').innerText = '-' + formatPrice(discount);
+            document.getElementById('price-final-total').innerText = formatPrice(finalTotal);
+
+            // Update bottom sticky bar
+            document.getElementById('sticky-original-price').innerText = formatPrice(originalTotal);
+            document.getElementById('sticky-final-price').innerText = formatPrice(finalTotal);
+        }
+
+        // Redirect directly to PhonePe Checkout Gateway when customer clicks "Order Now"
+        async function handleOrangeOrderNowClick() {
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+            const city = document.getElementById('cust-city').value.trim();
+            const state = document.getElementById('cust-state').value.trim();
+            const pin = document.getElementById('cust-pin').value.trim();
+
+            if (!name || !phone || !address || !city || !state || !pin) {
+                alert('Shipping details are incomplete. Please edit address.');
+                showWizardStep(1);
+                return;
+            }
+
+            const cart = getCart();
+            if (cart.length === 0) {
+                alert('Your cart is empty.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const total = getCartTotal();
+            const orderNum = Math.floor(100000 + Math.random() * 900000);
+            const orderId = `IKKO-${orderNum}`;
+
+            // Create order object with pending_payment status
+            const order = {
+                id: orderId,
+                date: new Date().toISOString(),
+                status: 'pending_payment',
+                paymentMethod: 'sabpaisa',
+                utr: 'Pending SabPaisa',
+                customer: {
+                    name,
+                    phone,
+                    address,
+                    city,
+                    state,
+                    pin
+                },
+                items: cart,
+                total: total
+            };
+
+            // Save order to localStorage & Firestore
+            await saveOrder(order);
+
+            const methodLabel = selectedPaymentMethod === 'gpay' ? 'Google Pay (GPay)' : (selectedPaymentMethod === 'paytm' ? 'Paytm' : 'SabPaisa');
+
+            // Show redirecting loading state on order buttons
+            const orderButtons = document.querySelectorAll('.btn-orange-submit, .btn-primary-action-orange');
+            orderButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+                btn.innerText = `Redirecting to ${methodLabel}...`;
+            });
+
+            try {
+                const response = await fetch('/api/create-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        orderId: orderId,
+                        amount: total,
+                        redirectUrl: `${window.location.origin}/order-confirmation.html?orderId=${orderId}&amount=${total}`,
+                        customerName: name,
+                        customerPhone: phone,
+                        customerEmail: `${phone}@luck1.com`
+                    })
+                });
+
+                const result = await response.json();
+                if (result && result.success && result.redirectUrl) {
+                    // Redirect directly to SabPaisa Payment Checkout Gateway
+                    window.location.href = result.redirectUrl;
+                } else {
+                    alert('Failed to initiate SabPaisa checkout: ' + (result.message || 'Please try again.'));
+                    orderButtons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                        btn.innerText = 'Order Now';
+                    });
+                }
+            } catch (err) {
+                console.error('SabPaisa connection error:', err);
+                alert('Connection error occurred while redirecting to SabPaisa. Please check your internet and try again.');
+                orderButtons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.innerText = 'Order Now';
+                });
+            }
+        }
+
+        window.addEventListener('load', () => {
+            // Do not pre-fill dummy values so the user is forced to enter their own shipping details
+            // We start at Step 1 (Address Form) as requested by the user
+            showWizardStep(1);
+            
+            // Render the checkout summary on load so the "Order Items" block is populated on Step 1
+            renderCheckoutSummary();
+            
+            // Auto-fill customer info if previously entered
+            try {
+                const customer = JSON.parse(localStorage.getItem('ikko_customer'));
+                if (customer) {
+                    if (customer.name) document.getElementById('cust-name').value = customer.name;
+                    if (customer.phone) document.getElementById('cust-phone').value = customer.phone;
+                    if (customer.address) document.getElementById('cust-address').value = customer.address;
+                    if (customer.city) document.getElementById('cust-city').value = customer.city;
+                    if (customer.state) document.getElementById('cust-state').value = customer.state;
+                    if (customer.pin) document.getElementById('cust-pin').value = customer.pin;
+                }
+            } catch (e) {
+                console.error("Error reading ikko_customer from localStorage:", e);
+            }
+        });
+
+    </script>
+</body>
+</html>

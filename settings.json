@@ -1,0 +1,17 @@
+{
+  "sabpaisaEnabled": true,
+  "sabpaisaMerchantId": "LUCK1",
+  "sabpaisaApiKey": "sp_A4EHc3rOQmN3L6Zed0q9Cx7CHgnDubPYCC0XnpJlAl0",
+  "sabpaisaSecretKey": "sec_-n8LkEjTI6btD-1u_uuWxYj-HPc20yW0NMAZhPEF49M",
+  "sabpaisaMode": "live",
+  "firebaseEnabled": true,
+  "firebaseConfig": {
+    "apiKey": "AIzaSyBEA_951CCrsfl8JHkayubYjv3rTaDcsEI",
+    "authDomain": "sabchira.firebaseapp.com",
+    "projectId": "sabchira",
+    "storageBucket": "sabchira.firebasestorage.app",
+    "messagingSenderId": "31219210330",
+    "appId": "1:31219210330:web:805c072c64ee21c7fc6063",
+    "measurementId": "G-2WRP0T510T"
+  }
+}

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed | Thank You | IKKO DIGITAL</title>
+    <link rel="stylesheet" href="style.css?v=2.4">
+    <style>
+        .confirmation-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            max-width: 800px;
+            margin: 40px auto;
+            font-family: var(--font-body);
+        }
+        .confirmation-success-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .success-icon-wrap {
+            width: 70px;
+            height: 70px;
+            background-color: var(--accent-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 4px 10px rgba(72, 187, 120, 0.3);
+        }
+        .confirmation-success-header h1 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .confirmation-success-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+        .order-badge-id {
+            background-color: var(--bg-main);
+            border: 1px dashed var(--border-color);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .confirmation-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        .details-col h3 {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+        .details-col p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #4a5568;
+        }
+        .confirmation-items-title {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        .confirmation-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .confirmation-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .confirmation-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-main);
+        }
+        .confirmation-item-info {
+            flex: 1;
+        }
+        .confirmation-item-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 4px;
+        }
+        .confirmation-item-qty {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .confirmation-item-price {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+        .confirmation-totals {
+            margin-top: 25px;
+            background-color: var(--bg-main);
+            padding: 20px;
+            border-radius: 6px;
+        }
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: #4a5568;
+        }
+        .totals-row.final {
+            margin-bottom: 0;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        .continue-btn-wrap {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .confirm-home-btn {
+            background-color: var(--accent);
+            color: white;
+            padding: 14px 35px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition-fast);
+            box-shadow: var(--shadow-glow);
+        }
+        .confirm-home-btn:hover {
+            background-color: #c42424;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 768px) {
+            .confirmation-details-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .confirmation-card {
+                padding: 20px;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header will be rendered here by app-core.js?v=11.0 -->
+    <div id="header-placeholder"></div>
+
+    <main class="storefront-main" style="min-height: 70vh;">
+        <div class="confirmation-card" id="confirmation-content-card">
+            <!-- Loading indicator -->
+            <div style="text-align: center; padding: 50px 0;">
+                <p style="color: var(--text-muted);">Fetching your order details...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer will be rendered here by app-core.js?v=11.0 -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Core Scripts -->
+    <script src="app-core.js?v=11.0"></script>
+    <script>
+        async function renderConfirmation() {
+            const card = document.getElementById('confirmation-content-card');
+            if (!card) return;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            let orderId = urlParams.get('orderId') || urlParams.get('client_txn_id') || urlParams.get('merchant_txn_id');
+
+            if (!orderId) {
+                // Fallback to the latest order placed on this browser if no ID is passed in the URL redirect
+                const orders = getOrders();
+                if (orders.length > 0) {
+                    orderId = orders[orders.length - 1].id;
+                }
+            }
+
+            if (!orderId) {
+                card.innerHTML = `
+                    <div style="text-align: center; padding: 40px 0;">
+                        <h2 style="color: var(--accent); font-family: var(--font-heading);">No Order Information Found</h2>
+                        <p style="color: var(--text-muted); margin: 15px 0 30px 0;">We could not locate this order. If you just placed an order, please check your home page.</p>
+                        <a href="index.html" class="confirm-home-btn">Return to Storefront</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const orders = getOrders();
+            let orderIndex = orders.findIndex(o => o.id === orderId);
+            let order = null;
+
+            if (orderIndex === -1) {
+                // Recover order: show verifying/loading spinner
+                card.innerHTML = `
+                    <div style="text-align: center; padding: 50px 0;" id="recovering-order-spinner">
+                        <div class="loader-spinner" style="border: 4px solid #e2e8f0; border-top: 4px solid var(--accent); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px auto;"></div>
+                        <h2 style="font-family: var(--font-heading); color: var(--primary);">Locating Order...</h2>
+                        <p style="color: var(--text-muted); margin-top: 10px; max-width: 400px; margin-left: auto; margin-right: auto;">
+                            We are retrieving your order details. Please wait.
+                        </p>
+                    </div>
+                `;
+                
+                try {
+                    // 1. Try to fetch from Firestore first (if enabled)
+                    const db = await initFirebase();
+                    if (db) {
+                        const doc = await db.collection('orders').doc(orderId).get();
+                        if (doc.exists) {
+                            order = doc.data();
+                            console.log(`[Firebase] Recovered order ${orderId} from Firestore.`);
+                        }
+                    }
+                } catch (err) {
+                    console.warn("Firestore recovery failed or disabled:", err);
+                }
+
+                // 2. If not found in Firestore, fallback to SabPaisa Status verification
+                if (!order) {
+                    try {
+                        const amountParam = urlParams.get('amount') || '';
+                        const checkRes = await fetch(`/api/check-status?orderId=${orderId}&amount=${amountParam}`);
+                        if (checkRes.ok) {
+                            const statusData = await checkRes.json();
+                            const state = (statusData.state || statusData.status || statusData.code || '').toUpperCase();
+                            
+                            if (state === 'COMPLETED' || state === 'SUCCESS' || state === 'PAYMENT_SUCCESS') {
+                                // Extract UTR/Transaction ID
+                                let utrVal = statusData.spTxnId || statusData.traceId || 'SabPaisa Verified';
+
+                                // Reconstruct minimal order object
+                                let totalVal = parseFloat(statusData.amount || amountParam || '0');
+
+                                order = {
+                                    id: orderId,
+                                    date: new Date().toISOString(),
+                                    status: 'pending',
+                                    paymentMethod: 'sabpaisa',
+                                    utr: utrVal,
+                                    customer: {
+                                        name: 'Valued Customer',
+                                        phone: '',
+                                        address: 'SabPaisa PG Checkout',
+                                        city: '',
+                                        state: '',
+                                        pin: ''
+                                    },
+                                    items: [], // Reconstructed orders don't have items metadata
+                                    total: totalVal
+                                };
+                                console.log(`[Status API] Reconstructed minimal order for ${orderId} from verified transaction.`);
+                            }
+                        }
+                    } catch (err) {
+                        console.error("PhonePe status verification failed:", err);
+                    }
+                }
+
+                // 3. Cache the recovered order in local storage and database so it is remembered
+                if (order) {
+                    if (typeof window.saveOrder === 'function') {
+                        await window.saveOrder(order);
+                    } else {
+                        const localOrders = getOrders();
+                        localOrders.push(order);
+                        localStorage.setItem('ikko_orders', JSON.stringify(localOrders));
+                    }
+                    // Re-read orders to get proper indexing
+                    const updatedOrders = getOrders();
+                    orderIndex = updatedOrders.findIndex(o => o.id === orderId);
+                } else {
+                    // Show Order Not Found
+                    card.innerHTML = `
+                        <div style="text-align: center; padding: 40px 0;">
+                            <h2 style="color: var(--accent); font-family: var(--font-heading);">Order Not Found</h2>
+                            <p style="color: var(--text-muted); margin: 15px 0 30px 0;">The order ID <strong>${orderId}</strong> could not be verified.</p>
+                            <a href="index.html" class="confirm-home-btn">Return to Storefront</a>
+                        </div>
+                    `;
+                    return;
+                }
+            } else {
+                order = orders[orderIndex];
+            }
+
+            // Render different layouts depending on verified status
+            function renderSuccessUI(order) {
+                // Fire Meta Pixel purchase tracking (handles de-duplication inside app-core)
+                if (typeof window.trackPurchaseEvent === 'function') {
+                    window.trackPurchaseEvent(order);
+                }
+
+                const itemsHtml = order.items.map(item => `
+                    <div class="confirmation-item">
+                        <img src="${item.image}" alt="${item.title}">
+                        <div class="confirmation-item-info">
+                            <span class="confirmation-item-title">${item.title}</span>
+                            <span class="confirmation-item-qty">Quantity: ${item.qty}</span>
+                        </div>
+                        <span class="confirmation-item-price">${item.price}</span>
+                    </div>
+                `).join('');
+
+                const formattedSubtotal = formatPrice(order.total);
+                let paymentText = order.paymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'PhonePe PG Payment';
+                let statusText = order.paymentMethod === 'cod' ? 'Awaiting Delivery' : 'Paid & Confirmed';
+
+                card.innerHTML = `
+                    <div class="confirmation-success-header">
+                        <div class="success-icon-wrap">
+                            <svg viewBox="0 0 24 24" width="40" height="40" stroke="currentColor" stroke-width="3.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <h1>Order Confirmed!</h1>
+                        <p>Thank you for shopping with us, <strong>${order.customer.name}</strong>! Your order is being processed.</p>
+                        <div class="order-badge-id">Order ID: ${order.id}</div>
+                    </div>
+
+                    <div class="confirmation-details-grid">
+                        <div class="details-col">
+                            <h3>Shipping Address</h3>
+                            <p>
+                                <strong>${order.customer.name}</strong><br>
+                                ${order.customer.address}<br>
+                                ${order.customer.city}, ${order.customer.state} - ${order.customer.pin}<br>
+                                📞 Phone: ${order.customer.phone}
+                            </p>
+                        </div>
+                        <div class="details-col">
+                            <h3>Billing & Payment</h3>
+                            <p>
+                                <strong>Method:</strong> ${paymentText}<br>
+                                <strong>Status:</strong> ${statusText}<br>
+                                <strong>Expected Delivery:</strong> Your order will be delivered next 7 days
+                            </p>
+                        </div>
+                    </div>
+
+                    <h2 class="confirmation-items-title">Ordered Items Summary</h2>
+                    <div class="confirmation-items-list">
+                        ${itemsHtml}
+                    </div>
+
+                    <div class="confirmation-totals">
+                        <div class="totals-row">
+                            <span>Subtotal</span>
+                            <span>${formattedSubtotal}</span>
+                        </div>
+                        <div class="totals-row">
+                            <span>Shipping</span>
+                            <span style="color: var(--accent-green); font-weight: bold;">FREE</span>
+                        </div>
+                        <div class="totals-row final">
+                            <span>Total Amount Paid</span>
+                            <span>${formattedSubtotal}</span>
+                        </div>
+                    </div>
+
+                    <div class="continue-btn-wrap">
+                        <a href="index.html" class="confirm-home-btn">Continue Shopping</a>
+                    </div>
+                `;
+            }
+
+            function renderFailedUI(order) {
+                card.innerHTML = `
+                    <div style="text-align: center; padding: 40px 0;">
+                        <div style="width: 60px; height: 60px; border-radius: 50%; background-color: #fed7d7; color: #e53e3e; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+                            <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="3" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </div>
+                        <h2 style="color: #e53e3e; font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800;">Payment Failed!</h2>
+                        <p style="color: var(--text-muted); margin: 15px auto 25px auto; max-width: 380px;">Your transaction could not be authorized by PhonePe. Please try checkout again.</p>
+                        <div class="order-badge-id" style="margin-bottom: 25px; background-color: #f7fafc; color: var(--text-dark);">Order ID: ${order.id}</div>
+                        <a href="checkout.html" class="confirm-home-btn" style="background-color: var(--accent); color: white; border: none;">Retry Checkout & Payment</a>
+                    </div>
+                `;
+            }
+
+            function renderPendingUI(order) {
+                card.innerHTML = `
+                    <div style="text-align: center; padding: 40px 0;">
+                        <div style="width: 60px; height: 60px; border-radius: 50%; background-color: #feebc8; color: #dd6b20; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+                            <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="3" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        </div>
+                        <h2 style="color: #dd6b20; font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800;">Payment Awaiting Verification</h2>
+                        <p style="color: var(--text-muted); margin: 15px auto 25px auto; max-width: 480px;">Your payment status is still pending confirmation from PhonePe. We will process your order as soon as we receive confirmation.</p>
+                        <div class="order-badge-id" style="margin-bottom: 25px; background-color: #f7fafc; color: var(--text-dark);">Order ID: ${order.id}</div>
+                        
+                        <div style="margin-top: 10px; display: flex; justify-content: center; gap: 15px;">
+                            <button onclick="location.reload()" class="confirm-home-btn" style="background-color: var(--accent); color: white; border: none; cursor: pointer;">Refresh Status</button>
+                            <a href="index.html" class="confirm-home-btn" style="background-color: #718096; color: white; border: none;">Return to Storefront</a>
+                        </div>
+                    </div>
+                `;
+            }
+
+            async function checkPaymentStatus(orderId, attempt = 1, maxAttempts = 10) {
+                try {
+                    const checkRes = await fetch(`/api/check-status?orderId=${orderId}`);
+                    if (checkRes.ok) {
+                        const statusData = await checkRes.json();
+                        if (statusData) {
+                            // PhonePe Checkout Status API returns state (COMPLETED, FAILED, PENDING)
+                            // Standard PG Status API might return code/status/success
+                            const state = (statusData.state || statusData.status || statusData.code || '').toUpperCase();
+                            console.log(`[PhonePe Status] Parsed state: ${state} for order ${orderId}`);
+                            
+                            if (state === 'COMPLETED' || state === 'SUCCESS' || state === 'PAYMENT_SUCCESS') {
+                                order.status = 'pending';
+                                
+                                // Extract UTR/Transaction ID securely
+                                let utrVal = 'PhonePe Verified';
+                                if (statusData.paymentDetails && statusData.paymentDetails.length > 0) {
+                                    utrVal = statusData.paymentDetails[0].pgTransactionId || statusData.paymentDetails[0].providerReferenceId || utrVal;
+                                } else if (statusData.data) {
+                                    utrVal = statusData.data.providerReferenceId || statusData.data.transactionId || utrVal;
+                                } else if (statusData.providerReferenceId) {
+                                    utrVal = statusData.providerReferenceId;
+                                }
+                                order.utr = utrVal;
+                                
+                                if (typeof clearCart === 'function') {
+                                    clearCart();
+                                }
+                                
+                                if (typeof window.saveOrder === 'function') {
+                                    await window.saveOrder(order);
+                                } else {
+                                    orders[orderIndex] = order;
+                                    localStorage.setItem('ikko_orders', JSON.stringify(orders));
+                                }
+                                renderSuccessUI(order);
+                                return;
+                            } else if (state === 'FAILED' || state === 'PAYMENT_ERROR' || state === 'PAYMENT_DECLINED' || state === 'CANCELED' || state === 'CANCELLED') {
+                                order.status = 'cancelled';
+                                order.utr = 'Payment Failed';
+                                
+                                if (typeof window.saveOrder === 'function') {
+                                    await window.saveOrder(order);
+                                } else {
+                                    orders[orderIndex] = order;
+                                    localStorage.setItem('ikko_orders', JSON.stringify(orders));
+                                }
+                                renderFailedUI(order);
+                                return;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error checking PhonePe status:", e);
+                }
+
+                if (attempt < maxAttempts) {
+                    setTimeout(() => {
+                        checkPaymentStatus(orderId, attempt + 1, maxAttempts);
+                    }, 3000);
+                } else {
+                    renderPendingUI(order);
+                }
+            }
+
+            // Decide what to render immediately based on current localStorage state
+            if (order.status === 'pending') {
+                renderSuccessUI(order);
+            } else if (order.status === 'cancelled' || order.utr === 'Payment Failed') {
+                renderFailedUI(order);
+            } else if (order.status === 'pending_payment') {
+                // Show dynamic verifying loader card
+                card.innerHTML = `
+                    <div style="text-align: center; padding: 50px 0;" id="verifying-payment-spinner">
+                        <div class="loader-spinner" style="border: 4px solid #e2e8f0; border-top: 4px solid var(--accent); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px auto;"></div>
+                        <h2 style="font-family: var(--font-heading); color: var(--primary);">Verifying Payment...</h2>
+                        <p style="color: var(--text-muted); margin-top: 10px; max-width: 400px; margin-left: auto; margin-right: auto;">
+                            We are confirming your payment status with PhonePe. Please wait.
+                        </p>
+                    </div>
+                `;
+                
+                // Start polling verification
+                checkPaymentStatus(orderId, 1, 10);
+            } else {
+                renderSuccessUI(order);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderConfirmation();
+        });
+    </script>
+</body>
+</html>
