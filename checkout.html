@@ -98,14 +98,14 @@
                     
                     <div class="payment-method-options-list">
                         
-                        <!-- SabPaisa Payment Gateway Option -->
-                        <div class="payment-app-row-card active" id="card-sabpaisa" onclick="selectPaymentMethod('sabpaisa', true)">
+                        <!-- PhonePe Payment Gateway Option -->
+                        <div class="payment-app-row-card active" id="card-phonepe" onclick="selectPaymentMethod('phonepe', true)">
                             <div class="app-info-left">
-                                <div class="app-logo" style="display: flex; align-items: center; justify-content: center; background-color: #1e3a8a; border-radius: 4px; color: white; font-weight: 800; font-family: var(--font-heading); font-size: 0.95rem; width: 44px; height: 44px;">
-                                    SP
+                                <div class="app-logo">
+                                    <img src="Image/phonepe-logo.svg" alt="PhonePe" style="width: 100%; height: 100%; object-fit: contain;">
                                 </div>
                                 <div class="app-texts">
-                                    <span class="app-name">SabPaisa Gateway</span>
+                                    <span class="app-name">PhonePe Gateway</span>
                                     <span class="app-sub">Pay using UPI, Debit/Credit Card, NetBanking</span>
                                 </div>
                             </div>
@@ -221,7 +221,7 @@
     <!-- Core Scripts -->
     <script src="app-core.js?v=11.0"></script>
     <script>
-        let selectedPaymentMethod = ''; // 'sabpaisa'
+        let selectedPaymentMethod = ''; // 'phonepe'
         let currentWizardStep = 1;
 
         // Form wizard navigation
@@ -260,8 +260,8 @@
                 // Calculate pricing
                 renderCheckoutSummary();
 
-                // Pre-select SabPaisa by default
-                selectPaymentMethod('sabpaisa');
+                // Pre-select PhonePe by default
+                selectPaymentMethod('phonepe');
             }
         }
 
@@ -306,7 +306,7 @@
             showWizardStep(2);
         }
 
-        // Selection of SabPaisa, Paytm, SCAN PAY
+        // Selection of PhonePe, Paytm, SCAN PAY
         function selectPaymentMethod(method, autoRedirect = false) {
             selectedPaymentMethod = method;
             
@@ -314,7 +314,7 @@
             document.querySelectorAll('.payment-app-row-card').forEach(card => card.classList.remove('active'));
             
             let cardId = '';
-            if (method === 'sabpaisa') cardId = 'card-sabpaisa';
+            if (method === 'phonepe') cardId = 'card-phonepe';
             else if (method === 'paytm') cardId = 'card-paytm';
             else if (method === 'scanpay') cardId = 'card-scanpay';
             else if (method === 'gpay') cardId = 'card-gpay';
@@ -424,7 +424,7 @@
             // Save order to localStorage & Firestore
             await saveOrder(order);
 
-            const methodLabel = selectedPaymentMethod === 'gpay' ? 'Google Pay (GPay)' : (selectedPaymentMethod === 'paytm' ? 'Paytm' : 'SabPaisa');
+            const methodLabel = selectedPaymentMethod === 'gpay' ? 'Google Pay (GPay)' : (selectedPaymentMethod === 'paytm' ? 'Paytm' : 'PhonePe');
 
             // Show redirecting loading state on order buttons
             const orderButtons = document.querySelectorAll('.btn-orange-submit, .btn-primary-action-orange');

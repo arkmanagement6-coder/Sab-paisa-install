@@ -132,7 +132,7 @@ module.exports = async (req, res) => {
                 payPayload
             );
 
-            if (payRes.statusCode !== 200) {
+            if (payRes.statusCode < 200 || payRes.statusCode >= 300) {
                 console.error('[SabPaisa] Pay Error Response:', payRes.body);
                 res.statusCode = payRes.statusCode;
                 res.end(JSON.stringify({ success: false, message: 'Failed to initiate payment with SabPaisa', details: payRes.body }));
@@ -140,9 +140,13 @@ module.exports = async (req, res) => {
             }
 
             const payData = JSON.parse(payRes.body);
-            const checkoutUrl = payData.checkoutUrl || (payData.data && payData.data.checkoutUrl) || payData.redirectUrl;
+            let checkoutUrl = payData.checkoutUrl || (payData.data && payData.data.checkoutUrl) || payData.redirectUrl;
+            const clientSecret = payData.clientSecret || (payData.data && payData.data.clientSecret);
 
             if (checkoutUrl) {
+                if (clientSecret) {
+                    checkoutUrl = checkoutUrl + (checkoutUrl.includes('?') ? '&' : '?') + 'clientSecret=' + clientSecret;
+                }
                 console.log(`[SabPaisa] Payment session created successfully. Redirect URL: ${checkoutUrl}`);
                 res.statusCode = 200;
                 res.end(JSON.stringify({ success: true, redirectUrl: checkoutUrl }));
