@@ -448,6 +448,27 @@
                 }
             }
 
+            // Check URL parameters for explicit payment failure indicators from SabPaisa
+            const pgStatus = (urlParams.get('status') || urlParams.get('sabPaisaStatus') || urlParams.get('payment_status') || urlParams.get('statusCode') || '').toUpperCase();
+            const respMsg = (urlParams.get('respMsg') || urlParams.get('responseMessage') || urlParams.get('statusMessage') || '').toUpperCase();
+            const pgTxnStatus = (urlParams.get('txnStatus') || '').toUpperCase();
+
+            const hasFailedIndicator = 
+                pgStatus.includes('FAIL') || pgStatus.includes('DECLINE') || pgStatus.includes('CANCEL') || pgStatus === '0300' ||
+                respMsg.includes('FAIL') || respMsg.includes('DECLINE') || respMsg.includes('CANCEL') ||
+                pgTxnStatus.includes('FAIL') || pgTxnStatus.includes('CANCEL');
+
+            if (hasFailedIndicator && order) {
+                order.status = 'cancelled';
+                order.utr = 'Payment Failed';
+                if (typeof window.saveOrder === 'function') {
+                    window.saveOrder(order);
+                } else {
+                    orders[orderIndex] = order;
+                    localStorage.setItem('ikko_orders', JSON.stringify(orders));
+                }
+            }
+
             // Decide what to render immediately based on current localStorage state
             if (order.status === 'pending' || order.status === 'pending_payment') {
                 if (order.status === 'pending_payment') {
