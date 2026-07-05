@@ -403,7 +403,7 @@
                             <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="3" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                         </div>
                         <h2 style="color: #e53e3e; font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800;">Payment Failed!</h2>
-                        <p style="color: var(--text-muted); margin: 15px auto 25px auto; max-width: 380px;">Your transaction could not be authorized by PhonePe. Please try checkout again.</p>
+                        <p style="color: var(--text-muted); margin: 15px auto 25px auto; max-width: 380px;">Your transaction could not be authorized by SabPaisa. Please try checkout again.</p>
                         <div class="order-badge-id" style="margin-bottom: 25px; background-color: #f7fafc; color: var(--text-dark);">Order ID: ${order.id}</div>
                         <a href="checkout.html" class="confirm-home-btn" style="background-color: var(--accent); color: white; border: none;">Retry Checkout & Payment</a>
                     </div>
@@ -417,7 +417,7 @@
                             <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="3" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                         </div>
                         <h2 style="color: #dd6b20; font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800;">Payment Awaiting Verification</h2>
-                        <p style="color: var(--text-muted); margin: 15px auto 25px auto; max-width: 480px;">Your payment status is still pending confirmation from PhonePe. We will process your order as soon as we receive confirmation.</p>
+                        <p style="color: var(--text-muted); margin: 15px auto 25px auto; max-width: 480px;">Your payment status is still pending confirmation from SabPaisa. We will process your order as soon as we receive confirmation.</p>
                         <div class="order-badge-id" style="margin-bottom: 25px; background-color: #f7fafc; color: var(--text-dark);">Order ID: ${order.id}</div>
                         
                         <div style="margin-top: 10px; display: flex; justify-content: center; gap: 15px;">
@@ -430,27 +430,19 @@
 
             async function checkPaymentStatus(orderId, attempt = 1, maxAttempts = 10) {
                 try {
-                    const checkRes = await fetch(`/api/check-status?orderId=${orderId}`);
+                    const amountParam = urlParams.get('amount') || (order ? order.total : '');
+                    const checkRes = await fetch(`/api/check-status?orderId=${orderId}&amount=${amountParam}`);
                     if (checkRes.ok) {
                         const statusData = await checkRes.json();
                         if (statusData) {
-                            // PhonePe Checkout Status API returns state (COMPLETED, FAILED, PENDING)
-                            // Standard PG Status API might return code/status/success
                             const state = (statusData.state || statusData.status || statusData.code || '').toUpperCase();
-                            console.log(`[PhonePe Status] Parsed state: ${state} for order ${orderId}`);
+                            console.log(`[SabPaisa Status] Parsed state: ${state} for order ${orderId}`);
                             
                             if (state === 'COMPLETED' || state === 'SUCCESS' || state === 'PAYMENT_SUCCESS') {
                                 order.status = 'pending';
                                 
                                 // Extract UTR/Transaction ID securely
-                                let utrVal = 'PhonePe Verified';
-                                if (statusData.paymentDetails && statusData.paymentDetails.length > 0) {
-                                    utrVal = statusData.paymentDetails[0].pgTransactionId || statusData.paymentDetails[0].providerReferenceId || utrVal;
-                                } else if (statusData.data) {
-                                    utrVal = statusData.data.providerReferenceId || statusData.data.transactionId || utrVal;
-                                } else if (statusData.providerReferenceId) {
-                                    utrVal = statusData.providerReferenceId;
-                                }
+                                let utrVal = statusData.spTxnId || statusData.traceId || 'SabPaisa Verified';
                                 order.utr = utrVal;
                                 
                                 if (typeof clearCart === 'function') {
@@ -481,7 +473,7 @@
                         }
                     }
                 } catch (e) {
-                    console.error("Error checking PhonePe status:", e);
+                    console.error("Error checking SabPaisa status:", e);
                 }
 
                 if (attempt < maxAttempts) {
@@ -505,7 +497,7 @@
                         <div class="loader-spinner" style="border: 4px solid #e2e8f0; border-top: 4px solid var(--accent); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px auto;"></div>
                         <h2 style="font-family: var(--font-heading); color: var(--primary);">Verifying Payment...</h2>
                         <p style="color: var(--text-muted); margin-top: 10px; max-width: 400px; margin-left: auto; margin-right: auto;">
-                            We are confirming your payment status with PhonePe. Please wait.
+                            We are confirming your payment status with SabPaisa. Please wait.
                         </p>
                     </div>
                 `;
