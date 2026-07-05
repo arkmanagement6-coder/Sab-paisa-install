@@ -18,15 +18,6 @@
     fbq('track', 'PageView');
     
     const runTracking = () => {
-        const noscript = document.createElement('noscript');
-        const img = document.createElement('img');
-        img.height = 1;
-        img.width = 1;
-        img.style.display = 'none';
-        img.src = `https://www.facebook.com/tr?id=${pixelId}&ev=PageView&noscript=1`;
-        noscript.appendChild(img);
-        document.body.appendChild(noscript);
-        
         // Track page-specific actions dynamically
         const path = window.location.pathname.toLowerCase();
         
