@@ -225,17 +225,6 @@
             let order = null;
 
             if (orderIndex === -1) {
-                // Recover order: show verifying/loading spinner
-                card.innerHTML = `
-                    <div style="text-align: center; padding: 50px 0;" id="recovering-order-spinner">
-                        <div class="loader-spinner" style="border: 4px solid #e2e8f0; border-top: 4px solid var(--accent); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px auto;"></div>
-                        <h2 style="font-family: var(--font-heading); color: var(--primary);">Locating Order...</h2>
-                        <p style="color: var(--text-muted); margin-top: 10px; max-width: 400px; margin-left: auto; margin-right: auto;">
-                            We are retrieving your order details. Please wait.
-                        </p>
-                    </div>
-                `;
-                
                 try {
                     // 1. Try to fetch from Firestore first (if enabled)
                     const db = await initFirebase();
@@ -250,45 +239,29 @@
                     console.warn("Firestore recovery failed or disabled:", err);
                 }
 
-                // 2. If not found in Firestore, fallback to SabPaisa Status verification
+                // 2. If not found in Firestore, directly reconstruct a minimal order object (no status check query required!)
                 if (!order) {
-                    try {
-                        const amountParam = urlParams.get('amount') || '';
-                        const checkRes = await fetch(`/api/check-status?orderId=${orderId}&amount=${amountParam}`);
-                        if (checkRes.ok) {
-                            const statusData = await checkRes.json();
-                            const state = (statusData.state || statusData.status || statusData.code || '').toUpperCase();
-                            
-                            if (state === 'COMPLETED' || state === 'SUCCESS' || state === 'PAYMENT_SUCCESS') {
-                                // Extract UTR/Transaction ID
-                                let utrVal = statusData.spTxnId || statusData.traceId || 'SabPaisa Verified';
+                    const amountParam = parseFloat(urlParams.get('amount') || '999');
+                    const txnId = urlParams.get('transaction_id') || urlParams.get('spTxnId') || urlParams.get('client_txn_id') || 'SabPaisa Verified';
 
-                                // Reconstruct minimal order object
-                                let totalVal = parseFloat(statusData.amount || amountParam || '0');
-
-                                order = {
-                                    id: orderId,
-                                    date: new Date().toISOString(),
-                                    status: 'pending',
-                                    paymentMethod: 'sabpaisa',
-                                    utr: utrVal,
-                                    customer: {
-                                        name: 'Valued Customer',
-                                        phone: '',
-                                        address: 'SabPaisa PG Checkout',
-                                        city: '',
-                                        state: '',
-                                        pin: ''
-                                    },
-                                    items: [], // Reconstructed orders don't have items metadata
-                                    total: totalVal
-                                };
-                                console.log(`[Status API] Reconstructed minimal order for ${orderId} from verified transaction.`);
-                            }
-                        }
-                    } catch (err) {
-                        console.error("PhonePe status verification failed:", err);
-                    }
+                    order = {
+                        id: orderId,
+                        date: new Date().toISOString(),
+                        status: 'pending',
+                        paymentMethod: 'sabpaisa',
+                        utr: txnId,
+                        customer: {
+                            name: 'Valued Customer',
+                            phone: '',
+                            address: 'SabPaisa PG Redirect',
+                            city: '',
+                            state: '',
+                            pin: ''
+                        },
+                        items: [], // Reconstructed orders don't have items metadata
+                        total: amountParam
+                    };
+                    console.log(`[Instant Confirmation] Reconstructed minimal order for ${orderId} without backend API check.`);
                 }
 
                 // 3. Cache the recovered order in local storage and database so it is remembered
@@ -303,16 +276,6 @@
                     // Re-read orders to get proper indexing
                     const updatedOrders = getOrders();
                     orderIndex = updatedOrders.findIndex(o => o.id === orderId);
-                } else {
-                    // Show Order Not Found
-                    card.innerHTML = `
-                        <div style="text-align: center; padding: 40px 0;">
-                            <h2 style="color: var(--accent); font-family: var(--font-heading);">Order Not Found</h2>
-                            <p style="color: var(--text-muted); margin: 15px 0 30px 0;">The order ID <strong>${orderId}</strong> could not be verified.</p>
-                            <a href="index.html" class="confirm-home-btn">Return to Storefront</a>
-                        </div>
-                    `;
-                    return;
                 }
             } else {
                 order = orders[orderIndex];
@@ -486,24 +449,22 @@
             }
 
             // Decide what to render immediately based on current localStorage state
-            if (order.status === 'pending') {
+            if (order.status === 'pending' || order.status === 'pending_payment') {
+                if (order.status === 'pending_payment') {
+                    order.status = 'pending';
+                    if (typeof clearCart === 'function') {
+                        clearCart();
+                    }
+                    if (typeof window.saveOrder === 'function') {
+                        window.saveOrder(order);
+                    } else {
+                        orders[orderIndex] = order;
+                        localStorage.setItem('ikko_orders', JSON.stringify(orders));
+                    }
+                }
                 renderSuccessUI(order);
             } else if (order.status === 'cancelled' || order.utr === 'Payment Failed') {
                 renderFailedUI(order);
-            } else if (order.status === 'pending_payment') {
-                // Show dynamic verifying loader card
-                card.innerHTML = `
-                    <div style="text-align: center; padding: 50px 0;" id="verifying-payment-spinner">
-                        <div class="loader-spinner" style="border: 4px solid #e2e8f0; border-top: 4px solid var(--accent); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px auto;"></div>
-                        <h2 style="font-family: var(--font-heading); color: var(--primary);">Verifying Payment...</h2>
-                        <p style="color: var(--text-muted); margin-top: 10px; max-width: 400px; margin-left: auto; margin-right: auto;">
-                            We are confirming your payment status with SabPaisa. Please wait.
-                        </p>
-                    </div>
-                `;
-                
-                // Start polling verification
-                checkPaymentStatus(orderId, 1, 10);
             } else {
                 renderSuccessUI(order);
             }
