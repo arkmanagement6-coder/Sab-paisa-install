@@ -97,6 +97,7 @@ module.exports = async (req, res) => {
             .digest('hex');
 
         const statusPayload = JSON.stringify({
+            clientCode: merchantId,
             merchantId: merchantId,
             merchantTxnId: orderId,
             amount: amountInPaise,
@@ -111,7 +112,8 @@ module.exports = async (req, res) => {
             'POST',
             {
                 'Content-Type': 'application/json',
-                'X-Api-Key': apiKey
+                'X-Api-Key': apiKey,
+                'X-Merchant-Id': merchantId
             },
             statusPayload
         );
