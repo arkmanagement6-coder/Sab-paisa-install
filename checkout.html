@@ -154,10 +154,10 @@
                     <h3 class="price-details-title">Price Details</h3>
                     <div class="price-details-rows">
                         <div class="price-row">
-                            <span class="price-row-label">Original Price</span>
+                            <span class="price-row-label">Price</span>
                             <span class="price-row-value" id="price-original-sum">Rs. 0.00</span>
                         </div>
-                        <div class="price-row highlight-green">
+                        <div class="price-row highlight-green" style="display: none;">
                             <span class="price-row-label">Product Discount</span>
                             <span class="price-row-value" id="price-discount-sum">-Rs. 0.00</span>
                         </div>
@@ -209,7 +209,7 @@
     <!-- Sticky Bottom Bar (For Mobile Layout) -->
     <div class="mobile-sticky-checkout-bar" id="sticky-bottom-action-bar" style="display: none;">
         <div class="price-summary-left">
-            <span class="strikethrough-original" id="sticky-original-price">Rs. 0.00</span>
+            <span class="strikethrough-original" id="sticky-original-price" style="display: none;">Rs. 0.00</span>
             <span class="final-price-bold" id="sticky-final-price">Rs. 0.00</span>
         </div>
         <button class="btn-orange-submit" onclick="handleOrangeOrderNowClick()">Order Now</button>
