@@ -92,8 +92,8 @@
                     </div>
                 </div>
 
-                <!-- Choose Payment Method Card -->
-                <div class="checkout-card" style="margin-top: 20px;">
+                <!-- Choose Payment Method Card (Hidden for direct gateway redirect) -->
+                <div class="checkout-card" style="margin-top: 20px; display: none;">
                     <h2 class="section-title">Choose Payment Method</h2>
                     
                     <div class="payment-method-options-list">
@@ -424,14 +424,12 @@
             // Save order to localStorage & Firestore
             await saveOrder(order);
 
-            const methodLabel = selectedPaymentMethod === 'gpay' ? 'Google Pay (GPay)' : (selectedPaymentMethod === 'paytm' ? 'Paytm' : 'PhonePe');
-
             // Show redirecting loading state on order buttons
             const orderButtons = document.querySelectorAll('.btn-orange-submit, .btn-primary-action-orange');
             orderButtons.forEach(btn => {
                 btn.disabled = true;
                 btn.style.opacity = '0.7';
-                btn.innerText = `Redirecting to ${methodLabel}...`;
+                btn.innerText = `Redirecting to Payment Gateway...`;
             });
 
             try {
