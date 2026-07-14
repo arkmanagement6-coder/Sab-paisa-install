@@ -456,10 +456,66 @@
                 }
             }
 
-            // Check URL parameters for explicit payment failure indicators from SabPaisa
+            // Check URL parameters for explicit payment success/failure indicators from SabPaisa
             const pgStatus = (urlParams.get('status') || urlParams.get('sabPaisaStatus') || urlParams.get('payment_status') || urlParams.get('statusCode') || '').toUpperCase();
             const respMsg = (urlParams.get('respMsg') || urlParams.get('responseMessage') || urlParams.get('statusMessage') || '').toUpperCase();
             const pgTxnStatus = (urlParams.get('txnStatus') || '').toUpperCase();
+
+            const hasSuccessIndicator = 
+                pgStatus.includes('SUCCESS') || pgStatus.includes('COMPLETED') || pgStatus === '0000' ||
+                respMsg.includes('SUCCESS') || respMsg.includes('COMPLETED') ||
+                pgTxnStatus.includes('SUCCESS');
+
+            if (hasSuccessIndicator) {
+                if (orderIndex === -1) {
+                    const amountParam = parseFloat(urlParams.get('amount') || '999');
+                    const txnId = urlParams.get('transaction_id') || urlParams.get('spTxnId') || urlParams.get('client_txn_id') || 'SabPaisa Verified';
+
+                    order = {
+                        id: orderId,
+                        date: new Date().toISOString(),
+                        status: 'pending',
+                        paymentMethod: 'sabpaisa',
+                        utr: txnId,
+                        customer: {
+                            name: 'Valued Customer',
+                            phone: '',
+                            address: 'SabPaisa PG Redirect',
+                            city: '',
+                            state: '',
+                            pin: ''
+                        },
+                        items: [],
+                        total: amountParam
+                    };
+                } else {
+                    order = orders[orderIndex];
+                    order.status = 'pending';
+                    const txnId = urlParams.get('transaction_id') || urlParams.get('spTxnId') || urlParams.get('client_txn_id');
+                    if (txnId) order.utr = txnId;
+                }
+
+                if (typeof clearCart === 'function') {
+                    clearCart();
+                }
+
+                if (typeof window.saveOrder === 'function') {
+                    await window.saveOrder(order);
+                } else {
+                    const localOrders = getOrders();
+                    if (orderIndex === -1) {
+                        localOrders.push(order);
+                    } else {
+                        localOrders[orderIndex] = order;
+                    }
+                    localStorage.setItem('ikko_orders', JSON.stringify(localOrders));
+                }
+
+                renderSuccessUI(order);
+                return;
+            }
+
+            // Check URL parameters for explicit payment failure indicators from SabPaisa
 
             const hasFailedIndicator = 
                 pgStatus.includes('FAIL') || pgStatus.includes('DECLINE') || pgStatus.includes('CANCEL') || pgStatus === '0300' ||
