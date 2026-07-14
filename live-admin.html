@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Store Administrator Panel | IKKO DIGITAL</title>
-    <link rel="stylesheet" href="style.css?v=2.4">
+    <link rel="stylesheet" href="style.css?v=2.7">
     <style>
         /* Specific layout overrides for Admin Panel */
         body {
@@ -87,6 +87,9 @@
             border: 1px solid var(--border-color);
         }
     </style>
+    <!-- Firebase SDKs for fast parallel loading and caching -->
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -140,25 +143,25 @@
                 
                 <!-- KPI metrics cards row -->
                 <div class="kpi-cards-grid">
-                    <div class="kpi-card">
-                        <span class="kpi-title">Total Revenue</span>
-                        <span class="kpi-value" id="kpi-revenue">Rs. 0.00</span>
-                        <span class="kpi-footer">From completed deliveries</span>
+                    <div class="kpi-card" style="border-left: 4px solid #3182ce;">
+                        <span class="kpi-title">Paid / Confirmed</span>
+                        <span class="kpi-value" id="kpi-utr-submitted" style="color: #2b6cb0;">Rs. 0.00</span>
+                        <span class="kpi-footer" id="kpi-utr-submitted-count">Confirmed payments</span>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" style="border-left: 4px solid #38a169;">
+                        <span class="kpi-title">Pending Payment</span>
+                        <span class="kpi-value" id="kpi-utr-approved" style="color: #2f855a;">Rs. 0.00</span>
+                        <span class="kpi-footer" id="kpi-utr-approved-count">Awaiting payment</span>
+                    </div>
+                    <div class="kpi-card" style="border-left: 4px solid #4a5568;">
                         <span class="kpi-title">Total Orders</span>
-                        <span class="kpi-value" id="kpi-orders-count">0</span>
+                        <span class="kpi-value" id="kpi-total-orders">0</span>
                         <span class="kpi-footer">Placed in checkout</span>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" style="border-left: 4px solid #718096;">
                         <span class="kpi-title">Active Inventory</span>
                         <span class="kpi-value" id="kpi-products-count">0</span>
                         <span class="kpi-footer">Products listed on store</span>
-                    </div>
-                    <div class="kpi-card">
-                        <span class="kpi-title">Pending Orders</span>
-                        <span class="kpi-value" id="kpi-pending-count" style="color: var(--accent-amber);">0</span>
-                        <span class="kpi-footer">Awaiting processing</span>
                     </div>
                 </div>
 
@@ -185,6 +188,49 @@
             <div class="admin-tab-section" id="tab-section-orders">
                 <div class="admin-tab-header">
                     <h1>Customer Orders Tracking</h1>
+                </div>
+
+                <!-- Filters Bar -->
+                <div class="orders-filter-bar" style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; padding: 15px; background: #f8fafc; border-radius: 8px; border: 1px solid var(--border-color); align-items: center;">
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <label style="font-size: 0.8rem; font-weight: 700; color: var(--primary); font-family: var(--font-heading);">Filter by Date</label>
+                        <input type="date" id="order-filter-date" onchange="applyOrdersFilter()" style="padding: 6px 12px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9rem; color: #475569;">
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <label style="font-size: 0.8rem; font-weight: 700; color: var(--primary); font-family: var(--font-heading);">Filter by Status</label>
+                        <select id="order-filter-utr" onchange="applyOrdersFilter()" style="padding: 6px 12px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9rem; color: #475569; background: white;">
+                            <option value="all">All Orders</option>
+                            <option value="paid">Paid / Confirmed</option>
+                            <option value="pending">Pending Payment</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 5px; flex-grow: 1; min-width: 200px;">
+                        <label style="font-size: 0.8rem; font-weight: 700; color: var(--primary); font-family: var(--font-heading);">Search Orders</label>
+                        <input type="text" id="order-filter-search" oninput="applyOrdersFilter()" placeholder="Search by name, UTR, mobile, ID..." style="padding: 6px 12px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9rem; color: #475569;">
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 5px; margin-top: auto;">
+                        <button onclick="resetOrdersFilter()" style="padding: 8px 16px; background: #e2e8f0; border: none; border-radius: 4px; font-size: 0.9rem; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s;">Reset Filters</button>
+                    </div>
+                </div>
+
+                <!-- Filters Summary Row -->
+                <div class="orders-summary-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                    <div style="background: #ebf8ff; border: 1px solid #bee3f8; border-radius: 8px; padding: 12px 15px; display: flex; flex-direction: column; border-left: 4px solid #3182ce;">
+                        <span style="font-size: 0.8rem; color: #2b6cb0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; font-family: var(--font-heading);">Paid / Confirmed</span>
+                        <span id="summary-utr-submitted" style="font-size: 1.4rem; font-weight: 800; color: #2b6cb0; margin-top: 5px;">Rs. 0.00</span>
+                    </div>
+                    <div style="background: #f0fff4; border: 1px solid #c6f6d5; border-radius: 8px; padding: 12px 15px; display: flex; flex-direction: column; border-left: 4px solid #38a169;">
+                        <span style="font-size: 0.8rem; color: #22543d; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; font-family: var(--font-heading);">Pending Payment</span>
+                        <span id="summary-utr-approved" style="font-size: 1.4rem; font-weight: 800; color: #22543d; margin-top: 5px;">Rs. 0.00</span>
+                    </div>
+                    <div style="background: #edf2f7; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 15px; display: flex; flex-direction: column; border-left: 4px solid #718096;">
+                        <span style="font-size: 0.8rem; color: #4a5568; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; font-family: var(--font-heading);">Total Orders</span>
+                        <span id="summary-total-orders" style="font-size: 1.4rem; font-weight: 800; color: #4a5568; margin-top: 5px;">0 orders</span>
+                    </div>
                 </div>
 
                 <div class="table-wrapper">
@@ -248,6 +294,8 @@
 
                 <div class="settings-card" style="background-color: white; border-radius: 8px; border: 1px solid var(--border-color); padding: 30px; max-width: 600px; margin-top: 20px; box-shadow: var(--shadow-sm);">
                     <form id="store-settings-form" onsubmit="handleSaveSettings(event)">
+
+                        
                         <!-- SabPaisa Gateway Config -->
                         <h2 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--primary); margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">SabPaisa Payment Gateway</h2>
                         
@@ -463,12 +511,7 @@
                         </div>
                     </div>
 
-                    <div class="form-grid" style="grid-template-columns: 1fr; margin-top: 15px;">
-                        <div class="form-group">
-                            <label for="form-payment-link">Razorpay Payment Link *</label>
-                            <input type="url" id="form-payment-link" required placeholder="https://razorpay.me/@username" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.95rem; box-sizing: border-box;">
-                        </div>
-                    </div>
+                    <input type="hidden" id="form-payment-link" value="https://rzp.io/rzp/tHlmofq">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="closeProductModal()">Cancel</button>
@@ -479,7 +522,7 @@
     </div>
 
     <!-- Core Scripts -->
-    <script src="app-core.js?v=11.0"></script>
+    <script src="app-core.js?v=20.0"></script>
     <script>
         let currentAdminTab = 'dash';
         let isEditing = false;
@@ -564,31 +607,36 @@
             location.reload();
         }
 
-        let globalOrders = null;
-        function getAdminOrders() {
-            return globalOrders || getOrders();
-        }
-
         // Dashboard Metrics Calculator
         async function renderDashboard() {
-            const orders = getAdminOrders();
+            const orders = getOrders();
             const products = await getProducts(true);
 
             // Calculate metrics
-            const totalOrders = orders.length;
+            const paidOrders = orders.filter(o => ['pending', 'success', 'delivered', 'completed'].includes(o.status));
+            const paidSum = paidOrders.reduce((sum, o) => sum + o.total, 0);
+            const paidCount = paidOrders.length;
+
+            const pendingPayOrders = orders.filter(o => o.status === 'pending_payment');
+            const pendingPaySum = pendingPayOrders.reduce((sum, o) => sum + o.total, 0);
+            const pendingPayCount = pendingPayOrders.length;
+
             const activeProducts = products.length;
-            
-            // Revenue only from Delivered orders
-            const totalRevenue = orders
-                .filter(o => o.status === 'delivered')
-                .reduce((sum, o) => sum + o.total, 0);
 
-            const pendingOrders = orders.filter(o => o.status === 'pending').length;
+            document.getElementById('kpi-utr-submitted').innerText = formatPrice(paidSum);
+            const subCountEl = document.getElementById('kpi-utr-submitted-count');
+            if (subCountEl) {
+                subCountEl.innerText = `Confirmed payments (${paidCount} ${paidCount === 1 ? 'order' : 'orders'})`;
+            }
 
-            document.getElementById('kpi-revenue').innerText = formatPrice(totalRevenue);
-            document.getElementById('kpi-orders-count').innerText = totalOrders;
+            document.getElementById('kpi-utr-approved').innerText = formatPrice(pendingPaySum);
+            const appCountEl = document.getElementById('kpi-utr-approved-count');
+            if (appCountEl) {
+                appCountEl.innerText = `Awaiting payment (${pendingPayCount} ${pendingPayCount === 1 ? 'order' : 'orders'})`;
+            }
+
+            document.getElementById('kpi-total-orders').innerText = orders.length;
             document.getElementById('kpi-products-count').innerText = activeProducts;
-            document.getElementById('kpi-pending-count').innerText = pendingOrders;
 
             // Render 5 recent activity orders
             const recentContainer = document.getElementById('recent-orders-list');
@@ -612,19 +660,94 @@
             `).join('');
         }
 
-        // Orders Tab Renderer
         function renderOrders() {
             const container = document.getElementById('admin-orders-list');
             if (!container) return;
 
-            const orders = getAdminOrders();
+            const orders = getOrders();
             if (orders.length === 0) {
                 container.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 40px;">No customer orders placed yet</td></tr>';
                 return;
             }
 
+            // Read filter inputs
+            const filterDateEl = document.getElementById('order-filter-date');
+            const filterUtrEl = document.getElementById('order-filter-utr');
+            const filterSearchEl = document.getElementById('order-filter-search');
+            
+            const filterDate = filterDateEl ? filterDateEl.value : '';
+            const filterUtr = filterUtrEl ? filterUtrEl.value : 'all';
+            const filterSearch = filterSearchEl ? filterSearchEl.value.trim().toLowerCase() : '';
+
+            let filteredOrders = [...orders];
+
+            // 1. Apply Search Filter (Name, UTR, Phone, Order ID)
+            if (filterSearch) {
+                filteredOrders = filteredOrders.filter(o => {
+                    const name = (o.customer.name || '').toLowerCase();
+                    const phone = (o.customer.phone || '').toLowerCase();
+                    const utr = (o.utr || '').toLowerCase();
+                    const orderId = (o.id || '').toLowerCase();
+                    return name.includes(filterSearch) || 
+                           phone.includes(filterSearch) || 
+                           utr.includes(filterSearch) || 
+                           orderId.includes(filterSearch);
+                });
+            }
+
+            // 2. Apply Date Filter
+            if (filterDate) {
+                filteredOrders = filteredOrders.filter(o => {
+                    const localDateStr = new Date(o.date).toLocaleDateString('en-CA'); // YYYY-MM-DD
+                    return localDateStr === filterDate;
+                });
+            }
+
+            // 3. Apply Status Filter
+            if (filterUtr !== 'all') {
+                filteredOrders = filteredOrders.filter(o => {
+                    if (filterUtr === 'paid') {
+                        return ['pending', 'success', 'delivered', 'completed'].includes(o.status);
+                    } else if (filterUtr === 'pending') {
+                        return o.status === 'pending_payment';
+                    } else if (filterUtr === 'cancelled') {
+                        return o.status === 'cancelled';
+                    }
+                    return true;
+                });
+            }
+
             // Sort orders by date descending
-            const sortedOrders = [...orders].sort((a,b) => new Date(b.date) - new Date(a.date));
+            const sortedOrders = filteredOrders.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            // Calculate filtered sums and counts
+            const paidOrders = filteredOrders.filter(o => ['pending', 'success', 'delivered', 'completed'].includes(o.status));
+            const sumPaid = paidOrders.reduce((sum, o) => sum + o.total, 0);
+            const countPaid = paidOrders.length;
+
+            const pendingPayOrders = filteredOrders.filter(o => o.status === 'pending_payment');
+            const sumPendingPay = pendingPayOrders.reduce((sum, o) => sum + o.total, 0);
+            const countPendingPay = pendingPayOrders.length;
+
+            // Update UI
+            const subEl = document.getElementById('summary-utr-submitted');
+            const appEl = document.getElementById('summary-utr-approved');
+            
+            if (subEl) {
+                subEl.innerText = `${formatPrice(sumPaid)} (${countPaid} ${countPaid === 1 ? 'order' : 'orders'})`;
+            }
+            if (appEl) {
+                appEl.innerText = `${formatPrice(sumPendingPay)} (${countPendingPay} ${countPendingPay === 1 ? 'order' : 'orders'})`;
+            }
+            const totEl = document.getElementById('summary-total-orders');
+            if (totEl) {
+                totEl.innerText = `${filteredOrders.length} ${filteredOrders.length === 1 ? 'order' : 'orders'}`;
+            }
+
+            if (sortedOrders.length === 0) {
+                container.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 40px;">No orders match the selected filters</td></tr>';
+                return;
+            }
 
             container.innerHTML = sortedOrders.map(o => {
                 const itemsHtml = o.items.map(item => `
@@ -633,17 +756,25 @@
                     </div>
                 `).join('');
 
-                const providerLabel = o.upiProvider ? (o.upiProvider === 'phonepe' ? 'PhonePe' : (o.upiProvider === 'paytm' ? 'Paytm' : 'SCAN PAY')) : 'UPI QR';
+                const providerLabel = o.paymentMethod === 'phonepe' ? 'PhonePe' : 
+                                      (o.paymentMethod === 'paytm' ? 'Paytm' : 
+                                      (o.paymentMethod === 'gpay' ? 'Google Pay' : 
+                                      (o.paymentMethod === 'sabpaisa' ? 'SabPaisa' : 
+                                      (o.paymentMethod === 'upi' ? 'UPI QR' : o.paymentMethod || 'SabPaisa'))));
 
                 const customerHtml = `
                     <strong>${o.customer.name}</strong><br>
                     📞 ${o.customer.phone}<br>
                     🏠 ${o.customer.address}, ${o.customer.city}, ${o.customer.state} - ${o.customer.pin}
-                    ${o.paymentMethod === 'upi' ? `
-                        <div style="margin-top: 6px; padding: 4px 8px; background-color: ${(o.utr === 'Real-Time Verified' || o.utr === 'Auto-Verified') ? '#c6f6d5' : '#feebc8'}; color: ${(o.utr === 'Real-Time Verified' || o.utr === 'Auto-Verified') ? '#22543d' : '#c05621'}; font-size: 0.8rem; border-radius: 4px; font-weight: 700; border: 1px solid ${(o.utr === 'Real-Time Verified' || o.utr === 'Auto-Verified') ? '#9ae6b4' : '#fbd38d'};">
-                            ${(o.utr === 'Real-Time Verified' || o.utr === 'Auto-Verified') ? `✅ Payment Confirmed (${providerLabel})` : `${providerLabel} UTR: ${o.utr || 'N/A'}`}
+                    ${o.utr ? `
+                        <div style="margin-top: 6px; padding: 4px 8px; background-color: #c6f6d5; color: #22543d; font-size: 0.8rem; border-radius: 4px; font-weight: 700; border: 1px solid #9ae6b4; display: inline-block;">
+                            ✅ Payment Confirmed (${providerLabel} Ref: ${o.utr})
                         </div>
-                    ` : ''}
+                    ` : `
+                        <div style="margin-top: 6px; padding: 4px 8px; background-color: #feebc8; color: #c05621; font-size: 0.8rem; border-radius: 4px; font-weight: 700; border: 1px solid #fbd38d; display: inline-block;">
+                            ⏳ Payment Pending
+                        </div>
+                    `}
                 `;
 
                 // Render dynamic status changes
@@ -661,8 +792,8 @@
                     <tr>
                         <td>
                             <strong>${o.id}</strong><br>
-                            <span style="font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; font-weight: 700; background-color: ${o.paymentMethod === 'upi' ? '#ebf8ff' : '#f7fafc'}; color: ${o.paymentMethod === 'upi' ? '#2b6cb0' : '#4a5568'}; display: inline-block; margin-top: 4px; border: 1px solid ${o.paymentMethod === 'upi' ? '#bee3f8' : '#e2e8f0'}; text-transform: uppercase;">
-                                ${o.paymentMethod === 'upi' ? providerLabel : 'COD'}
+                            <span style="font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; font-weight: 700; background-color: #ebf8ff; color: #2b6cb0; display: inline-block; margin-top: 4px; border: 1px solid #bee3f8; text-transform: uppercase;">
+                                ${providerLabel}
                             </span>
                         </td>
                         <td>${new Date(o.date).toLocaleString()}</td>
@@ -677,20 +808,67 @@
         }
 
         async function updateOrderStatus(orderId, newStatus) {
-            if (typeof window.updateOrderStatusInDb === 'function') {
-                await window.updateOrderStatusInDb(orderId, newStatus);
-            } else {
-                const orders = getOrders();
-                const orderIndex = orders.findIndex(o => o.id === orderId);
-                if (orderIndex !== -1) {
-                    orders[orderIndex].status = newStatus;
-                    localStorage.setItem('ikko_orders', JSON.stringify(orders));
+            const orders = getOrders();
+            const orderIndex = orders.findIndex(o => o.id === orderId);
+            if (orderIndex !== -1) {
+                const order = orders[orderIndex];
+                const oldStatus = order.status;
+                order.status = newStatus;
+                
+                localStorage.setItem('ikko_orders', JSON.stringify(orders));
+                
+                // Sync to Firestore if enabled
+                const settings = getSettings();
+                if (settings.firebaseEnabled) {
+                    const db = await initFirebase();
+                    if (db) {
+                        try {
+                            await db.collection('orders').doc(orderId).update({ status: newStatus });
+                            console.log("Order status synced to Firestore:", orderId, newStatus);
+                        } catch (e) {
+                            console.error("Failed to sync order status to Firestore:", e);
+                        }
+                    }
                 }
+
+                // Fire Conversions API tracking if approved and not already fired
+                const approvalStatuses = ['pending', 'success', 'delivered', 'completed'];
+                if (approvalStatuses.includes(newStatus) && !order.pixelFired) {
+                    console.log(`[CAPI] Firing Conversions API Purchase tracking request for order: ${orderId}`);
+                    fetch('/api/track-purchase', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ order: order })
+                    }).then(res => res.json())
+                      .then(async (resData) => {
+                          if (resData.success) {
+                              console.log(`[CAPI] Order purchase successfully tracked via server.`);
+                              order.pixelFired = true;
+                              
+                              // Update LocalStorage
+                              localStorage.setItem('ikko_orders', JSON.stringify(orders));
+                              
+                              // Sync pixelFired: true to Firestore
+                              if (settings.firebaseEnabled) {
+                                  const db = await initFirebase();
+                                  if (db) {
+                                      db.collection('orders').doc(orderId).update({ pixelFired: true })
+                                        .then(() => console.log("[CAPI] Synced pixelFired=true to Firestore."))
+                                        .catch(e => console.error("[CAPI] Failed to sync pixelFired to Firestore:", e));
+                                  }
+                              }
+                          } else {
+                              console.error(`[CAPI] Meta Conversions API failed:`, resData.message, resData.detail);
+                          }
+                      }).catch(err => {
+                          console.error("[CAPI] Network error tracking purchase:", err);
+                      });
+                }
+                
+                // Re-render the active tab
+                if (currentAdminTab === 'dash') renderDashboard();
+                if (currentAdminTab === 'orders') renderOrders();
             }
-            
-            // Re-render the active tab
-            if (currentAdminTab === 'dash') renderDashboard();
-            if (currentAdminTab === 'orders') renderOrders();
         }
 
         // Categorize helper
@@ -1143,32 +1321,72 @@
             }
         }
 
-        // Load dashboard stats automatically
-        window.addEventListener('load', async () => {
-            // Wait for settings to load
+        let ordersListenerUnsubscribe = null;
+
+        async function initRealTimeOrders() {
             if (window.settingsLoadingPromise) {
-                try {
-                    await window.settingsLoadingPromise;
-                } catch (e) {
-                    console.error("Error waiting for settings loading:", e);
+                await window.settingsLoadingPromise;
+            }
+            const settings = getSettings();
+            if (settings.firebaseEnabled) {
+                const db = await initFirebase();
+                if (db) {
+                    console.log("Listening to orders from Firestore in real-time...");
+                    ordersListenerUnsubscribe = db.collection('orders').onSnapshot((snapshot) => {
+                        const firestoreOrders = [];
+                        snapshot.forEach((doc) => {
+                            firestoreOrders.push(doc.data());
+                        });
+                        localStorage.setItem('ikko_orders', JSON.stringify(firestoreOrders));
+                        
+                        // Re-render
+                        if (currentAdminTab === 'dash') renderDashboard();
+                        if (currentAdminTab === 'orders') renderOrders();
+                    }, (error) => {
+                        console.error("Firestore orders subscription error:", error);
+                    });
                 }
             }
-            
-            // Check if Firebase order subscription is available
-            if (typeof window.subscribeToFirestoreOrders === 'function') {
-                window.subscribeToFirestoreOrders((orders) => {
-                    if (orders) {
-                        globalOrders = orders;
-                        console.log(`[Firebase Admin] Synced ${orders.length} orders from Firestore.`);
-                    } else {
-                        globalOrders = null;
-                    }
-                    renderDashboard();
-                    if (currentAdminTab === 'orders') renderOrders();
-                });
+        }
+
+        window.viewScreenshot = function(base64Data, orderId) {
+            let modal = document.getElementById('screenshot-preview-modal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'screenshot-preview-modal';
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100vw';
+                modal.style.height = '100vh';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.85)';
+                modal.style.zIndex = '99999';
+                modal.style.display = 'flex';
+                modal.style.flexDirection = 'column';
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+                modal.style.cursor = 'pointer';
+                modal.onclick = () => modal.style.display = 'none';
+                
+                modal.innerHTML = `
+                    <div style="position: relative; max-width: 90%; max-height: 85%; display: flex; flex-direction: column; align-items: center;" onclick="event.stopPropagation()">
+                        <span style="position: absolute; top: -45px; right: 0; color: white; font-size: 2.5rem; font-weight: bold; cursor: pointer;" onclick="document.getElementById('screenshot-preview-modal').style.display = 'none'">&times;</span>
+                        <h4 id="screenshot-modal-title" style="color: white; margin: 0 0 15px 0; font-family: sans-serif; text-align: center; font-size: 1.1rem; font-weight: 700;"></h4>
+                        <img id="screenshot-modal-img" src="" style="max-width: 100%; max-height: 75vh; object-fit: contain; border-radius: 8px; border: 3px solid white; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                    </div>
+                `;
+                document.body.appendChild(modal);
             }
             
+            document.getElementById('screenshot-modal-title').innerText = `Receipt for Order: ${orderId}`;
+            document.getElementById('screenshot-modal-img').src = base64Data;
+            modal.style.display = 'flex';
+        }
+
+        // Load dashboard stats automatically
+        window.addEventListener('load', async () => {
             await renderDashboard();
+            initRealTimeOrders();
         });
 
         // Listen for Firestore background product sync and refresh inventory view
@@ -1221,6 +1439,21 @@
                     alert("Failed to restore database: " + e.message);
                 }
             }
+        }
+
+        // Order filters helper functions
+        function applyOrdersFilter() {
+            renderOrders();
+        }
+
+        function resetOrdersFilter() {
+            const filterDateEl = document.getElementById('order-filter-date');
+            const filterUtrEl = document.getElementById('order-filter-utr');
+            const filterSearchEl = document.getElementById('order-filter-search');
+            if (filterDateEl) filterDateEl.value = '';
+            if (filterUtrEl) filterUtrEl.value = 'all';
+            if (filterSearchEl) filterSearchEl.value = '';
+            renderOrders();
         }
     </script>
 </body>
