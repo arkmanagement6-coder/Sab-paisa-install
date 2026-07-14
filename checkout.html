@@ -367,7 +367,7 @@
             const discount = originalTotal - finalTotal;
 
             // Update main details
-            document.getElementById('price-original-sum').innerText = formatPrice(originalTotal);
+            document.getElementById('price-original-sum').innerText = formatPrice(finalTotal);
             document.getElementById('price-discount-sum').innerText = '-' + formatPrice(discount);
             document.getElementById('price-final-total').innerText = formatPrice(finalTotal);
 
