@@ -20,19 +20,6 @@ const MIME_TYPES = {
 const server = http.createServer((req, res) => {
     console.log(`[${new Date().toLocaleTimeString()}] ${req.method} ${req.url}`);
     
-    // Server-side payment gateway proxy endpoints
-    if (req.method === 'POST' && req.url === '/api/create-payment') {
-        const createPaymentHandler = require('./api/create-payment');
-        createPaymentHandler(req, res);
-        return;
-    }
-    
-    if (req.url.startsWith('/api/check-status')) {
-        const checkStatusHandler = require('./api/check-status');
-        checkStatusHandler(req, res);
-        return;
-    }
-    
     // Normalize path and solve index.html routing
     let decodedUrl;
     try {

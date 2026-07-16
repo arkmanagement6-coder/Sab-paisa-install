@@ -402,13 +402,13 @@
             const orderNum = Math.floor(100000 + Math.random() * 900000);
             const orderId = `IKKO-${orderNum}`;
 
-            // Create order object with pending_payment status
+            // Create order object with pending status (Confirmed COD)
             const order = {
                 id: orderId,
                 date: new Date().toISOString(),
-                status: 'pending_payment',
-                paymentMethod: 'sabpaisa',
-                utr: 'Pending SabPaisa',
+                status: 'pending',
+                paymentMethod: 'cod',
+                utr: 'COD Direct Order',
                 customer: {
                     name,
                     phone,
@@ -421,48 +421,28 @@
                 total: total
             };
 
-            // Save order to localStorage & Firestore
-            await saveOrder(order);
-
-            // Show redirecting loading state on order buttons
+            // Show processing state on order buttons
             const orderButtons = document.querySelectorAll('.btn-orange-submit, .btn-primary-action-orange');
             orderButtons.forEach(btn => {
                 btn.disabled = true;
                 btn.style.opacity = '0.7';
-                btn.innerText = `Redirecting to Payment Gateway...`;
+                btn.innerText = `Placing Order...`;
             });
 
             try {
-                const response = await fetch('/api/create-payment', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        orderId: orderId,
-                        amount: total,
-                        redirectUrl: `${window.location.origin}/order-confirmation.html?orderId=${orderId}&amount=${total}`,
-                        customerName: name,
-                        customerPhone: phone,
-                        customerEmail: `${phone}@luck1.com`
-                    })
-                });
-
-                const result = await response.json();
-                if (result && result.success && result.redirectUrl) {
-                    // Redirect directly to SabPaisa Payment Checkout Gateway
-                    window.location.href = result.redirectUrl;
-                } else {
-                    alert('Failed to initiate SabPaisa checkout: ' + (result.message || 'Please try again.'));
-                    orderButtons.forEach(btn => {
-                        btn.disabled = false;
-                        btn.style.opacity = '1';
-                        btn.innerText = 'Order Now';
-                    });
+                // Save order to localStorage & Firestore
+                await saveOrder(order);
+                
+                // Clear the shopping cart
+                if (typeof clearCart === 'function') {
+                    clearCart();
                 }
+
+                // Redirect directly to order confirmation page with SUCCESS status
+                window.location.href = `order-confirmation.html?orderId=${orderId}&amount=${total}&status=SUCCESS`;
             } catch (err) {
-                console.error('SabPaisa connection error:', err);
-                alert('Connection error occurred while redirecting to SabPaisa. Please check your internet and try again.');
+                console.error('Error placing order:', err);
+                alert('An error occurred while placing your order. Please try again.');
                 orderButtons.forEach(btn => {
                     btn.disabled = false;
                     btn.style.opacity = '1';
