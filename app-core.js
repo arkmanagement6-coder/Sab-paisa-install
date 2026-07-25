@@ -120,29 +120,6 @@ window.trackPurchaseEvent = function(order) {
 
 const INITIAL_PRODUCTS = [
   {
-    "id": "1111111111111",
-    "paymentLink": "https://rzp.io/rzp/tHlmofq",
-    "category": "tablets",
-    "price": "Rs. 1.00",
-    "badge": "Demo Product",
-    "title": "SabPaisa Live 1 Rs Demo Test Product",
-    "image": "demo_cake.png",
-    "images": [
-      "demo_cake.png"
-    ],
-    "url": "/products/sabpaisa-live-1-rs-demo-test-product",
-    "stockStatus": "in-stock",
-    "handle": "sabpaisa-live-1-rs-demo-test-product",
-    "comparePrice": "Rs. 99.00",
-    "specs": [
-      {
-        "name": "Price",
-        "value": "1 Rs"
-      }
-    ],
-    "description": "<h1>SabPaisa Payment Gateway Live Testing Demo Product</h1><p>Use this product to test payments of exactly Rs. 1.00 on the live SabPaisa gateway.</p>"
-  },
-  {
     "id": "8270415000000",
     "paymentLink": "https://rzp.io/rzp/tHlmofq",
     "category": "tablets",
@@ -822,7 +799,16 @@ const INITIAL_PRODUCTS = [
 
 // Database Initialization
 function dbInit() {
-    if (!localStorage.getItem('ikko_products')) {
+    let localProds = null;
+    try {
+        localProds = JSON.parse(localStorage.getItem('ikko_products'));
+    } catch(e) {}
+    if (localProds && Array.isArray(localProds)) {
+        const filtered = localProds.filter(p => p.id !== '1111111111111');
+        if (filtered.length !== localProds.length) {
+            localStorage.setItem('ikko_products', JSON.stringify(filtered));
+        }
+    } else {
         localStorage.setItem('ikko_products', JSON.stringify(INITIAL_PRODUCTS));
     }
     if (!localStorage.getItem('ikko_orders')) {
