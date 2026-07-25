@@ -1,1 +1,82 @@
-{" cleanUrls\: true}
+{
+  "version": 2,
+  "cleanUrls": true,
+  "builds": [
+    {
+      "src": "checkout.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "order-confirmation.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "admin.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "live-admin.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "product.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "about-us.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "account.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "collections.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "contact-information.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "privacy-policy.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "refund-policy.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "shipping-policy.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "terms-of-service.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "style.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "app-core.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "products.json",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "settings.json",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "Image/**/*",
+      "use": "@vercel/static"
+    }
+  ]
+}
