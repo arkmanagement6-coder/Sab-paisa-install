@@ -242,18 +242,18 @@
                 // 2. If not found in Firestore, directly reconstruct a minimal order object (no status check query required!)
                 if (!order) {
                     const amountParam = parseFloat(urlParams.get('amount') || '999');
-                    const txnId = urlParams.get('transaction_id') || urlParams.get('spTxnId') || urlParams.get('client_txn_id') || 'COD Verified';
+                    const txnId = urlParams.get('transaction_id') || urlParams.get('spTxnId') || urlParams.get('client_txn_id') || 'SabPaisa Verified';
 
                     order = {
                         id: orderId,
                         date: new Date().toISOString(),
                         status: 'pending',
-                        paymentMethod: 'cod',
+                        paymentMethod: 'sabpaisa',
                         utr: txnId,
                         customer: {
                             name: 'Valued Customer',
                             phone: '',
-                            address: 'COD Direct Redirect',
+                            address: 'SabPaisa PG Redirect',
                             city: '',
                             state: '',
                             pin: ''
@@ -469,18 +469,18 @@
             if (hasSuccessIndicator) {
                 if (orderIndex === -1) {
                     const amountParam = parseFloat(urlParams.get('amount') || '999');
-                    const txnId = urlParams.get('transaction_id') || urlParams.get('spTxnId') || urlParams.get('client_txn_id') || 'COD Verified';
+                    const txnId = urlParams.get('transaction_id') || urlParams.get('spTxnId') || urlParams.get('client_txn_id') || 'SabPaisa Verified';
 
                     order = {
                         id: orderId,
                         date: new Date().toISOString(),
                         status: 'pending',
-                        paymentMethod: 'cod',
+                        paymentMethod: 'sabpaisa',
                         utr: txnId,
                         customer: {
                             name: 'Valued Customer',
                             phone: '',
-                            address: 'COD Direct Redirect',
+                            address: 'SabPaisa PG Redirect',
                             city: '',
                             state: '',
                             pin: ''

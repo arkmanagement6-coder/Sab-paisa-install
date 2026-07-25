@@ -3,6 +3,14 @@
   "cleanUrls": true,
   "builds": [
     {
+      "src": "api/create-payment.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/check-status.js",
+      "use": "@vercel/node"
+    },
+    {
       "src": "checkout.html",
       "use": "@vercel/static"
     },
@@ -77,6 +85,20 @@
     {
       "src": "Image/**/*",
       "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/create-payment",
+      "dest": "api/create-payment.js"
+    },
+    {
+      "src": "/api/check-status",
+      "dest": "api/check-status.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
     }
   ]
 }
