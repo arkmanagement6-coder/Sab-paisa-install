@@ -1,5 +1,28 @@
 [
   {
+    "id": "1111111111111",
+    "paymentLink": "https://rzp.io/rzp/tHlmofq",
+    "category": "tablets",
+    "price": "Rs. 1.00",
+    "badge": "Demo Product",
+    "title": "SabPaisa Live 1 Rs Demo Test Product",
+    "image": "demo_cake.png",
+    "images": [
+      "demo_cake.png"
+    ],
+    "url": "/products/sabpaisa-live-1-rs-demo-test-product",
+    "stockStatus": "in-stock",
+    "handle": "sabpaisa-live-1-rs-demo-test-product",
+    "comparePrice": "Rs. 99.00",
+    "specs": [
+      {
+        "name": "Price",
+        "value": "1 Rs"
+      }
+    ],
+    "description": "<h1>SabPaisa Payment Gateway Live Testing Demo Product</h1><p>Use this product to test payments of exactly Rs. 1.00 on the live SabPaisa gateway.</p>"
+  },
+  {
     "id": "8270415000000",
     "paymentLink": "https://rzp.io/rzp/tHlmofq",
     "category": "tablets",
