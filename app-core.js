@@ -68,7 +68,7 @@ window.trackPurchaseEvent = function(order) {
     // Memory Cache, SessionStorage and LocalStorage guard to prevent double-firing
     window.firedPixels = window.firedPixels || {};
     if (order.pixelFired || window.firedPixels[order.id] || sessionStorage.getItem('pixel_fired_' + order.id) === 'true') {
-        console.log(`[Pixel] Purchase event already fired for order ${order.id}. Skipping.`);
+        console.warn(`[Pixel Verification] Purchase event for order ${order.id} was already successfully fired and tracked in this browser session. To prevent duplicate tracking data, it is skipped on reload/refresh. Place a new test order to fire it again.`);
         return;
     }
 
