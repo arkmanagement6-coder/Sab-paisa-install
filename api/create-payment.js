@@ -4,14 +4,18 @@ const fs = require('fs');
 const crypto = require('crypto');
 
 // Helper to make HTTPS requests
-function makeRequest(url, method, headers, postData = null) {
+function makeRequest(url, method, headers = {}, postData = null) {
     return new Promise((resolve, reject) => {
         const urlObj = new URL(url);
+        const reqHeaders = { ...headers };
+        if (postData) {
+            reqHeaders['Content-Length'] = Buffer.byteLength(postData);
+        }
         const options = {
             hostname: urlObj.hostname,
             path: urlObj.pathname + urlObj.search,
             method: method,
-            headers: headers
+            headers: reqHeaders
         };
 
         const req = https.request(options, (res) => {
