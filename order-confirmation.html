@@ -194,7 +194,7 @@
 </head>
 <body>
 
-    <!-- Header will be rendered here by app-core.js?v=13.0 -->
+    <!-- Header will be rendered here by app-core.js?v=14.0 -->
     <div id="header-placeholder"></div>
 
     <main class="storefront-main" style="min-height: 70vh;">
@@ -206,11 +206,11 @@
         </div>
     </main>
 
-    <!-- Footer will be rendered here by app-core.js?v=13.0 -->
+    <!-- Footer will be rendered here by app-core.js?v=14.0 -->
     <div id="footer-placeholder"></div>
 
     <!-- Core Scripts -->
-    <script src="app-core.js?v=13.0"></script>
+    <script src="app-core.js?v=14.0"></script>
     <script>
         async function renderConfirmation() {
             const card = document.getElementById('confirmation-content-card');
@@ -305,6 +305,9 @@
                 if (typeof window.trackPurchaseEvent === 'function') {
                     window.trackPurchaseEvent(order);
                 }
+                
+                // Run diagnostic update
+                setTimeout(updatePixelDiagnostics, 500);
 
                 const itemsHtml = order.items.map(item => `
                     <div class="confirmation-item">
@@ -371,10 +374,65 @@
                         </div>
                     </div>
 
-                    <div class="continue-btn-wrap">
+                    <div class="continue-btn-wrap" style="margin-bottom: 25px;">
                         <a href="index.html" class="confirm-home-btn">Continue Shopping</a>
                     </div>
+                    
+                    <!-- Meta Pixel Diagnostic Box -->
+                    <div class="pixel-diagnostic-box" style="margin-top: 30px; padding: 15px; border-radius: 8px; background-color: #f7fafc; border: 1px solid #e2e8f0; font-size: 0.85rem; font-family: monospace; color: #4a5568; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto; box-shadow: var(--shadow-sm);">
+                        <strong style="color: #2d3748; display: block; margin-bottom: 8px; font-size: 0.9rem;">🔍 Meta Pixel Diagnostic Console</strong>
+                        <div style="margin-bottom: 4px;">Target Pixel ID: <span style="color: #2b6cb0; font-weight: 700;">1039324625032380</span></div>
+                        <div style="margin-bottom: 4px;">Library Load: <span id="diag-lib-status" style="font-weight: 700; color: #d69e2e;">Checking...</span></div>
+                        <div style="margin-bottom: 4px;">Purchase Event: <span id="diag-event-status" style="font-weight: 700; color: #d69e2e;">Verifying...</span></div>
+                        <div id="diag-details-row" style="margin-top: 8px; font-size: 0.75rem; color: #718096; line-height: 1.4; border-top: 1px dashed #e2e8f0; padding-top: 8px;">
+                            Initializing verification checks...
+                        </div>
+                    </div>
                 `;
+            }
+
+            function updatePixelDiagnostics() {
+                const libStatusEl = document.getElementById('diag-lib-status');
+                const eventStatusEl = document.getElementById('diag-event-status');
+                const detailsEl = document.getElementById('diag-details-row');
+                
+                if (!libStatusEl || !eventStatusEl || !detailsEl) return;
+                
+                const status = window.pixelStatus || {};
+                const fbScriptLoaded = (typeof fbq === 'function' && fbq.version);
+                
+                if (fbScriptLoaded) {
+                    libStatusEl.innerText = 'Active (Loaded Successfully)';
+                    libStatusEl.style.color = '#38a169'; // Green
+                } else if (typeof fbq === 'function') {
+                    libStatusEl.innerText = 'Stub Active (Real Script Blocked/Failed)';
+                    libStatusEl.style.color = '#dd6b20'; // Orange
+                } else {
+                    libStatusEl.innerText = 'Blocked / Failed to Load';
+                    libStatusEl.style.color = '#e53e3e'; // Red
+                }
+                
+                if (status.fired === 'SUCCESS') {
+                    eventStatusEl.innerText = 'SUCCESS (Tracked Rs. ' + (status.value || '0') + ')';
+                    eventStatusEl.style.color = '#38a169'; // Green
+                    detailsEl.innerHTML = '✅ Purchase event successfully sent to Meta servers for order: <strong>' + (status.orderId || '') + '</strong>.';
+                } else if (status.fired && status.fired.startsWith('SKIPPED')) {
+                    eventStatusEl.innerText = 'SKIPPED (Duplicate Prevention)';
+                    eventStatusEl.style.color = '#3182ce'; // Blue
+                    detailsEl.innerHTML = 'ℹ️ This order was already tracked in your current browser session. We block duplicate tracking to protect your Ads Manager metrics. (If you want to fire it again, please place a new order).';
+                } else if (status.fired && status.fired.startsWith('FAILED')) {
+                    eventStatusEl.innerText = 'FAILED';
+                    eventStatusEl.style.color = '#e53e3e'; // Red
+                    detailsEl.innerHTML = '❌ Tracking call failed: ' + status.fired;
+                } else {
+                    eventStatusEl.innerText = 'NOT TRIGGERED';
+                    eventStatusEl.style.color = '#e53e3e'; // Red
+                    if (!fbScriptLoaded) {
+                        detailsEl.innerHTML = '⚠️ The purchase event could not be sent because your browser (or adblocker) blocked the connection to <strong>connect.facebook.net</strong>.';
+                    } else {
+                        detailsEl.innerHTML = '⚠️ Purchase tracking failed to trigger. Please check your browser developer tools console (F12) for errors.';
+                    }
+                }
             }
 
             function renderFailedUI(order) {

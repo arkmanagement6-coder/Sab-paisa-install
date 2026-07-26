@@ -65,9 +65,15 @@
 window.trackPurchaseEvent = function(order) {
     if (!order) return;
     
+    // Initialize diagnostic status object
+    window.pixelStatus = window.pixelStatus || {};
+    window.pixelStatus.orderId = order.id;
+    window.pixelStatus.fbqExists = (typeof fbq === 'function');
+    
     // Memory Cache, SessionStorage and LocalStorage guard to prevent double-firing
     window.firedPixels = window.firedPixels || {};
     if (order.pixelFired || window.firedPixels[order.id] || sessionStorage.getItem('pixel_fired_' + order.id) === 'true') {
+        window.pixelStatus.fired = 'SKIPPED (Duplicate Prevention)';
         console.warn(`[Pixel Verification] Purchase event for order ${order.id} was already successfully fired and tracked in this browser session. To prevent duplicate tracking data, it is skipped on reload/refresh. Place a new test order to fire it again.`);
         return;
     }
@@ -80,13 +86,20 @@ window.trackPurchaseEvent = function(order) {
             if (!isNaN(parsed)) totalVal = parsed;
         }
         
-        console.log(`[Pixel] Firing Purchase event for order ${order.id} with value Rs. ${totalVal}`);
-        fbq('track', 'Purchase', {
-            value: totalVal,
-            currency: 'INR',
-            content_type: 'product',
-            content_ids: (order.items || []).map(item => String(item.id))
-        });
+        try {
+            console.log(`[Pixel] Firing Purchase event for order ${order.id} with value Rs. ${totalVal}`);
+            fbq('track', 'Purchase', {
+                value: totalVal,
+                currency: 'INR',
+                content_type: 'product',
+                content_ids: (order.items || []).map(item => String(item.id))
+            });
+            window.pixelStatus.fired = 'SUCCESS';
+            window.pixelStatus.value = totalVal;
+        } catch (e) {
+            window.pixelStatus.fired = 'FAILED: ' + e.message;
+            console.error('[Pixel] fbq track Purchase failed:', e);
+        }
         
         // Mark as fired in memory and sessionStorage immediately
         window.firedPixels[order.id] = true;
