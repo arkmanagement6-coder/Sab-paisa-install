@@ -1287,7 +1287,10 @@ async function getProducts(forceSync = false) {
 
     if (cached && !forceSync) {
         try {
-            const products = JSON.parse(cached);
+            let products = JSON.parse(cached);
+            if (Array.isArray(products)) {
+                products = products.filter(p => String(p.id) !== '8270415000000_demo');
+            }
             if (products && products.length > 0) {
                 // Trigger background sync only once per session to prevent hitting Firestore limits
                 if (!alreadySynced) {
@@ -1300,7 +1303,12 @@ async function getProducts(forceSync = false) {
     }
     // No cache or forcing sync, await the sync
     sessionStorage.setItem('ikko_products_synced', 'true');
-    return await syncProductsBackground(forceSync);
+    let synced = await syncProductsBackground(forceSync);
+    if (!synced || synced.length === 0) {
+        synced = (typeof INITIAL_PRODUCTS !== 'undefined') ? [...INITIAL_PRODUCTS] : [];
+        localStorage.setItem('ikko_products', JSON.stringify(synced));
+    }
+    return synced;
 }
 
 async function saveProducts(products, changedProduct = null) {
