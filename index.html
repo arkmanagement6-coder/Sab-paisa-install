@@ -4,51 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IKKO DIGITAL | Premium Electronics Flat Rs. 999.00</title>
-    <script>
-    window.onerror = function(message, source, lineno, colno, error) {
-        const show = () => {
-            const div = document.createElement('div');
-            div.style.position = 'fixed';
-            div.style.top = '0';
-            div.style.left = '0';
-            div.style.width = '100%';
-            div.style.background = 'red';
-            div.style.color = 'white';
-            div.style.padding = '20px';
-            div.style.zIndex = '99999';
-            div.style.fontFamily = 'monospace';
-            div.innerHTML = '<strong>JS Error:</strong> ' + message + ' at ' + source + ':' + lineno + ':' + colno;
-            document.body.appendChild(div);
-        };
-        if (document.body) {
-            show();
-        } else {
-            window.addEventListener('DOMContentLoaded', show);
-        }
-        return false;
-    };
-    window.addEventListener('unhandledrejection', function(event) {
-        const show = () => {
-            const div = document.createElement('div');
-            div.style.position = 'fixed';
-            div.style.top = '0';
-            div.style.left = '0';
-            div.style.width = '100%';
-            div.style.background = 'orange';
-            div.style.color = 'black';
-            div.style.padding = '20px';
-            div.style.zIndex = '99999';
-            div.style.fontFamily = 'monospace';
-            div.innerHTML = '<strong>Unhandled Rejection:</strong> ' + (event.reason ? event.reason.message || event.reason : 'Unknown reason');
-            document.body.appendChild(div);
-        };
-        if (document.body) {
-            show();
-        } else {
-            window.addEventListener('DOMContentLoaded', show);
-        }
-    });
-    </script>
     <link rel="stylesheet" href="style.css?v=200.0">
     <!-- Meta Pixel Code -->
     <script>
@@ -245,7 +200,21 @@
             const grid = document.getElementById('products-grid-container');
             if (!grid) return;
 
-            const products = await getProducts();
+            let products = [];
+            try {
+                if (typeof getProducts === 'function') {
+                    products = await getProducts();
+                } else if (typeof window.getProducts === 'function') {
+                    products = await window.getProducts();
+                } else {
+                    const cached = localStorage.getItem('ikko_products');
+                    if (cached) products = JSON.parse(cached);
+                    else products = (typeof INITIAL_PRODUCTS !== 'undefined') ? INITIAL_PRODUCTS : [];
+                }
+            } catch(e) {
+                console.error("Error fetching products:", e);
+                products = (typeof INITIAL_PRODUCTS !== 'undefined') ? INITIAL_PRODUCTS : [];
+            }
             
             // Filter products
             let filteredProducts = products;

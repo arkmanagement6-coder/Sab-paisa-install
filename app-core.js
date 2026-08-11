@@ -1825,3 +1825,15 @@ window.addEventListener('DOMContentLoaded', () => {
     renderHeader();
     renderFooter();
 });
+
+// Expose core functions globally on window to prevent undefined function errors
+window.getProducts = getProducts;
+window.saveProducts = saveProducts;
+window.getCart = getCart;
+window.saveCart = saveCart;
+window.addToCart = addToCart;
+window.getCartTotal = getCartTotal;
+window.saveOrder = saveOrder;
+window.getOrders = getOrders;
+window.parsePrice = parsePrice;
+window.formatPrice = formatPrice;
