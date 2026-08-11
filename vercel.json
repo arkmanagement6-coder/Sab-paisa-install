@@ -1,5 +1,15 @@
 {
   "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/api/create-payment",
+      "destination": "/api/create-payment.js"
+    },
+    {
+      "source": "/api/check-status",
+      "destination": "/api/check-status.js"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
