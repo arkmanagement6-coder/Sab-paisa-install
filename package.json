@@ -2,6 +2,7 @@
   "name": "sab-paisa-install",
   "version": "1.0.0",
   "private": true,
+  "main": "index.js",
   "scripts": {
     "build": "echo 'Static build ready'"
   },
