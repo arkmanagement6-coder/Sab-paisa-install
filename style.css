@@ -47,122 +47,103 @@ button, input, select, textarea {
 }
 
 /* --- ANNOUNCEMENT BAR --- */
-.announcement-bar {
-    background-color: #000000;
-    color: white;
-    text-align: center;
-    padding: 10px 15px;
-    font-size: 0.82rem;
-    font-weight: 600;
+/* --- ANNOUNCEMENT MARQUEE TICKER LINE --- */
+.marquee-ticker-bar {
+    background-color: #d92525;
+    color: #ffffff;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 8px 0;
+    font-size: 0.85rem;
+    font-weight: 700;
     letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
 }
-.announcement-bar__text {
+.marquee-ticker-content {
     display: inline-block;
+    white-space: nowrap;
+    animation: marquee-scroll 25s linear infinite;
+}
+@keyframes marquee-scroll {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
 }
 
-/* --- SUB HEADER NAVIGATION --- */
-.sub-header-nav {
-    background-color: #191547;
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 500;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-.sub-header-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 8px 20px;
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-.sub-header-container a {
-    color: rgba(255, 255, 255, 0.8);
-    transition: var(--transition-fast);
-}
-.sub-header-container a:hover {
-    color: white;
-}
-
-/* --- HEADER --- */
+/* --- RELIANCE DIGITAL BLUE MAIN HEADER --- */
 .main-header {
-    background-color: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    color: var(--text-main);
+    background-color: #0c529c;
+    color: #ffffff;
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.01);
-    transition: var(--transition-premium);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 .header-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 15px 20px;
+    padding: 10px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 30px;
+    gap: 20px;
 }
 .logo-link {
     font-family: var(--font-heading);
     font-size: 1.45rem;
     font-weight: 800;
     letter-spacing: 0.5px;
-    color: var(--primary);
-    transition: var(--transition-fast);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    transition: opacity 0.2s ease;
 }
 .logo-link:hover {
-    color: var(--accent);
+    color: #ffffff;
+    opacity: 0.9;
 }
 
 /* Search Bar */
 .search-bar-container {
     flex: 1;
-    max-width: 650px;
+    max-width: 600px;
     position: relative;
 }
 .search-form {
     display: flex;
-    background-color: #f1f5f9; /* Soft grey background */
-    border: 1px solid rgba(0,0,0,0.03);
-    border-radius: 8px; /* Slightly more rounded corners */
-    overflow: hidden;
-    height: 44px;
-    transition: var(--transition-premium);
-}
-.search-form:focus-within {
     background-color: #ffffff;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(229, 46, 46, 0.1);
+    border-radius: 25px; /* Pill shape matching reliancedigitals.shop */
+    overflow: hidden;
+    height: 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding-left: 15px;
 }
 .search-form input {
     width: 100%;
-    padding: 10px 15px;
+    padding: 8px 10px 8px 5px;
     background: transparent;
     border: none;
     outline: none;
-    color: #1c1d1d;
-    font-size: 0.95rem;
+    color: #0f172a;
+    font-size: 0.9rem;
 }
 .search-form input::placeholder {
-    color: #7c7c7c;
+    color: #64748b;
 }
 .search-btn {
-    background-color: #e52e2e;
+    background-color: #0088cc;
     border: none;
-    width: 60px;
-    color: white;
-    cursor: pointer;
+    color: #ffffff;
+    width: 50px;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color var(--transition-fast);
+    cursor: pointer;
+    border-radius: 0 25px 25px 0;
+    transition: background-color 0.2s ease;
 }
 .search-btn:hover {
-    background-color: #c42424;
+    background-color: #0077b6;
 }
 
 /* Search Results Dropdown */
@@ -702,21 +683,21 @@ button, input, select, textarea {
 }
 .add-to-cart-btn {
     flex: 1;
-    background-color: var(--primary);
+    background-color: #00875a;
     color: white;
-    border: 1px solid var(--primary);
+    border: 1px solid #00875a;
     padding: 10px 20px;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.88rem;
-    border-radius: 30px; /* Pill button */
+    border-radius: 25px; /* Pill button */
     cursor: pointer;
     transition: var(--transition-premium);
     text-align: center;
 }
 .add-to-cart-btn:hover:not(:disabled) {
-    background-color: var(--accent);
-    border-color: var(--accent);
-    box-shadow: 0 4px 15px rgba(229, 46, 46, 0.2);
+    background-color: #00704a;
+    border-color: #00704a;
+    box-shadow: 0 4px 15px rgba(0, 135, 90, 0.3);
     transform: translateY(-1px);
 }
 .add-to-cart-btn:disabled {
@@ -1284,33 +1265,33 @@ button, input, select, textarea {
     gap: 12px;
 }
 .pdp-add-btn {
-    background-color: var(--primary);
+    background-color: #00875a;
     color: white;
     border: none;
     padding: 14px;
-    border-radius: 6px;
+    border-radius: 25px;
     font-weight: 700;
     font-size: 1rem;
     cursor: pointer;
-    transition: var(--transition-fast);
+    transition: background-color 0.2s;
 }
 .pdp-add-btn:hover {
-    background-color: var(--primary-light);
+    background-color: #00704a;
 }
 .pdp-buy-btn {
-    background-color: var(--accent);
+    background-color: #0088cc;
     color: white;
     border: none;
     padding: 14px;
-    border-radius: 6px;
+    border-radius: 25px;
     font-weight: 700;
     font-size: 1rem;
     cursor: pointer;
-    box-shadow: var(--shadow-glow);
+    box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
     transition: background-color 0.2s;
 }
 .pdp-buy-btn:hover {
-    background-color: #c42424;
+    background-color: #0077b6;
 }
 .trust-badges {
     display: flex;

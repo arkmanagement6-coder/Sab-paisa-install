@@ -443,7 +443,7 @@
             const proceedBtn = document.getElementById('btn-proceed-to-pay');
             if (proceedBtn) {
                 proceedBtn.disabled = true;
-                proceedBtn.innerText = 'Saving Order...';
+                proceedBtn.innerText = 'Connecting SabPaisa Gateway... ⏳';
             }
 
             const total = getCartTotal();
@@ -475,8 +475,44 @@
                 console.error("Error saving order to Firestore:", err);
             }
 
-            // Redirect to Payment Options page with order details
-            window.location.href = `payment.html?orderId=${encodeURIComponent(orderId)}&total=${encodeURIComponent(total)}`;
+            // Track Meta Pixel AddPaymentInfo event
+            try {
+                if (typeof fbq === 'function') {
+                    fbq('track', 'AddPaymentInfo', {
+                        value: total,
+                        currency: 'INR'
+                    });
+                }
+            } catch(e){}
+
+            // Direct SabPaisa Gateway Integration
+            const confirmationUrl = `${window.location.origin}/order-confirmation.html?orderId=${encodeURIComponent(orderId)}&amount=${encodeURIComponent(total)}`;
+
+            try {
+                const response = await fetch('/api/create-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: orderId,
+                        amount: total,
+                        redirectUrl: confirmationUrl,
+                        customerName: cust.name || 'Valued Customer',
+                        customerPhone: cust.phone || '9999999999',
+                        customerEmail: `${cust.phone || '9999999999'}@luck1.com`
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success && data.redirectUrl) {
+                    window.location.href = data.redirectUrl;
+                } else {
+                    console.warn("SabPaisa API returned fallback:", data.message);
+                    window.location.href = confirmationUrl;
+                }
+            } catch (err) {
+                console.error("SabPaisa Gateway error:", err);
+                window.location.href = confirmationUrl;
+            }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
