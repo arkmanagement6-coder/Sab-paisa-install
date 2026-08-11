@@ -1,4 +1,10 @@
 {
+  "name": "sab-paisa-install",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static build ready'"
+  },
   "dependencies": {
     "jsdom": "^29.1.1",
     "ws": "^8.21.0"
