@@ -133,6 +133,27 @@ window.trackPurchaseEvent = function(order) {
 
 const INITIAL_PRODUCTS = [
   {
+    "id": "8270415000000_demo",
+    "paymentLink": "https://rzp.io/rzp/tHlmofq",
+    "category": "tablets",
+    "price": "Rs. 1.00",
+    "comparePrice": "Rs. 999.00",
+    "badge": "LIVE DEMO ₹1",
+    "title": "₹1 LIVE DEMO TEST PRODUCT - Apple iPad Air (Live Gateway Test)",
+    "image": "https://look-10287.myshopify.com/cdn/shop/files/2_cd196f0b-3a1d-440f-8443-55d07c764b30_512x512.jpg?v=1781259490",
+    "images": [
+      "https://look-10287.myshopify.com/cdn/shop/files/2_cd196f0b-3a1d-440f-8443-55d07c764b30_512x512.jpg?v=1781259490"
+    ],
+    "url": "/products/demo-1rs-product",
+    "stockStatus": "in-stock",
+    "handle": "demo-1rs-product",
+    "specs": [
+      { "name": "Item", "value": "₹1 Live Test Demo Product" },
+      { "name": "Price", "value": "Rs. 1.00" }
+    ],
+    "description": "<div>Live testing demo product priced at ₹1.00 for testing SabPaisa payment gateway integration.</div>"
+  },
+  {
     "id": "8270415000000",
     "paymentLink": "https://rzp.io/rzp/tHlmofq",
     "category": "tablets",
@@ -1177,8 +1198,6 @@ async function syncProductsBackground(forceSync = false) {
                     }
                 }
 
-                // Ensure Demo Product is permanently filtered out
-                products = products.filter(p => String(p.id) !== '8270415000000_demo');
 
                 // Sanitize products to prevent XSS payloads from hiding the DOM and update old payment links
                 products = products.map(p => {
@@ -1251,12 +1270,6 @@ async function syncProductsBackground(forceSync = false) {
 
         let updated = false;
 
-        // Ensure Demo Product is permanently filtered out
-        const originalLength = products.length;
-        products = products.filter(p => String(p.id) !== '8270415000000_demo');
-        if (products.length !== originalLength) {
-            updated = true;
-        }
 
         products = products.map(p => {
             if (!p.paymentLink || p.paymentLink === 'https://razorpay.me/@luckydigitalmedia') {
@@ -1288,9 +1301,7 @@ async function getProducts(forceSync = false) {
     if (cached && !forceSync) {
         try {
             let products = JSON.parse(cached);
-            if (Array.isArray(products)) {
-                products = products.filter(p => String(p.id) !== '8270415000000_demo');
-            }
+
             if (products && products.length > 0) {
                 // Trigger background sync only once per session to prevent hitting Firestore limits
                 if (!alreadySynced) {
