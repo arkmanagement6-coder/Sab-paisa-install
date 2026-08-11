@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Options | Online Store</title>
+    <link rel="stylesheet" href="style.css?v=200.0">
+    <!-- Firebase SDKs for fast parallel loading and caching -->
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('set', 'autoConfig', false, '1039324625032380');
+    fbq('init', '1039324625032380');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1039324625032380&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    <style>
+        body {
+            padding-bottom: 110px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Brand Header Bar -->
+    <div class="brand-header-bar">
+        <div class="header-title-wrap">
+            <a href="checkout.html" class="header-back-btn">←</a>
+            <h1 class="header-title">Payment Options</h1>
+        </div>
+        <div class="secure-badge-pill">
+            🛡️ 100% Secure
+        </div>
+    </div>
+
+    <main class="payment-wrapper">
+
+        <!-- Top Price Summary Card -->
+        <div class="ui-card price-summary-card">
+            <div class="view-details-link" onclick="window.location.href='checkout.html'">
+                View Details <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-left: 2px;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+            <div class="top-total-amount" id="top-payment-total">
+                ₹999.00
+            </div>
+        </div>
+
+        <!-- Cashback Offer Banner -->
+        <div class="cashback-offer-box">
+            <div class="cashback-info">
+                <div class="cashback-title">70% Cashback Applied</div>
+                <div class="cashback-subtext">Instant cashback on UPI payment</div>
+            </div>
+            <div class="bank-logos-wrap">
+                <div class="bank-logo-circle" style="color: #a855f7;">A</div>
+                <div class="bank-logo-circle" style="color: #0284c7;">S</div>
+            </div>
+        </div>
+
+        <!-- Recommended Section -->
+        <div class="ui-card">
+            <div class="section-header-wrap">
+                <h2 class="section-main-title">
+                    <span>📱</span> Recommended
+                </h2>
+                <div class="section-subtitle">Pay via SabPaisa Secure Gateway</div>
+            </div>
+
+            <!-- Option 1: Paytm UPI (Default & Recommended) -->
+            <div class="payment-option-row selected" id="opt-paytm" onclick="selectPaymentOption('paytm')">
+                <div class="option-left-content">
+                    <div class="app-logo-box">
+                        <img src="Image/paytm-logo.svg" alt="Paytm" onerror="this.src='https://cdn.iconscout.com/icon/free/png-256/free-paytm-3521626-2945032.png'">
+                    </div>
+                    <div class="app-title-text">
+                        Paytm UPI
+                        <span class="fastest-pill">⚡ Fastest & Recommended</span>
+                    </div>
+                </div>
+                <div class="custom-radio-circle"></div>
+            </div>
+
+            <!-- Option 2: PhonePe / GPay -->
+            <div class="payment-option-row" id="opt-phonepe" onclick="selectPaymentOption('phonepe')">
+                <div class="option-left-content">
+                    <div class="app-logo-box">
+                        <img src="Image/phonepe-logo.svg" alt="PhonePe" onerror="this.src='https://cdn.iconscout.com/icon/free/png-256/free-phonepe-3521634-2945040.png'">
+                    </div>
+                    <div class="app-title-text">
+                        PhonePe / Google Pay
+                    </div>
+                </div>
+                <div class="custom-radio-circle"></div>
+            </div>
+
+            <!-- Option 3: All UPI / Gateway -->
+            <div class="payment-option-row" id="opt-upi" onclick="selectPaymentOption('upi')">
+                <div class="option-left-content">
+                    <div class="app-logo-box" style="background: #ffeef0; color: #0088cc; font-size: 1.2rem; font-weight: 800;">
+                        💳
+                    </div>
+                    <div class="app-title-text">
+                        SabPaisa Universal Gateway
+                    </div>
+                </div>
+                <div class="custom-radio-circle"></div>
+            </div>
+
+        </div>
+
+        <!-- Unavailable Payment Methods Section -->
+        <div class="ui-card">
+            
+            <div class="disabled-option-row">
+                <div class="option-left-content">
+                    <div class="app-logo-box">💳</div>
+                    <div class="app-title-text">Credit / Debit Card</div>
+                </div>
+                <span class="unavailable-pill">UNAVAILABLE</span>
+            </div>
+
+            <div class="disabled-option-row">
+                <div class="option-left-content">
+                    <div class="app-logo-box">🏦</div>
+                    <div class="app-title-text">Net Banking</div>
+                </div>
+                <span class="unavailable-pill">UNAVAILABLE</span>
+            </div>
+
+            <div class="disabled-option-row">
+                <div class="option-left-content">
+                    <div class="app-logo-box">💵</div>
+                    <div class="app-title-text">Cash on Delivery</div>
+                </div>
+                <span class="unavailable-pill">UNAVAILABLE</span>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Bottom Fixed Pay Action Bar -->
+    <div class="bottom-pay-bar">
+        <button type="button" class="pay-securely-btn" id="btn-pay-securely" onclick="executePayment()">
+            Pay Securely <span id="btn-pay-price">₹999.00</span> <span>›</span>
+        </button>
+        <div class="secure-subtext">
+            <span>🔒</span> 100% Safe & Secure SabPaisa Payment
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="app-core.js?v=200.0"></script>
+    <script>
+        let selectedMethod = 'paytm'; // 'paytm', 'phonepe', 'upi'
+        let currentOrderId = '';
+        let currentTotal = 999.00;
+
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function selectPaymentOption(method) {
+            selectedMethod = method;
+            document.querySelectorAll('.payment-option-row').forEach(el => el.classList.remove('selected'));
+            
+            const selectedRow = document.getElementById('opt-' + method);
+            if (selectedRow) {
+                selectedRow.classList.add('selected');
+            }
+        }
+
+        async function executePayment() {
+            const btnPay = document.getElementById('btn-pay-securely');
+            if (btnPay) {
+                btnPay.disabled = true;
+                btnPay.innerHTML = 'Connecting Gateway... ⏳';
+            }
+
+            let cust = {};
+            try { cust = JSON.parse(localStorage.getItem('ikko_customer')) || {}; } catch(e){}
+
+            const orders = getOrders();
+            let currentOrder = orders.find(o => o.id === currentOrderId);
+            if (!currentOrder) {
+                currentOrder = {
+                    id: currentOrderId,
+                    date: new Date().toISOString(),
+                    status: 'pending_payment',
+                    paymentMethod: 'sabpaisa',
+                    utr: 'SabPaisa Gateway',
+                    customer: {
+                        name: cust.name || 'Customer',
+                        phone: cust.phone || '',
+                        address: cust.fullAddressText || `${cust.address || ''}, ${cust.city || ''}`,
+                        city: cust.city || '',
+                        state: cust.state || '',
+                        pin: cust.pin || ''
+                    },
+                    items: getCart(),
+                    total: currentTotal
+                };
+            } else {
+                currentOrder.paymentMethod = 'sabpaisa';
+                currentOrder.status = 'pending_payment';
+            }
+
+            // Sync order to Firestore / local storage
+            try {
+                await saveOrder(currentOrder);
+            } catch(e){
+                console.error("Error syncing order before payment:", e);
+            }
+
+            // Track Meta Pixel AddPaymentInfo event
+            try {
+                if (typeof fbq === 'function') {
+                    fbq('track', 'AddPaymentInfo', {
+                        value: currentTotal,
+                        currency: 'INR'
+                    });
+                }
+            } catch(e){}
+
+            // Redirect URL back to order-confirmation page
+            const redirectUrl = `${window.location.origin}/order-confirmation.html?orderId=${encodeURIComponent(currentOrderId)}&amount=${encodeURIComponent(currentTotal)}`;
+
+            try {
+                const response = await fetch('/api/create-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: currentOrderId,
+                        amount: currentTotal,
+                        redirectUrl: redirectUrl,
+                        customerName: cust.name || 'Valued Customer',
+                        customerPhone: cust.phone || '9999999999',
+                        customerEmail: `${cust.phone || '9999999999'}@luck1.com`
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success && data.redirectUrl) {
+                    window.location.href = data.redirectUrl;
+                } else {
+                    alert('Could not initiate payment session: ' + (data.message || 'Unknown error'));
+                    if (btnPay) {
+                        btnPay.disabled = false;
+                        btnPay.innerHTML = `Pay Securely <span id="btn-pay-price">₹${currentTotal.toFixed(2)}</span> <span>›</span>`;
+                    }
+                }
+            } catch (err) {
+                console.error("SabPaisa API Error:", err);
+                alert("Payment initiation timed out. Redirecting to verification...");
+                window.location.href = redirectUrl;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            currentOrderId = getQueryParam('orderId') || `IKKO-${Math.floor(100000 + Math.random() * 900000)}`;
+            const totalParam = getQueryParam('total');
+            if (totalParam) {
+                currentTotal = parseFloat(totalParam) || 999.00;
+            } else {
+                currentTotal = getCartTotal() || 999.00;
+            }
+
+            document.getElementById('top-payment-total').innerText = `₹${currentTotal.toFixed(2)}`;
+            document.getElementById('btn-pay-price').innerText = `₹${currentTotal.toFixed(2)}`;
+
+            selectPaymentOption('paytm');
+        });
+    </script>
+</body>
+</html>

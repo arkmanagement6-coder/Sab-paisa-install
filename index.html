@@ -49,7 +49,7 @@
         }
     });
     </script>
-    <link rel="stylesheet" href="style.css?v=2.4">
+    <link rel="stylesheet" href="style.css?v=200.0">
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -71,15 +71,78 @@
 </head>
 <body>
 
-    <!-- Header will be rendered here by app-core.js?v=15.0 -->
+    <!-- Header will be rendered here by app-core.js?v=200.0 -->
     <div id="header-placeholder"></div>
 
-    <!-- Hero Banner Section -->
-    <section class="hero-banner">
-        <div class="hero-container">
-            <h1>Up to 90% Off</h1>
-            <p>Stunning Essentials for the Journey. Grab now!</p>
-            <a href="#store-listings" class="hero-btn" onclick="scrollToProducts(event)">SHOP NOW</a>
+    <!-- Hero Slider Section (3 High-End Electronics Slides with Images) -->
+    <section class="hero-slider-wrapper">
+        <button class="slider-arrow slider-arrow-prev" onclick="prevSlide()">&lsaquo;</button>
+        <button class="slider-arrow slider-arrow-next" onclick="nextSlide()">&rsaquo;</button>
+        
+        <div class="hero-slider-track" id="hero-slider-track">
+            <!-- Slide 1: Apple iPad Air -->
+            <div class="hero-slide hero-slide-1">
+                <div class="hero-slide-container">
+                    <div class="hero-slide-text">
+                        <span class="hero-slide-tag">🎁 BUY 2 GET 1 FREE &nbsp;|&nbsp; SPECIAL OFFER</span>
+                        <h2>Apple iPad Air (M2) 11″</h2>
+                        <p>Liquid Retina Display | M2 Powerhouse | 256GB Storage</p>
+                        <div class="hero-slide-price-pill">
+                            <span>Rs. 999.00</span>
+                        </div>
+                        <div>
+                            <a href="#store-listings" class="hero-slide-btn" onclick="filterTab('tablets'); scrollToProducts(event)">BUY NOW &rsaquo;</a>
+                        </div>
+                    </div>
+                    <div class="hero-slide-img-wrap">
+                        <img src="https://look-10287.myshopify.com/cdn/shop/files/2_cd196f0b-3a1d-440f-8443-55d07c764b30_512x512.jpg?v=1781259490" alt="Apple iPad Air M2">
+                    </div>
+                </div>
+            </div>
+            <!-- Slide 2: boAt Airdopes -->
+            <div class="hero-slide hero-slide-2">
+                <div class="hero-slide-container">
+                    <div class="hero-slide-text">
+                        <span class="hero-slide-tag">🎁 BUY 2 GET 1 FREE &nbsp;|&nbsp; AUDIO FESTIVAL</span>
+                        <h2>boAt Airdopes 441 TWS</h2>
+                        <p>IPX7 Water Resistance | 500mAh Case | 20 Hours Playback</p>
+                        <div class="hero-slide-price-pill">
+                            <span>Rs. 999.00</span>
+                        </div>
+                        <div>
+                            <a href="#store-listings" class="hero-slide-btn" onclick="filterTab('audio'); scrollToProducts(event)">EXPLORE AUDIO &rsaquo;</a>
+                        </div>
+                    </div>
+                    <div class="hero-slide-img-wrap">
+                        <img src="https://look-10287.myshopify.com/cdn/shop/files/7f87efa7-f1a4-46c7-b77a-0cb200c34bd1_38d8c7b5-626e-4d36-9524-95da56324c64_512x512.png?v=1781259437" alt="boAt Airdopes Wireless">
+                    </div>
+                </div>
+            </div>
+            <!-- Slide 3: Samsung Galaxy Tab S10+ -->
+            <div class="hero-slide hero-slide-3">
+                <div class="hero-slide-container">
+                    <div class="hero-slide-text">
+                        <span class="hero-slide-tag">🎁 BUY 2 GET 1 FREE &nbsp;|&nbsp; TABLET SALE</span>
+                        <h2>Samsung Galaxy Tab S10+</h2>
+                        <p>12.4" Dynamic AMOLED 2X Display | S Pen In-Box | 12GB RAM</p>
+                        <div class="hero-slide-price-pill">
+                            <span>Rs. 999.00</span>
+                        </div>
+                        <div>
+                            <a href="#store-listings" class="hero-slide-btn" onclick="filterTab('tablets'); scrollToProducts(event)">ORDER NOW &rsaquo;</a>
+                        </div>
+                    </div>
+                    <div class="hero-slide-img-wrap">
+                        <img src="https://look-10287.myshopify.com/cdn/shop/files/5_ab735dcb-c7a9-4839-8fdc-79d12c03c54c_512x512.jpg?v=1781259489" alt="Samsung Galaxy Tab S10 Plus">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slider-dots">
+            <div class="slider-dot active" onclick="goToSlide(0)"></div>
+            <div class="slider-dot" onclick="goToSlide(1)"></div>
+            <div class="slider-dot" onclick="goToSlide(2)"></div>
         </div>
     </section>
 
@@ -98,16 +161,54 @@
         </div>
     </main>
 
-    <!-- Footer will be rendered here by app-core.js?v=15.0 -->
+    <!-- Footer will be rendered here by app-core.js?v=200.0 -->
     <div id="footer-placeholder"></div>
 
     <!-- Core Scripts -->
-    <script src="app-core.js?v=15.0"></script>
+    <script src="app-core.js?v=200.0"></script>
     <script>
         let currentTab = 'all';
 
+        // 3-Slide Hero Banner Carousel Logic
+        let currentSlide = 0;
+        const totalSlides = 3;
+        let slideTimer = null;
+
+        function updateSlider() {
+            const track = document.getElementById('hero-slider-track');
+            if (track) {
+                track.style.transform = `translate3d(-${currentSlide * (100 / totalSlides)}%, 0, 0)`;
+            }
+            const dots = document.querySelectorAll('.slider-dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlider();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlider();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+        }
+
+        function startAutoSlide() {
+            if (slideTimer) clearInterval(slideTimer);
+            slideTimer = setInterval(nextSlide, 3800);
+        }
+
+        startAutoSlide();
+
         function scrollToProducts(e) {
-            e.preventDefault();
+            if (e) e.preventDefault();
             document.getElementById('store-listings').scrollIntoView({ behavior: 'smooth' });
         }
 
