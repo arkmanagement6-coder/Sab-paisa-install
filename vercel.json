@@ -1,24 +1,47 @@
 {
+  "version": 2,
   "cleanUrls": true,
-  "rewrites": [
+  "builds": [
     {
-      "source": "/api/create-payment",
-      "destination": "/api/create-payment.js"
+      "src": "api/*.js",
+      "use": "@vercel/node"
     },
     {
-      "source": "/api/check-status",
-      "destination": "/api/check-status.js"
+      "src": "*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "style.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "app-core.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "products.json",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "settings.json",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "Image/**/*",
+      "use": "@vercel/static"
     }
   ],
-  "headers": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
+      "src": "/api/create-payment",
+      "dest": "api/create-payment.js"
+    },
+    {
+      "src": "/api/check-status",
+      "dest": "api/check-status.js"
+    },
+    {
+      "handle": "filesystem"
     }
   ]
 }
