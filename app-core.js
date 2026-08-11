@@ -1293,6 +1293,15 @@ async function syncProductsBackground(forceSync = false) {
     return result;
 }
 
+function ensureDemoProductPresent(products) {
+    if (!Array.isArray(products)) products = [];
+    const demoItem = (typeof INITIAL_PRODUCTS !== 'undefined') ? INITIAL_PRODUCTS.find(p => String(p.id) === '8270415000000_demo') : null;
+    if (demoItem && !products.some(p => String(p.id) === '8270415000000_demo')) {
+        products = [demoItem, ...products];
+    }
+    return products;
+}
+
 // Product Database Helpers (Firestore Async with local Cache fallback)
 async function getProducts(forceSync = false) {
     const cached = localStorage.getItem('ikko_products');
@@ -1301,8 +1310,9 @@ async function getProducts(forceSync = false) {
     if (cached && !forceSync) {
         try {
             let products = JSON.parse(cached);
-
             if (products && products.length > 0) {
+                products = ensureDemoProductPresent(products);
+                localStorage.setItem('ikko_products', JSON.stringify(products));
                 // Trigger background sync only once per session to prevent hitting Firestore limits
                 if (!alreadySynced) {
                     sessionStorage.setItem('ikko_products_synced', 'true');
@@ -1317,8 +1327,9 @@ async function getProducts(forceSync = false) {
     let synced = await syncProductsBackground(forceSync);
     if (!synced || synced.length === 0) {
         synced = (typeof INITIAL_PRODUCTS !== 'undefined') ? [...INITIAL_PRODUCTS] : [];
-        localStorage.setItem('ikko_products', JSON.stringify(synced));
     }
+    synced = ensureDemoProductPresent(synced);
+    localStorage.setItem('ikko_products', JSON.stringify(synced));
     return synced;
 }
 
@@ -1507,10 +1518,20 @@ function saveCart(cart) {
 
 async function addToCart(productId, qty = 1) {
     const cart = getCart();
-    const products = await getProducts();
-    const product = products.find(p => String(p.id) === String(productId));
+    let products = [];
+    try {
+        products = await getProducts();
+    } catch(e){}
+
+    let product = Array.isArray(products) ? products.find(p => String(p.id) === String(productId)) : null;
+    if (!product && typeof INITIAL_PRODUCTS !== 'undefined') {
+        product = INITIAL_PRODUCTS.find(p => String(p.id) === String(productId));
+    }
     
-    if (!product) return;
+    if (!product) {
+        console.error("Product not found for ID:", productId);
+        return;
+    }
     
     const existingItem = cart.find(item => String(item.id) === String(productId));
     if (existingItem) {
@@ -1527,21 +1548,23 @@ async function addToCart(productId, qty = 1) {
     }
     
     // Meta Pixel AddToCart Event
-    if (typeof fbq === 'function') {
-        let priceVal = 999;
-        if (product.price) {
-            const cleaned = String(product.price).replace(/[^\d.]/g, '');
-            const parsed = parseFloat(cleaned);
-            if (!isNaN(parsed)) priceVal = parsed;
+    try {
+        if (typeof fbq === 'function') {
+            let priceVal = 1;
+            if (product.price) {
+                const cleaned = String(product.price).replace(/[^\d.]/g, '');
+                const parsed = parseFloat(cleaned);
+                if (!isNaN(parsed)) priceVal = parsed;
+            }
+            fbq('track', 'AddToCart', {
+                content_ids: [String(product.id)],
+                content_name: product.title,
+                content_type: 'product',
+                value: priceVal,
+                currency: 'INR'
+            });
         }
-        fbq('track', 'AddToCart', {
-            content_ids: [String(product.id)],
-            content_name: product.title,
-            content_type: 'product',
-            value: priceVal,
-            currency: 'INR'
-        });
-    }
+    } catch(e){}
 
     saveCart(cart);
     openCartDrawer();
