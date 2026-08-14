@@ -1,8 +1,8 @@
 {
   "sabpaisaEnabled": true,
-  "sabpaisaMerchantId": "LUCK1",
-  "sabpaisaApiKey": "sp_A4EHc3rOQmN3L6Zed0q9Cx7CHgnDubPYCC0XnpJlAl0",
-  "sabpaisaSecretKey": "sec_-n8LkEjTI6btD-1u_uuWxYj-HPc20yW0NMAZhPEF49M",
+  "sabpaisaMerchantId": "ARKM1",
+  "sabpaisaApiKey": "sp_P4FN07lSTKNxqbLdT2SN5ZvKCzBTxasI0PgsMaM7_Og",
+  "sabpaisaSecretKey": "sec_C-0PTD_nPJ2Q4j7JDGDqhmqQLYyNEXTLkiJgp_dAAMU",
   "sabpaisaMode": "live",
   "firebaseEnabled": true,
   "firebaseConfig": {

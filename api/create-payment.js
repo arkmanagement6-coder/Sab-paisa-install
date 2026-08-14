@@ -103,9 +103,9 @@ module.exports = async (req, res) => {
         }
 
         // Fallbacks to credentials provided by user
-        const merchantId = settings.sabpaisaMerchantId || 'LUCK1';
-        const apiKey = settings.sabpaisaApiKey || 'sp_A4EHc3rOQmN3L6Zed0q9Cx7CHgnDubPYCC0XnpJlAl0';
-        const secretKey = settings.sabpaisaSecretKey || 'sec_-n8LkEjTI6btD-1u_uuWxYj-HPc20yW0NMAZhPEF49M';
+        const merchantId = settings.sabpaisaMerchantId || 'ARKM1';
+        const apiKey = settings.sabpaisaApiKey || 'sp_P4FN07lSTKNxqbLdT2SN5ZvKCzBTxasI0PgsMaM7_Og';
+        const secretKey = settings.sabpaisaSecretKey || 'sec_C-0PTD_nPJ2Q4j7JDGDqhmqQLYyNEXTLkiJgp_dAAMU';
         const isLive = settings.sabpaisaMode !== 'test'; // default to live
 
         // Base URL selection

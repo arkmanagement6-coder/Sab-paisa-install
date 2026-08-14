@@ -851,9 +851,9 @@ function dbInit() {
     if (!localStorage.getItem('ikko_settings')) {
         localStorage.setItem('ikko_settings', JSON.stringify({
             sabpaisaEnabled: true,
-            sabpaisaMerchantId: 'LUCK1',
-            sabpaisaApiKey: 'sp_A4EHc3rOQmN3L6Zed0q9Cx7CHgnDubPYCC0XnpJlAl0',
-            sabpaisaSecretKey: 'sec_-n8LkEjTI6btD-1u_uuWxYj-HPc20yW0NMAZhPEF49M',
+            sabpaisaMerchantId: 'ARKM1',
+            sabpaisaApiKey: 'sp_P4FN07lSTKNxqbLdT2SN5ZvKCzBTxasI0PgsMaM7_Og',
+            sabpaisaSecretKey: 'sec_C-0PTD_nPJ2Q4j7JDGDqhmqQLYyNEXTLkiJgp_dAAMU',
             sabpaisaMode: 'live'
         }));
     }
@@ -965,9 +965,9 @@ function getSettings() {
         changed = true;
     }
     if (!settings.sabpaisaMerchantId) {
-        settings.sabpaisaMerchantId = 'LUCK1';
-        settings.sabpaisaApiKey = 'sp_A4EHc3rOQmN3L6Zed0q9Cx7CHgnDubPYCC0XnpJlAl0';
-        settings.sabpaisaSecretKey = 'sec_-n8LkEjTI6btD-1u_uuWxYj-HPc20yW0NMAZhPEF49M';
+        settings.sabpaisaMerchantId = 'ARKM1';
+        settings.sabpaisaApiKey = 'sp_P4FN07lSTKNxqbLdT2SN5ZvKCzBTxasI0PgsMaM7_Og';
+        settings.sabpaisaSecretKey = 'sec_C-0PTD_nPJ2Q4j7JDGDqhmqQLYyNEXTLkiJgp_dAAMU';
         settings.sabpaisaMode = 'live';
         changed = true;
     }
