@@ -61,7 +61,7 @@
     }
 })();
 
-// Expose global helper to track purchase event dynamically on demand
+// Expose global helper to track purchase event dynamically on demand (Client Pixel + Server CAPI)
 window.trackPurchaseEvent = function(order) {
     if (!order) return;
     
@@ -74,61 +74,85 @@ window.trackPurchaseEvent = function(order) {
     window.firedPixels = window.firedPixels || {};
     if (order.pixelFired || window.firedPixels[order.id] || sessionStorage.getItem('pixel_fired_' + order.id) === 'true') {
         window.pixelStatus.fired = 'SKIPPED (Duplicate Prevention)';
-        console.warn(`[Pixel Verification] Purchase event for order ${order.id} was already successfully fired and tracked in this browser session. To prevent duplicate tracking data, it is skipped on reload/refresh. Place a new test order to fire it again.`);
+        console.warn(`[Pixel Verification] Purchase event for order ${order.id} was already tracked in this session. Skipping duplicate fire.`);
         return;
     }
 
+    let totalVal = 999;
+    if (order.total) {
+        const cleaned = String(order.total).replace(/[^\d.]/g, '');
+        const parsed = parseFloat(cleaned);
+        if (!isNaN(parsed)) totalVal = parsed;
+    }
+
+    const eventId = `order_${order.id}`;
+
+    // 1. Client-Side Browser Meta Pixel Fire (fbq)
     if (typeof fbq === 'function') {
-        let totalVal = 999;
-        if (order.total) {
-            const cleaned = String(order.total).replace(/[^\d.]/g, '');
-            const parsed = parseFloat(cleaned);
-            if (!isNaN(parsed)) totalVal = parsed;
-        }
-        
         try {
-            console.log(`[Pixel] Firing Purchase event for order ${order.id} with value Rs. ${totalVal}`);
+            console.log(`[Meta Pixel Client] Firing Purchase event for order ${order.id} (Value: Rs. ${totalVal})`);
             fbq('track', 'Purchase', {
                 value: totalVal,
                 currency: 'INR',
                 content_type: 'product',
                 content_ids: (order.items || []).map(item => String(item.id))
-            });
+            }, { eventID: eventId });
             window.pixelStatus.fired = 'SUCCESS';
             window.pixelStatus.value = totalVal;
         } catch (e) {
             window.pixelStatus.fired = 'FAILED: ' + e.message;
-            console.error('[Pixel] fbq track Purchase failed:', e);
+            console.error('[Meta Pixel Client] fbq track Purchase error:', e);
         }
-        
-        // Mark as fired in memory and sessionStorage immediately
-        window.firedPixels[order.id] = true;
-        sessionStorage.setItem('pixel_fired_' + order.id, 'true');
-        
-        // Mark order as tracked in localStorage
-        order.pixelFired = true;
-        const orders = JSON.parse(localStorage.getItem('ikko_orders')) || [];
-        const idx = orders.findIndex(o => o.id === order.id);
-        if (idx !== -1) {
-            orders[idx] = order;
-            localStorage.setItem('ikko_orders', JSON.stringify(orders));
-        }
-
-        // Also sync pixelFired = true to Firestore to prevent double firing on other devices/browsers!
-        initFirebase().then(db => {
-            if (db) {
-                db.collection('orders').doc(order.id).update({ pixelFired: true })
-                  .then(() => console.log(`[Firebase] Marked order ${order.id} as pixelFired in Firestore.`))
-                  .catch(e => {
-                      // fallback to set merge if update fails
-                      db.collection('orders').doc(order.id).set({ pixelFired: true }, { merge: true })
-                        .catch(err => console.error("Failed to update pixelFired in Firestore:", err));
-                  });
-            }
-        }).catch(err => console.error("Firebase init failed during pixel tracking:", err));
     } else {
-        console.warn('[Pixel] fbq function not found. Could not track Purchase.');
+        console.warn('[Meta Pixel Client] fbq function not found on window.');
     }
+
+    // 2. Server-Side Meta Conversions API (CAPI) Fire
+    try {
+        const cust = order.customer || {};
+        fetch('/api/track-purchase', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                orderId: order.id,
+                amount: totalVal,
+                customerName: cust.name || 'Valued Customer',
+                customerPhone: cust.phone || '',
+                customerEmail: cust.email || `${cust.phone || 'customer'}@luckydigitalmedia.in`,
+                items: order.items || [],
+                userAgent: navigator.userAgent
+            })
+        }).then(res => res.json())
+          .then(data => console.log('[Meta CAPI Server Response]', data))
+          .catch(err => console.error('[Meta CAPI Server Error]', err));
+    } catch(err) {
+        console.error('[Meta CAPI Call Failed]', err);
+    }
+    
+    // Mark as fired in memory and sessionStorage immediately
+    window.firedPixels[order.id] = true;
+    sessionStorage.setItem('pixel_fired_' + order.id, 'true');
+    
+    // Mark order as tracked in localStorage
+    order.pixelFired = true;
+    const orders = JSON.parse(localStorage.getItem('ikko_orders')) || [];
+    const idx = orders.findIndex(o => o.id === order.id);
+    if (idx !== -1) {
+        orders[idx] = order;
+        localStorage.setItem('ikko_orders', JSON.stringify(orders));
+    }
+
+    // Also sync pixelFired = true to Firestore to prevent double firing on other devices/browsers!
+    initFirebase().then(db => {
+        if (db) {
+            db.collection('orders').doc(order.id).update({ pixelFired: true })
+              .then(() => console.log(`[Firebase] Marked order ${order.id} as pixelFired in Firestore.`))
+              .catch(e => {
+                  db.collection('orders').doc(order.id).set({ pixelFired: true }, { merge: true })
+                    .catch(err => console.error("Failed to update pixelFired in Firestore:", err));
+              });
+        }
+    }).catch(err => console.error("Firebase init failed during pixel tracking:", err));
 };
 
 const INITIAL_PRODUCTS = [

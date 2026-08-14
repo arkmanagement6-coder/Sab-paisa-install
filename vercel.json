@@ -41,6 +41,10 @@
       "dest": "api/check-status.js"
     },
     {
+      "src": "/api/track-purchase",
+      "dest": "api/track-purchase.js"
+    },
+    {
       "handle": "filesystem"
     }
   ]
