@@ -157,27 +157,6 @@ window.trackPurchaseEvent = function(order) {
 
 const INITIAL_PRODUCTS = [
   {
-    "id": "8270415000000_demo",
-    "paymentLink": "https://rzp.io/rzp/tHlmofq",
-    "category": "tablets",
-    "price": "Rs. 1.00",
-    "comparePrice": "Rs. 999.00",
-    "badge": "LIVE DEMO ₹1",
-    "title": "₹1 LIVE DEMO TEST PRODUCT - Apple iPad Air (Live Gateway Test)",
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/2_cd196f0b-3a1d-440f-8443-55d07c764b30_512x512.jpg?v=1781259490",
-    "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/2_cd196f0b-3a1d-440f-8443-55d07c764b30_512x512.jpg?v=1781259490"
-    ],
-    "url": "/products/demo-1rs-product",
-    "stockStatus": "in-stock",
-    "handle": "demo-1rs-product",
-    "specs": [
-      { "name": "Item", "value": "₹1 Live Test Demo Product" },
-      { "name": "Price", "value": "Rs. 1.00" }
-    ],
-    "description": "<div>Live testing demo product priced at ₹1.00 for testing SabPaisa payment gateway integration.</div>"
-  },
-  {
     "id": "8270415000000",
     "paymentLink": "https://rzp.io/rzp/tHlmofq",
     "category": "tablets",
@@ -1317,13 +1296,9 @@ async function syncProductsBackground(forceSync = false) {
     return result;
 }
 
-function ensureDemoProductPresent(products) {
+function cleanDemoProducts(products) {
     if (!Array.isArray(products)) products = [];
-    const demoItem = (typeof INITIAL_PRODUCTS !== 'undefined') ? INITIAL_PRODUCTS.find(p => String(p.id) === '8270415000000_demo') : null;
-    if (demoItem && !products.some(p => String(p.id) === '8270415000000_demo')) {
-        products = [demoItem, ...products];
-    }
-    return products;
+    return products.filter(p => String(p.id) !== '8270415000000_demo' && String(p.id) !== '1111111111111' && p.price !== 'Rs. 1.00');
 }
 
 // Product Database Helpers (Firestore Async with local Cache fallback)
@@ -1335,7 +1310,7 @@ async function getProducts(forceSync = false) {
         try {
             let products = JSON.parse(cached);
             if (products && products.length > 0) {
-                products = ensureDemoProductPresent(products);
+                products = cleanDemoProducts(products);
                 localStorage.setItem('ikko_products', JSON.stringify(products));
                 // Trigger background sync only once per session to prevent hitting Firestore limits
                 if (!alreadySynced) {
@@ -1352,7 +1327,7 @@ async function getProducts(forceSync = false) {
     if (!synced || synced.length === 0) {
         synced = (typeof INITIAL_PRODUCTS !== 'undefined') ? [...INITIAL_PRODUCTS] : [];
     }
-    synced = ensureDemoProductPresent(synced);
+    synced = cleanDemoProducts(synced);
     localStorage.setItem('ikko_products', JSON.stringify(synced));
     return synced;
 }
