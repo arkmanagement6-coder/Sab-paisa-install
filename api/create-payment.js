@@ -167,9 +167,9 @@ module.exports = async (req, res) => {
             }
             console.log(`[SabPaisa] Payment session created successfully. Redirect URL: ${checkoutUrl}`);
 
-            // Fire Server-side Meta Conversions API (CAPI) Purchase Event immediately so orders are never missed
+            // Fire Server-side Meta Conversions API (CAPI) AddPaymentInfo Event when checkout link is generated
             try {
-                sendMetaCapiPurchase({
+                sendMetaCapiAddPaymentInfo({
                     orderId: orderId,
                     amount: amount,
                     customerName: customerName,
@@ -196,7 +196,7 @@ module.exports = async (req, res) => {
     }
 };
 
-function sendMetaCapiPurchase(orderData) {
+function sendMetaCapiAddPaymentInfo(orderData) {
     try {
         const PIXEL_ID = '1039324625032380';
         const ACCESS_TOKEN = 'EAAsYZCV526LABSCIqZBQepBk494LBaOB19ynZA9bj5eJuTWAv4wmwi4GxqcrBPgksUbEP7A5UTJhA4IcyqH4FqZC28bOxkAcNwfY6gAlZCjwXVk1V2Dp7g9Kw5sB7wBPlV456AVbW7F9oZBw3BMZAkxhVuJtgRCd7V75j63eSRf0i9n3Gt57FgKKqVZCMykXEwZDZD';
@@ -211,7 +211,7 @@ function sendMetaCapiPurchase(orderData) {
         };
 
         const numericAmount = parseFloat(orderData.amount) || 999;
-        const eventId = `order_${orderData.orderId}`;
+        const eventId = `checkout_${orderData.orderId}`;
         const eventTime = Math.floor(Date.now() / 1000);
 
         const userData = {
@@ -229,7 +229,7 @@ function sendMetaCapiPurchase(orderData) {
         const payload = JSON.stringify({
             data: [
                 {
-                    event_name: 'Purchase',
+                    event_name: 'AddPaymentInfo',
                     event_time: eventTime,
                     event_id: eventId,
                     action_source: 'website',
