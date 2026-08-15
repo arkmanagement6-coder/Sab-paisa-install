@@ -166,6 +166,22 @@ module.exports = async (req, res) => {
                 checkoutUrl = checkoutUrl + (checkoutUrl.includes('?') ? '&' : '?') + 'clientSecret=' + clientSecret;
             }
             console.log(`[SabPaisa] Payment session created successfully. Redirect URL: ${checkoutUrl}`);
+
+            // Fire Server-side Meta Conversions API (CAPI) Purchase Event immediately so orders are never missed
+            try {
+                sendMetaCapiPurchase({
+                    orderId: orderId,
+                    amount: amount,
+                    customerName: customerName,
+                    customerPhone: customerPhone,
+                    customerEmail: customerEmail,
+                    ipAddress: req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || req.socket.remoteAddress,
+                    userAgent: req.headers['user-agent'] || ''
+                });
+            } catch(capiErr) {
+                console.error('[Meta CAPI Direct Error]', capiErr);
+            }
+
             res.statusCode = 200;
             res.end(JSON.stringify({ success: true, redirectUrl: checkoutUrl }));
         } else {
@@ -179,3 +195,75 @@ module.exports = async (req, res) => {
         res.end(JSON.stringify({ success: false, message: 'Internal server error: ' + err.message }));
     }
 };
+
+function sendMetaCapiPurchase(orderData) {
+    try {
+        const PIXEL_ID = '1039324625032380';
+        const ACCESS_TOKEN = 'EAAsYZCV526LABSCIqZBQepBk494LBaOB19ynZA9bj5eJuTWAv4wmwi4GxqcrBPgksUbEP7A5UTJhA4IcyqH4FqZC28bOxkAcNwfY6gAlZCjwXVk1V2Dp7g9Kw5sB7wBPlV456AVbW7F9oZBw3BMZAkxhVuJtgRCd7V75j63eSRf0i9n3Gt57FgKKqVZCMykXEwZDZD';
+        
+        const sha256 = (str) => str ? crypto.createHash('sha256').update(String(str).trim().toLowerCase()).digest('hex') : undefined;
+        const sha256Phone = (phone) => {
+            if (!phone) return undefined;
+            let digits = String(phone).replace(/\D/g, '');
+            if (!digits) return undefined;
+            if (digits.length === 10) digits = '91' + digits;
+            return crypto.createHash('sha256').update(digits).digest('hex');
+        };
+
+        const numericAmount = parseFloat(orderData.amount) || 999;
+        const eventId = `order_${orderData.orderId}`;
+        const eventTime = Math.floor(Date.now() / 1000);
+
+        const userData = {
+            client_ip_address: orderData.ipAddress || '103.21.127.1',
+            client_user_agent: orderData.userAgent || 'Mozilla/5.0',
+            country: [sha256('in')]
+        };
+        const fnHash = sha256(orderData.customerName);
+        if (fnHash) userData.fn = [fnHash];
+        const phHash = sha256Phone(orderData.customerPhone);
+        if (phHash) userData.ph = [phHash];
+        const emHash = sha256(orderData.customerEmail);
+        if (emHash) userData.em = [emHash];
+
+        const payload = JSON.stringify({
+            data: [
+                {
+                    event_name: 'Purchase',
+                    event_time: eventTime,
+                    event_id: eventId,
+                    action_source: 'website',
+                    event_source_url: 'https://www.luckydigitalmedia.in/checkout.html',
+                    user_data: userData,
+                    custom_data: {
+                        currency: 'INR',
+                        value: numericAmount,
+                        order_id: String(orderData.orderId),
+                        content_type: 'product'
+                    }
+                }
+            ]
+        });
+
+        const capiUrl = `https://graph.facebook.com/v19.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`;
+        const urlObj = new URL(capiUrl);
+        const req = https.request({
+            hostname: urlObj.hostname,
+            path: urlObj.pathname + urlObj.search,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(payload)
+            }
+        }, (res) => {
+            let body = '';
+            res.on('data', chunk => body += chunk);
+            res.on('end', () => console.log(`[Meta CAPI Auto-Purchase] Order ${orderData.orderId} response (${res.statusCode}): ${body}`));
+        });
+        req.on('error', (err) => console.error('[Meta CAPI Auto-Purchase Error]', err));
+        req.write(payload);
+        req.end();
+    } catch(e) {
+        console.error('[Meta CAPI Exception]', e);
+    }
+}
