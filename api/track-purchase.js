@@ -11,6 +11,16 @@ function sha256(str) {
     return crypto.createHash('sha256').update(cleaned).digest('hex');
 }
 
+function sha256Phone(phone) {
+    if (!phone) return undefined;
+    let digits = String(phone).replace(/\D/g, '');
+    if (!digits) return undefined;
+    if (digits.length === 10) {
+        digits = '91' + digits;
+    }
+    return crypto.createHash('sha256').update(digits).digest('hex');
+}
+
 module.exports = async (req, res) => {
     // Enable CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -31,7 +41,7 @@ module.exports = async (req, res) => {
             bodyData = req.query || {};
         }
 
-        const { orderId, amount, customerName, customerPhone, customerEmail, items, clientIp, userAgent } = bodyData;
+        const { orderId, amount, customerName, customerPhone, customerEmail, items, clientIp, userAgent, fbp, fbc, testEventCode } = bodyData;
 
         if (!orderId || !amount) {
             res.statusCode = 400;
@@ -48,6 +58,25 @@ module.exports = async (req, res) => {
         const ipAddress = clientIp || req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || req.socket.remoteAddress;
         const clientUserAgent = userAgent || req.headers['user-agent'] || '';
 
+        // Prepare User Data
+        const userData = {
+            client_ip_address: ipAddress,
+            client_user_agent: clientUserAgent,
+            country: [sha256('in')]
+        };
+
+        const fnHash = sha256(customerName);
+        if (fnHash) userData.fn = [fnHash];
+
+        const phHash = sha256Phone(customerPhone);
+        if (phHash) userData.ph = [phHash];
+
+        const emHash = sha256(customerEmail);
+        if (emHash) userData.em = [emHash];
+
+        if (fbp) userData.fbp = fbp;
+        if (fbc) userData.fbc = fbc;
+
         // Prepare Meta Conversions API (CAPI) Payload
         const payload = {
             data: [
@@ -57,23 +86,26 @@ module.exports = async (req, res) => {
                     event_id: eventId,
                     action_source: 'website',
                     event_source_url: 'https://www.luckydigitalmedia.in/order-confirmation.html',
-                    user_data: {
-                        fn: sha256(customerName) ? [sha256(customerName)] : undefined,
-                        ph: sha256(customerPhone) ? [sha256(customerPhone)] : undefined,
-                        em: sha256(customerEmail) ? [sha256(customerEmail)] : undefined,
-                        client_ip_address: ipAddress,
-                        client_user_agent: clientUserAgent
-                    },
+                    user_data: userData,
                     custom_data: {
                         currency: 'INR',
                         value: numericAmount,
                         order_id: String(orderId),
                         content_type: 'product',
-                        contents: Array.isArray(items) ? items.map(i => ({ id: String(i.id), quantity: i.qty || 1, item_price: parseFloat(String(i.price).replace(/[^\d.]/g, '')) || numericAmount })) : []
+                        contents: Array.isArray(items) ? items.map(i => ({
+                            id: String(i.id),
+                            quantity: i.qty || 1,
+                            item_price: parseFloat(String(i.price).replace(/[^\d.]/g, '')) || numericAmount
+                        })) : []
                     }
                 }
             ]
         };
+
+        const testCode = testEventCode || (req.query ? req.query.test_event_code : undefined);
+        if (testCode) {
+            payload.test_event_code = testCode;
+        }
 
         const postData = JSON.stringify(payload);
         const capiUrl = `https://graph.facebook.com/v19.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`;
