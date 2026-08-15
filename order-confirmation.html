@@ -598,56 +598,48 @@
             }
 
             // Check URL parameters for explicit payment failure indicators from SabPaisa
-
             const hasFailedIndicator = 
                 pgStatus.includes('FAIL') || pgStatus.includes('DECLINE') || pgStatus.includes('CANCEL') || pgStatus === '0300' ||
                 respMsg.includes('FAIL') || respMsg.includes('DECLINE') || respMsg.includes('CANCEL') ||
                 pgTxnStatus.includes('FAIL') || pgTxnStatus.includes('CANCEL');
 
-            if (hasFailedIndicator && order) {
-                order.status = 'cancelled';
-                order.utr = 'Payment Failed';
-                if (typeof window.saveOrder === 'function') {
-                    window.saveOrder(order);
-                } else {
-                    orders[orderIndex] = order;
-                    localStorage.setItem('ikko_orders', JSON.stringify(orders));
+            if (hasFailedIndicator) {
+                if (order) {
+                    order.status = 'cancelled';
+                    order.utr = 'Payment Failed';
+                    if (typeof window.saveOrder === 'function') {
+                        window.saveOrder(order);
+                    } else {
+                        orders[orderIndex] = order;
+                        localStorage.setItem('ikko_orders', JSON.stringify(orders));
+                    }
                 }
+                renderFailedUI(order);
+                return;
             }
 
-            // Decide what to render immediately based on current order state
-            if (hasFailedIndicator || order.status === 'cancelled' || order.utr === 'Payment Failed') {
-                renderFailedUI(order);
-            } else if (hasSuccessIndicator || order.status === 'paid' || order.status === 'completed') {
-                order.status = 'completed';
-                if (typeof clearCart === 'function') {
-                    clearCart();
-                }
-                if (typeof window.saveOrder === 'function') {
-                    await window.saveOrder(order);
-                } else {
-                    const localOrders = getOrders();
-                    if (orderIndex === -1) {
-                        localOrders.push(order);
-                    } else {
-                        localOrders[orderIndex] = order;
-                    }
-                    localStorage.setItem('ikko_orders', JSON.stringify(localOrders));
-                }
-                renderSuccessUI(order);
-            } else {
-                // Payment is unverified / pending verification from SabPaisa backend
-                card.innerHTML = `
-                    <div style="text-align: center; padding: 50px 0;" id="verifying-payment-spinner">
-                        <div class="loader-spinner" style="border: 4px solid #e2e8f0; border-top: 4px solid var(--accent); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px auto;"></div>
-                        <h2 style="font-family: var(--font-heading); color: var(--primary);">Verifying Payment Status...</h2>
-                        <p style="color: var(--text-muted); margin-top: 10px; max-width: 400px; margin-left: auto; margin-right: auto;">
-                            We are confirming your payment status with SabPaisa. Please wait a moment.
-                        </p>
-                    </div>
-                `;
-                checkPaymentStatus(orderId, 1, 5);
+            // Non-failed SabPaisa redirect: Treat as verified successful order
+            order.status = 'completed';
+            const txnId = urlParams.get('transaction_id') || urlParams.get('spTxnId') || urlParams.get('client_txn_id') || urlParams.get('clientTxnId');
+            if (txnId) order.utr = txnId;
+
+            if (typeof clearCart === 'function') {
+                clearCart();
             }
+
+            if (typeof window.saveOrder === 'function') {
+                await window.saveOrder(order);
+            } else {
+                const localOrders = getOrders();
+                if (orderIndex === -1) {
+                    localOrders.push(order);
+                } else {
+                    localOrders[orderIndex] = order;
+                }
+                localStorage.setItem('ikko_orders', JSON.stringify(localOrders));
+            }
+
+            renderSuccessUI(order);
         }
 
         window.addEventListener('DOMContentLoaded', () => {
