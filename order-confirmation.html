@@ -539,14 +539,19 @@
             }
 
             // Check URL parameters for explicit payment success/failure indicators from SabPaisa
-            const pgStatus = (urlParams.get('status') || urlParams.get('sabPaisaStatus') || urlParams.get('payment_status') || urlParams.get('statusCode') || '').toUpperCase();
-            const respMsg = (urlParams.get('respMsg') || urlParams.get('responseMessage') || urlParams.get('statusMessage') || '').toUpperCase();
+            const pgStatus = (urlParams.get('status') || urlParams.get('sabPaisaStatus') || urlParams.get('payment_status') || urlParams.get('statusCode') || urlParams.get('spRespCode') || urlParams.get('query_status') || '').toUpperCase();
+            const respMsg = (urlParams.get('respMsg') || urlParams.get('responseMessage') || urlParams.get('statusMessage') || urlParams.get('spResponseMessage') || urlParams.get('sabpaisaMessage') || '').toUpperCase();
             const pgTxnStatus = (urlParams.get('txnStatus') || '').toUpperCase();
 
             const hasSuccessIndicator = 
                 pgStatus.includes('SUCCESS') || pgStatus.includes('COMPLETED') || pgStatus === '0000' ||
                 respMsg.includes('SUCCESS') || respMsg.includes('COMPLETED') ||
-                pgTxnStatus.includes('SUCCESS');
+                pgTxnStatus.includes('SUCCESS') || pgTxnStatus.includes('COMPLETED');
+
+            const hasFailedIndicator = 
+                pgStatus.includes('FAIL') || pgStatus.includes('DECLINE') || pgStatus.includes('CANCEL') || pgStatus.includes('TIMEOUT') || pgStatus.includes('EXPIRED') || pgStatus.includes('ABANDON') || pgStatus === '0300' || pgStatus === '0100' ||
+                respMsg.includes('FAIL') || respMsg.includes('DECLINE') || respMsg.includes('CANCEL') || respMsg.includes('TIMEOUT') || respMsg.includes('EXPIRED') ||
+                pgTxnStatus.includes('FAIL') || pgTxnStatus.includes('CANCEL') || pgTxnStatus.includes('TIMEOUT') || pgTxnStatus.includes('EXPIRED');
 
             if (hasSuccessIndicator) {
                 if (orderIndex === -1) {
@@ -556,7 +561,7 @@
                     order = {
                         id: orderId,
                         date: new Date().toISOString(),
-                        status: 'pending',
+                        status: 'completed',
                         paymentMethod: 'sabpaisa',
                         utr: txnId,
                         customer: {
@@ -572,7 +577,7 @@
                     };
                 } else {
                     order = orders[orderIndex];
-                    order.status = 'pending';
+                    order.status = 'completed';
                     const txnId = urlParams.get('transaction_id') || urlParams.get('spTxnId') || urlParams.get('client_txn_id');
                     if (txnId) order.utr = txnId;
                 }
@@ -597,16 +602,10 @@
                 return;
             }
 
-            // Check URL parameters for explicit payment failure indicators from SabPaisa
-            const hasFailedIndicator = 
-                pgStatus.includes('FAIL') || pgStatus.includes('DECLINE') || pgStatus.includes('CANCEL') || pgStatus === '0300' ||
-                respMsg.includes('FAIL') || respMsg.includes('DECLINE') || respMsg.includes('CANCEL') ||
-                pgTxnStatus.includes('FAIL') || pgTxnStatus.includes('CANCEL');
-
             if (hasFailedIndicator) {
                 if (order) {
                     order.status = 'cancelled';
-                    order.utr = 'Payment Failed';
+                    order.utr = pgStatus.includes('TIMEOUT') || respMsg.includes('TIMEOUT') ? 'Payment Timed Out' : 'Payment Failed';
                     if (typeof window.saveOrder === 'function') {
                         window.saveOrder(order);
                     } else {
@@ -618,28 +617,17 @@
                 return;
             }
 
-            // Non-failed SabPaisa redirect: Treat as verified successful order
-            order.status = 'completed';
-            const txnId = urlParams.get('transaction_id') || urlParams.get('spTxnId') || urlParams.get('client_txn_id') || urlParams.get('clientTxnId');
-            if (txnId) order.utr = txnId;
-
-            if (typeof clearCart === 'function') {
-                clearCart();
-            }
-
-            if (typeof window.saveOrder === 'function') {
-                await window.saveOrder(order);
-            } else {
-                const localOrders = getOrders();
-                if (orderIndex === -1) {
-                    localOrders.push(order);
-                } else {
-                    localOrders[orderIndex] = order;
-                }
-                localStorage.setItem('ikko_orders', JSON.stringify(localOrders));
-            }
-
-            renderSuccessUI(order);
+            // Status is unknown / pending: Do NOT fire purchase pixel immediately. Verify with backend API!
+            card.innerHTML = `
+                <div style="text-align: center; padding: 50px 0;" id="verifying-payment-spinner">
+                    <div class="loader-spinner" style="border: 4px solid #e2e8f0; border-top: 4px solid var(--accent); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px auto;"></div>
+                    <h2 style="font-family: var(--font-heading); color: var(--primary);">Verifying Payment Status...</h2>
+                    <p style="color: var(--text-muted); margin-top: 10px; max-width: 400px; margin-left: auto; margin-right: auto;">
+                        We are confirming your payment status with SabPaisa. Please wait a moment.
+                    </p>
+                </div>
+            `;
+            checkPaymentStatus(orderId, 1, 3);
         }
 
         window.addEventListener('DOMContentLoaded', () => {
