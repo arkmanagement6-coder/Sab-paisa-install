@@ -156,25 +156,6 @@ window.trackPurchaseEvent = function(order) {
 
 const INITIAL_PRODUCTS = [
   {
-    "id": "8270415000000_demo",
-    "category": "tablets",
-    "price": "Rs. 1.00",
-    "badge": "DEMO PRODUCT",
-    "title": "₹1 LIVE DEMO TEST PRODUCT - Apple iPad Air 11″ (M2) Test Order",
-    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
-    "images": [
-      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
-    ],
-    "url": "/product.html?id=8270415000000_demo",
-    "stockStatus": "in-stock",
-    "handle": "demo-1rs-product",
-    "comparePrice": "Rs. 999.00",
-    "specs": [
-      { "name": "Brand", "value": "Test Demo" },
-      { "name": "Price", "value": "Rs. 1.00" }
-    ]
-  },
-  {
     "id": "8270415000000",
     "paymentLink": "https://rzp.io/rzp/tHlmofq",
     "category": "tablets",
@@ -1314,36 +1295,9 @@ async function syncProductsBackground(forceSync = false) {
     return result;
 }
 
-function ensureDemoProductPresent(products) {
+function cleanDemoProducts(products) {
     if (!Array.isArray(products)) products = [];
-    const demoObj = {
-        "id": "8270415000000_demo",
-        "category": "tablets",
-        "price": "Rs. 1.00",
-        "badge": "DEMO PRODUCT",
-        "title": "₹1 LIVE DEMO TEST PRODUCT - Apple iPad Air 11″ (M2) Test Order",
-        "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
-        "images": [
-            "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
-        ],
-        "url": "/product.html?id=8270415000000_demo",
-        "stockStatus": "in-stock",
-        "handle": "demo-1rs-product",
-        "comparePrice": "Rs. 999.00",
-        "specs": [
-            { "name": "Brand", "value": "Test Demo" },
-            { "name": "Price", "value": "Rs. 1.00" }
-        ]
-    };
-
-    const exists = products.some(p => String(p.id) === '8270415000000_demo');
-    if (!exists) {
-        products.unshift(demoObj);
-    } else {
-        const idx = products.findIndex(p => String(p.id) === '8270415000000_demo');
-        products[idx] = demoObj;
-    }
-    return products;
+    return products.filter(p => String(p.id) !== '8270415000000_demo' && String(p.id) !== '1111111111111' && p.price !== 'Rs. 1.00');
 }
 
 // Product Database Helpers (Firestore Async with local Cache fallback)
@@ -1355,7 +1309,7 @@ async function getProducts(forceSync = false) {
         try {
             let products = JSON.parse(cached);
             if (products && products.length > 0) {
-                products = ensureDemoProductPresent(products);
+                products = cleanDemoProducts(products);
                 localStorage.setItem('ikko_products', JSON.stringify(products));
                 // Trigger background sync only once per session to prevent hitting Firestore limits
                 if (!alreadySynced) {
@@ -1372,7 +1326,7 @@ async function getProducts(forceSync = false) {
     if (!synced || synced.length === 0) {
         synced = (typeof INITIAL_PRODUCTS !== 'undefined') ? [...INITIAL_PRODUCTS] : [];
     }
-    synced = ensureDemoProductPresent(synced);
+    synced = cleanDemoProducts(synced);
     localStorage.setItem('ikko_products', JSON.stringify(synced));
     return synced;
 }
