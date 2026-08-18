@@ -69,6 +69,12 @@
                             <input type="tel" id="cust-phone" class="custom-input input-with-prefix" placeholder="Mobile Number" pattern="[0-9]{10}" maxlength="10" required>
                         </div>
                     </div>
+                    <div class="input-group">
+                        <div class="input-wrapper">
+                            <span class="input-icon">✉️</span>
+                            <input type="email" id="cust-email" class="custom-input" placeholder="Email Address (Optional)">
+                        </div>
+                    </div>
 
                     <!-- Address Details -->
                     <div class="form-section-title" style="margin-top: 22px;">
@@ -283,10 +289,14 @@
                 return;
             }
 
+            const emailEl = document.getElementById('cust-email');
+            const email = emailEl ? emailEl.value.trim() : '';
+
             const fullAddressText = `${address}, ${area}, ${city}, ${state} - ${pin}`;
             const customerObj = {
                 name,
                 phone,
+                email,
                 pin,
                 city,
                 state,
@@ -497,7 +507,7 @@
                         redirectUrl: confirmationUrl,
                         customerName: cust.name || 'Valued Customer',
                         customerPhone: cust.phone || '9999999999',
-                        customerEmail: `${cust.phone || '9999999999'}@luck1.com`
+                        customerEmail: (cust.email && cust.email.includes('@')) ? cust.email : `${cust.phone || '9999999999'}@luck1.com`
                     })
                 });
 
