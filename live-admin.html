@@ -1328,28 +1328,66 @@
 
         let ordersListenerUnsubscribe = null;
 
+        async function fetchServerOrders() {
+            try {
+                const res = await fetch('/api/admin-orders?v=' + Date.now());
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && Array.isArray(data.orders)) {
+                        const localOrders = JSON.parse(localStorage.getItem('ikko_orders')) || [];
+                        const merged = [...data.orders];
+                        localOrders.forEach(o => {
+                            if (o && o.id && !merged.some(m => m.id === o.id)) {
+                                merged.push(o);
+                            }
+                        });
+                        localStorage.setItem('ikko_orders', JSON.stringify(merged));
+                        if (currentAdminTab === 'dash') renderDashboard();
+                        if (currentAdminTab === 'orders') renderOrders();
+                    }
+                }
+            } catch(e) {
+                console.error("Server orders fetch error:", e);
+            }
+        }
+
         async function initRealTimeOrders() {
+            // Initial server orders sync
+            await fetchServerOrders();
+            // Poll server orders every 6 seconds for continuous live updates
+            setInterval(fetchServerOrders, 6000);
+
             if (window.settingsLoadingPromise) {
                 await window.settingsLoadingPromise;
             }
             const settings = getSettings();
             if (settings.firebaseEnabled) {
-                const db = await initFirebase();
-                if (db) {
-                    console.log("Listening to orders from Firestore in real-time...");
-                    ordersListenerUnsubscribe = db.collection('orders').onSnapshot((snapshot) => {
-                        const firestoreOrders = [];
-                        snapshot.forEach((doc) => {
-                            firestoreOrders.push(doc.data());
+                try {
+                    const db = await initFirebase();
+                    if (db) {
+                        console.log("Listening to orders from Firestore in real-time...");
+                        ordersListenerUnsubscribe = db.collection('orders').onSnapshot((snapshot) => {
+                            const firestoreOrders = [];
+                            snapshot.forEach((doc) => {
+                                firestoreOrders.push(doc.data());
+                            });
+                            const currentLocal = JSON.parse(localStorage.getItem('ikko_orders')) || [];
+                            firestoreOrders.forEach(o => {
+                                if (o && o.id && !currentLocal.some(c => c.id === o.id)) {
+                                    currentLocal.push(o);
+                                }
+                            });
+                            localStorage.setItem('ikko_orders', JSON.stringify(currentLocal));
+                            
+                            // Re-render
+                            if (currentAdminTab === 'dash') renderDashboard();
+                            if (currentAdminTab === 'orders') renderOrders();
+                        }, (error) => {
+                            console.error("Firestore orders subscription notice (falling back to Server API):", error);
                         });
-                        localStorage.setItem('ikko_orders', JSON.stringify(firestoreOrders));
-                        
-                        // Re-render
-                        if (currentAdminTab === 'dash') renderDashboard();
-                        if (currentAdminTab === 'orders') renderOrders();
-                    }, (error) => {
-                        console.error("Firestore orders subscription error:", error);
-                    });
+                    }
+                } catch(err) {
+                    console.warn("Firestore listener fallback:", err);
                 }
             }
         }

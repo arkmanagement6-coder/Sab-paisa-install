@@ -167,6 +167,36 @@ module.exports = async (req, res) => {
             }
             console.log(`[SabPaisa] Payment session created successfully. Redirect URL: ${checkoutUrl}`);
 
+            // Save order to Server Backend Admin Orders database automatically so Admin never misses an order
+            try {
+                const adminOrdersApi = require('./admin-orders.js');
+                const mockReq = {
+                    method: 'POST',
+                    body: {
+                        id: orderId,
+                        date: new Date().toISOString(),
+                        status: 'pending_payment',
+                        paymentMethod: 'sabpaisa',
+                        utr: 'Pending',
+                        total: parseFloat(amount) || 999,
+                        customer: {
+                            name: customerName,
+                            phone: customerPhone,
+                            email: customerEmail,
+                            address: data.customerAddress || 'Checkout Customer',
+                            city: data.customerCity || '',
+                            state: data.customerState || '',
+                            pin: data.customerPin || ''
+                        },
+                        items: data.items || []
+                    }
+                };
+                const mockRes = { setHeader: () => {}, statusCode: 200, end: () => {} };
+                adminOrdersApi(mockReq, mockRes);
+            } catch(orderSaveErr) {
+                console.error('[Server Order Save Error]', orderSaveErr);
+            }
+
             // Fire Server-side Meta Conversions API (CAPI) AddPaymentInfo Event when checkout link is generated
             try {
                 sendMetaCapiAddPaymentInfo({

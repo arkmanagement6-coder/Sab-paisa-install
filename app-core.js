@@ -1444,6 +1444,15 @@ async function saveOrder(order) {
         orders.push(order);
     }
     localStorage.setItem('ikko_orders', JSON.stringify(orders));
+
+    // Sync to Server Backend Database
+    try {
+        fetch('/api/admin-orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(order)
+        }).catch(err => console.error("Server order sync error:", err));
+    } catch(e){}
     
     // Sync to Firestore if enabled
     try {
