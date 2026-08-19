@@ -88,7 +88,7 @@ module.exports = async (req, res) => {
         }
 
         const merchantId = settings.ccavenueMerchantId || '4445524';
-        const accessCode = settings.ccavenueAccessCode || 'AVEP92NE55BL03PELB';
+        const accessCode = settings.ccavenueAccessCode || 'AVTA92NE51BK54ATKB';
         const workingKey = settings.ccavenueWorkingKey || 'AEE54FF9EA969DED8B505C982FC74CEA';
 
         const protocol = req.headers['x-forwarded-proto'] || 'https';
