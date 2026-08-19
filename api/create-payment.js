@@ -88,14 +88,11 @@ module.exports = async (req, res) => {
         }
 
         const merchantId = settings.ccavenueMerchantId || '4445524';
-        const accessCode = settings.ccavenueAccessCode || 'AVTA92NE51BK54ATKB';
+        const accessCode = settings.ccavenueAccessCode || 'AVEP92NE55BL03PELB';
         const workingKey = settings.ccavenueWorkingKey || 'AEE54FF9EA969DED8B505C982FC74CEA';
 
         const protocol = req.headers['x-forwarded-proto'] || 'https';
         const host = req.headers['host'] || 'www.revantagrowthmedia.com';
-        const baseUrl = `${protocol}://${host}`;
-        
-        // CCAvenue requires redirect_url domain to match registered merchant domain
         const ccavResponseUrl = `https://www.revantagrowthmedia.com/api/ccav-response`;
 
         const numericAmount = parseFloat(amount).toFixed(2);
@@ -105,24 +102,26 @@ module.exports = async (req, res) => {
             return String(str).replace(/[&=?#%]/g, ' ').trim() || fallback;
         }
 
-        // Format CCAvenue parameter string (unencoded plain key-values required by CCAvenue)
-        const ccavParams = [
-            `merchant_id=${merchantId}`,
-            `order_id=${orderId}`,
-            `currency=INR`,
-            `amount=${numericAmount}`,
-            `redirect_url=${ccavResponseUrl}`,
-            `cancel_url=${ccavResponseUrl}`,
-            `language=EN`,
-            `billing_name=${cleanParam(customerName, 'Customer')}`,
-            `billing_tel=${cleanParam(customerPhone, '9999999999')}`,
-            `billing_email=${cleanParam(customerEmail, 'customer@luckydigitalmedia.in')}`,
-            `billing_address=${cleanParam(body.customerAddress, 'Address')}`,
-            `billing_city=${cleanParam(body.customerCity, 'City')}`,
-            `billing_state=${cleanParam(body.customerState, 'State')}`,
-            `billing_zip=${cleanParam(body.customerPin, '110001')}`,
-            `billing_country=India`
-        ].join('&');
+        const querystring = require('querystring');
+        const paramsObj = {
+            merchant_id: merchantId,
+            order_id: String(orderId),
+            currency: 'INR',
+            amount: numericAmount,
+            redirect_url: ccavResponseUrl,
+            cancel_url: ccavResponseUrl,
+            language: 'EN',
+            billing_name: cleanParam(customerName, 'Customer'),
+            billing_address: cleanParam(body.customerAddress, 'Address'),
+            billing_city: cleanParam(body.customerCity, 'City'),
+            billing_state: cleanParam(body.customerState, 'State'),
+            billing_zip: cleanParam(body.customerPin, '110001'),
+            billing_country: 'India',
+            billing_tel: cleanParam(customerPhone, '9999999999'),
+            billing_email: cleanParam(customerEmail, 'customer@luckydigitalmedia.in')
+        };
+
+        const ccavParams = querystring.stringify(paramsObj);
 
         console.log(`[CCAvenue] Initiating checkout pay request for Order ${orderId}`);
         const encRequest = encryptCCAvenue(ccavParams, workingKey);
