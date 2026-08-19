@@ -49,6 +49,10 @@
       "dest": "api/admin-orders.js"
     },
     {
+      "src": "/api/ccav-response",
+      "dest": "api/ccav-response.js"
+    },
+    {
       "handle": "filesystem"
     }
   ]

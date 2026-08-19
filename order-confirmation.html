@@ -320,7 +320,7 @@
                 `).join('');
 
                 const formattedSubtotal = formatPrice(order.total);
-                let paymentText = order.paymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'SabPaisa PG Payment';
+                let paymentText = order.paymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'CCAvenue PG Payment';
                 let statusText = order.paymentMethod === 'cod' ? 'Awaiting Delivery' : 'Paid & Confirmed';
 
                 card.innerHTML = `
@@ -462,7 +462,7 @@
                             <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="3" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                         </div>
                         <h2 style="color: #dd6b20; font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800;">Payment Awaiting Verification</h2>
-                        <p style="color: var(--text-muted); margin: 15px auto 25px auto; max-width: 480px;">Your payment status is still pending confirmation from SabPaisa. We will process your order as soon as we receive confirmation.</p>
+                        <p style="color: var(--text-muted); margin: 15px auto 25px auto; max-width: 480px;">Your payment status is still pending confirmation from CCAvenue. We will process your order as soon as we receive confirmation.</p>
                         <div class="order-badge-id" style="margin-bottom: 25px; background-color: #f7fafc; color: var(--text-dark);">Order ID: ${order.id}</div>
                         
                         <div style="margin-top: 10px; display: flex; justify-content: center; gap: 15px;">

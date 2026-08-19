@@ -1,9 +1,9 @@
 {
-  "sabpaisaEnabled": true,
-  "sabpaisaMerchantId": "ARKM1",
-  "sabpaisaApiKey": "sp_P4FN07lSTKNxqbLdT2SN5ZvKCzBTxasI0PgsMaM7_Og",
-  "sabpaisaSecretKey": "sec_C-0PTD_nPJ2Q4j7JDGDqhmqQLYyNEXTLkiJgp_dAAMU",
-  "sabpaisaMode": "live",
+  "ccavenueEnabled": true,
+  "ccavenueMerchantId": "4445524",
+  "ccavenueAccessCode": "AVTA92NE51BK54ATKB",
+  "ccavenueWorkingKey": "AEE54FF9EA969DED8B505C982FC74CEA",
+  "ccavenueMode": "live",
   "firebaseEnabled": true,
   "firebaseConfig": {
     "apiKey": "AIzaSyAmxUfqwJjdy1AZ3iqrHCK7DV7cY15ksZM",

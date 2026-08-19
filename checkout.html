@@ -452,7 +452,7 @@
             const proceedBtn = document.getElementById('btn-proceed-to-pay');
             if (proceedBtn) {
                 proceedBtn.disabled = true;
-                proceedBtn.innerText = 'Connecting SabPaisa Gateway... ⏳';
+                proceedBtn.innerText = 'Connecting CCAvenue Gateway... ⏳';
             }
 
             const total = getCartTotal();
@@ -463,7 +463,7 @@
                 id: orderId,
                 date: new Date().toISOString(),
                 status: 'pending_payment',
-                paymentMethod: 'sabpaisa',
+                paymentMethod: 'ccavenue',
                 utr: 'Pending Payment',
                 customer: {
                     name: cust.name || 'Customer',
@@ -494,7 +494,7 @@
                 }
             } catch(e){}
 
-            // Direct SabPaisa Gateway Integration
+            // CCAvenue Gateway Integration
             const confirmationUrl = `${window.location.origin}/order-confirmation.html?orderId=${encodeURIComponent(orderId)}&amount=${encodeURIComponent(total)}`;
 
             try {
@@ -507,19 +507,43 @@
                         redirectUrl: confirmationUrl,
                         customerName: cust.name || 'Valued Customer',
                         customerPhone: cust.phone || '9999999999',
-                        customerEmail: (cust.email && cust.email.includes('@')) ? cust.email : `${cust.phone || '9999999999'}@luck1.com`
+                        customerEmail: (cust.email && cust.email.includes('@')) ? cust.email : `${cust.phone || '9999999999'}@luck1.com`,
+                        customerAddress: cust.address || '',
+                        customerCity: cust.city || '',
+                        customerState: cust.state || '',
+                        customerPin: cust.pin || '',
+                        items: cart
                     })
                 });
 
                 const data = await response.json();
-                if (data.success && data.redirectUrl) {
+                if (data.success && data.encRequest && data.accessCode) {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = data.formUrl || 'https://secure.ccavenue.com/gTransaction.do?command=initiateTransaction';
+                    
+                    const encInput = document.createElement('input');
+                    encInput.type = 'hidden';
+                    encInput.name = 'encRequest';
+                    encInput.value = data.encRequest;
+                    form.appendChild(encInput);
+
+                    const accessInput = document.createElement('input');
+                    accessInput.type = 'hidden';
+                    accessInput.name = 'access_code';
+                    accessInput.value = data.accessCode;
+                    form.appendChild(accessInput);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                } else if (data.redirectUrl) {
                     window.location.href = data.redirectUrl;
                 } else {
-                    console.warn("SabPaisa API returned fallback:", data.message);
+                    console.warn("CCAvenue API returned fallback:", data.message);
                     window.location.href = confirmationUrl;
                 }
             } catch (err) {
-                console.error("SabPaisa Gateway error:", err);
+                console.error("CCAvenue Gateway error:", err);
                 window.location.href = confirmationUrl;
             }
         }
