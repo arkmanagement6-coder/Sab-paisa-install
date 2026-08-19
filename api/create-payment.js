@@ -92,9 +92,11 @@ module.exports = async (req, res) => {
         const workingKey = settings.ccavenueWorkingKey || 'AEE54FF9EA969DED8B505C982FC74CEA';
 
         const protocol = req.headers['x-forwarded-proto'] || 'https';
-        const host = req.headers['host'] || 'www.luckydigitalmedia.in';
+        const host = req.headers['host'] || 'www.revantagrowthmedia.com';
         const baseUrl = `${protocol}://${host}`;
-        const ccavResponseUrl = `${baseUrl}/api/ccav-response`;
+        
+        // CCAvenue requires redirect_url domain to match registered merchant domain
+        const ccavResponseUrl = `https://www.revantagrowthmedia.com/api/ccav-response`;
 
         const numericAmount = parseFloat(amount).toFixed(2);
 
