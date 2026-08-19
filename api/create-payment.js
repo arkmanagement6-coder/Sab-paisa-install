@@ -98,22 +98,27 @@ module.exports = async (req, res) => {
 
         const numericAmount = parseFloat(amount).toFixed(2);
 
-        // Format CCAvenue parameter string
+        function cleanParam(str, fallback = 'N/A') {
+            if (!str) return fallback;
+            return String(str).replace(/[&=?#%]/g, ' ').trim() || fallback;
+        }
+
+        // Format CCAvenue parameter string (unencoded plain key-values required by CCAvenue)
         const ccavParams = [
             `merchant_id=${merchantId}`,
             `order_id=${orderId}`,
             `currency=INR`,
             `amount=${numericAmount}`,
-            `redirect_url=${encodeURIComponent(ccavResponseUrl)}`,
-            `cancel_url=${encodeURIComponent(ccavResponseUrl)}`,
+            `redirect_url=${ccavResponseUrl}`,
+            `cancel_url=${ccavResponseUrl}`,
             `language=EN`,
-            `billing_name=${encodeURIComponent(customerName)}`,
-            `billing_tel=${encodeURIComponent(customerPhone)}`,
-            `billing_email=${encodeURIComponent(customerEmail)}`,
-            `billing_address=${encodeURIComponent(body.customerAddress || 'Address')}`,
-            `billing_city=${encodeURIComponent(body.customerCity || 'City')}`,
-            `billing_state=${encodeURIComponent(body.customerState || 'State')}`,
-            `billing_zip=${encodeURIComponent(body.customerPin || '110001')}`,
+            `billing_name=${cleanParam(customerName, 'Customer')}`,
+            `billing_tel=${cleanParam(customerPhone, '9999999999')}`,
+            `billing_email=${cleanParam(customerEmail, 'customer@luckydigitalmedia.in')}`,
+            `billing_address=${cleanParam(body.customerAddress, 'Address')}`,
+            `billing_city=${cleanParam(body.customerCity, 'City')}`,
+            `billing_state=${cleanParam(body.customerState, 'State')}`,
+            `billing_zip=${cleanParam(body.customerPin, '110001')}`,
             `billing_country=India`
         ].join('&');
 
