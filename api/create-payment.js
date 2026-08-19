@@ -92,8 +92,9 @@ module.exports = async (req, res) => {
         const workingKey = settings.ccavenueWorkingKey || 'AEE54FF9EA969DED8B505C982FC74CEA';
 
         const protocol = req.headers['x-forwarded-proto'] || 'https';
-        const host = req.headers['host'] || 'www.revantagrowthmedia.com';
-        const ccavResponseUrl = `https://www.revantagrowthmedia.com/api/ccav-response`;
+        const host = req.headers['host'] || 'www.ikkodigital.store';
+        const baseUrl = `${protocol}://${host}`;
+        const ccavResponseUrl = `${baseUrl}/api/ccav-response`;
 
         const numericAmount = parseFloat(amount).toFixed(2);
 
