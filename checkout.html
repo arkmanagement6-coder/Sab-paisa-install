@@ -520,7 +520,7 @@
                 if (data.success && data.encRequest && data.accessCode) {
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = data.formUrl || 'https://secure.ccavenue.com/gTransaction.do?command=initiateTransaction';
+                    form.action = data.formUrl || 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction';
                     
                     const encInput = document.createElement('input');
                     encInput.type = 'hidden';

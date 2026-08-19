@@ -176,7 +176,7 @@ module.exports = async (req, res) => {
         res.end(JSON.stringify({
             success: true,
             gateway: 'ccavenue',
-            formUrl: 'https://secure.ccavenue.com/gTransaction.do?command=initiateTransaction',
+            formUrl: 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction',
             encRequest: encRequest,
             accessCode: accessCode
         }));
