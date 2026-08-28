@@ -255,6 +255,21 @@
     <!-- Core Scripts -->
     <script src="app-core.js?v=200.0"></script>
     <script>
+        function safeGetOrders() {
+            if (typeof window.getOrders === 'function') {
+                try { return window.getOrders(); } catch(e){}
+            }
+            try { return JSON.parse(localStorage.getItem('ikko_orders')) || []; } catch(e) { return []; }
+        }
+
+        function safeFormatPrice(num) {
+            if (typeof window.formatPrice === 'function') {
+                try { return window.formatPrice(num); } catch(e){}
+            }
+            const val = parseFloat(num) || 0;
+            return '₹' + val.toFixed(2);
+        }
+
         async function renderConfirmation() {
             const card = document.getElementById('confirmation-content-card');
             if (!card) return;
@@ -264,7 +279,7 @@
 
             if (!orderId) {
                 // Fallback to the latest order placed on this browser if no ID is passed in the URL redirect
-                const orders = getOrders();
+                const orders = safeGetOrders();
                 if (orders.length > 0) {
                     orderId = orders[orders.length - 1].id;
                 }
@@ -281,7 +296,7 @@
                 return;
             }
 
-            const orders = getOrders();
+            const orders = safeGetOrders();
             let orderIndex = orders.findIndex(o => o.id === orderId);
             let order = orderIndex !== -1 ? orders[orderIndex] : null;
 
@@ -354,7 +369,7 @@
                     </div>
                 `).join('');
 
-                const formattedSubtotal = formatPrice(order.total);
+                const formattedSubtotal = safeFormatPrice(order.total);
                 let paymentText = order.paymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'SabPaisa PG Payment';
                 let statusText = order.paymentMethod === 'cod' ? 'Awaiting Delivery' : 'Paid & Confirmed';
 
