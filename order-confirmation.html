@@ -303,8 +303,14 @@
             let orderIndex = orders.findIndex(o => o.id === orderId);
             let order = orderIndex !== -1 ? orders[orderIndex] : null;
 
-            // Reconstruct minimal order object instantly if not cached locally
+            // Reconstruct order object instantly with saved customer details & cart items if not cached in orders array
             if (!order) {
+                let savedCust = {};
+                try { savedCust = JSON.parse(localStorage.getItem('ikko_customer')) || {}; } catch(e){}
+
+                let savedCart = [];
+                try { savedCart = JSON.parse(localStorage.getItem('ikko_cart')) || []; } catch(e){}
+
                 const amountParam = parseFloat(urlParams.get('amount') || '999');
                 const txnId = urlParams.get('transaction_id') || urlParams.get('spTxnId') || urlParams.get('client_txn_id') || 'SabPaisa Verified';
 
@@ -315,14 +321,14 @@
                     paymentMethod: 'sabpaisa',
                     utr: txnId,
                     customer: {
-                        name: 'Valued Customer',
-                        phone: '',
-                        address: 'SabPaisa PG Redirect',
-                        city: '',
-                        state: '',
-                        pin: ''
+                        name: savedCust.name || urlParams.get('name') || 'Valued Customer',
+                        phone: savedCust.phone || urlParams.get('phone') || '',
+                        address: savedCust.fullAddressText || savedCust.address || 'Delivery Address Provided',
+                        city: savedCust.city || '',
+                        state: savedCust.state || '',
+                        pin: savedCust.pin || ''
                     },
-                    items: [],
+                    items: savedCart,
                     total: amountParam
                 };
             }
@@ -353,6 +359,28 @@
 
             // Render different layouts depending on verified status
             function renderSuccessUI(order) {
+                // Ensure customer details and items are populated from local storage if missing
+                let savedCust = {};
+                try { savedCust = JSON.parse(localStorage.getItem('ikko_customer')) || {}; } catch(e){}
+
+                let savedCart = [];
+                try { savedCart = JSON.parse(localStorage.getItem('ikko_cart')) || []; } catch(e){}
+
+                if ((!order.customer || !order.customer.name || order.customer.name === 'Valued Customer') && savedCust.name) {
+                    order.customer = {
+                        name: savedCust.name,
+                        phone: savedCust.phone || (order.customer ? order.customer.phone : '') || '',
+                        address: savedCust.fullAddressText || savedCust.address || (order.customer ? order.customer.address : '') || 'Delivery Address',
+                        city: savedCust.city || (order.customer ? order.customer.city : '') || '',
+                        state: savedCust.state || (order.customer ? order.customer.state : '') || '',
+                        pin: savedCust.pin || (order.customer ? order.customer.pin : '') || ''
+                    };
+                }
+
+                if ((!order.items || order.items.length === 0) && savedCart.length > 0) {
+                    order.items = savedCart;
+                }
+
                 // Fire Meta Pixel purchase tracking (handles de-duplication inside app-core)
                 if (typeof window.trackPurchaseEvent === 'function') {
                     window.trackPurchaseEvent(order);
@@ -361,16 +389,24 @@
                 // Run diagnostic update
                 setTimeout(updatePixelDiagnostics, 500);
 
-                const itemsHtml = order.items.map(item => `
+                const itemsHtml = (order.items && order.items.length > 0) ? order.items.map(item => `
                     <div class="confirmation-item">
-                        <img src="${item.image}" alt="${item.title}">
+                        <img src="${item.image || 'https://via.placeholder.com/60'}" alt="${item.title}">
                         <div class="confirmation-item-info">
                             <span class="confirmation-item-title">${item.title}</span>
                             <span class="confirmation-item-qty">Quantity: ${item.qty}</span>
                         </div>
                         <span class="confirmation-item-price">${item.price}</span>
                     </div>
-                `).join('');
+                `).join('') : `
+                    <div class="confirmation-item">
+                        <div class="confirmation-item-info">
+                            <span class="confirmation-item-title">IKKO Digital Product Pack</span>
+                            <span class="confirmation-item-qty">Quantity: 1</span>
+                        </div>
+                        <span class="confirmation-item-price">${safeFormatPrice(order.total)}</span>
+                    </div>
+                `;
 
                 const formattedSubtotal = safeFormatPrice(order.total);
                 let paymentText = order.paymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'SabPaisa PG Payment';
