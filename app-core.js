@@ -68,14 +68,6 @@ window.trackPurchaseEvent = function(order) {
     window.pixelStatus = window.pixelStatus || {};
     window.pixelStatus.orderId = order.id;
     window.pixelStatus.fbqExists = (typeof fbq === 'function');
-    
-    // Memory Cache, SessionStorage and LocalStorage guard to prevent double-firing
-    window.firedPixels = window.firedPixels || {};
-    if (order.pixelFired || window.firedPixels[order.id] || sessionStorage.getItem('pixel_fired_' + order.id) === 'true') {
-        window.pixelStatus.fired = 'SKIPPED (Duplicate Prevention)';
-        console.warn(`[Pixel Verification] Purchase event for order ${order.id} was already tracked in this session. Skipping duplicate fire.`);
-        return;
-    }
 
     let totalVal = 999;
     if (order.total) {

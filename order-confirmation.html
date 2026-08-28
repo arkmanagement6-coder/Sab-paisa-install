@@ -18,27 +18,47 @@
     fbq('init', '1561333291845790');
     fbq('track', 'PageView');
 
-    // Immediate Purchase Pixel Fire for Verified SabPaisa SUCCESS Redirects
+    // Immediate Purchase Pixel & CAPI Fire for Verified SabPaisa SUCCESS Redirects
     (function() {
         try {
             const params = new URLSearchParams(window.location.search);
             const status = (params.get('status') || params.get('sabPaisaStatus') || params.get('statusCode') || params.get('spRespCode') || '').toUpperCase();
             const respMsg = (params.get('respMsg') || params.get('responseMessage') || '').toUpperCase();
-            const orderId = params.get('orderId') || params.get('merchant_txn_id') || params.get('clientTxnId') || '';
+            const orderId = params.get('orderId') || params.get('merchant_txn_id') || params.get('clientTxnId') || 'IKKO-ORDER';
             const amountVal = parseFloat(params.get('amount') || '999') || 999;
+            const searchLower = window.location.search.toLowerCase();
 
-            const isSuccess = status.includes('SUCCESS') || status === '0000' || respMsg.includes('SUCCESS');
+            const isSuccess = status.includes('SUCCESS') || status === '0000' || respMsg.includes('SUCCESS') || searchLower.includes('status=success') || searchLower.includes('status=completed');
             if (isSuccess && orderId) {
                 const eventId = 'order_' + orderId;
-                fbq('track', 'Purchase', {
-                    value: amountVal,
-                    currency: 'INR',
-                    content_type: 'product'
-                }, { eventID: eventId });
-                console.log('[Meta Pixel Immediate Head] Purchase event tracked for order:', orderId, 'Value:', amountVal);
+                if (typeof fbq === 'function') {
+                    fbq('track', 'Purchase', {
+                        value: amountVal,
+                        currency: 'INR',
+                        content_type: 'product'
+                    }, { eventID: eventId });
+                }
+                console.log('[Meta Pixel Head Direct] Purchase event tracked for order:', orderId, 'Value:', amountVal);
+
+                // Direct Server-Side CAPI Trigger Backup
+                try {
+                    fetch('/api/track-purchase', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            orderId: orderId,
+                            amount: amountVal,
+                            customerName: 'Valued Customer',
+                            customerPhone: '',
+                            customerEmail: 'customer@ikkodigital.store',
+                            items: [],
+                            userAgent: navigator.userAgent
+                        })
+                    }).catch(e => {});
+                } catch(e){}
             }
         } catch(e) {
-            console.error('[Meta Pixel Immediate Error]', e);
+            console.error('[Meta Pixel Head Error]', e);
         }
     })();
     </script>
