@@ -164,7 +164,13 @@ module.exports = async (req, res) => {
             console.error('[SabPaisa API Parse Error]', sabpaisaRes.body);
         }
 
-        const checkoutUrl = sabpaisaData.checkoutUrl || sabpaisaData.paymentUrl || (sabpaisaData.data && sabpaisaData.data.paymentUrl) || '';
+        let checkoutUrl = sabpaisaData.checkoutUrl || sabpaisaData.paymentUrl || (sabpaisaData.data && sabpaisaData.data.paymentUrl) || '';
+        const clientSecret = sabpaisaData.clientSecret || (sabpaisaData.data && sabpaisaData.data.clientSecret) || '';
+
+        if (checkoutUrl && clientSecret && !checkoutUrl.includes('clientSecret=')) {
+            const sep = checkoutUrl.includes('?') ? '&' : '?';
+            checkoutUrl = `${checkoutUrl}${sep}clientSecret=${encodeURIComponent(clientSecret)}`;
+        }
 
         // Save order to Server Backend Admin Orders database automatically
         try {
