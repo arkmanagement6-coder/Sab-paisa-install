@@ -283,64 +283,55 @@
 
             const orders = getOrders();
             let orderIndex = orders.findIndex(o => o.id === orderId);
-            let order = null;
+            let order = orderIndex !== -1 ? orders[orderIndex] : null;
 
-            if (orderIndex === -1) {
+            // Reconstruct minimal order object instantly if not cached locally
+            if (!order) {
+                const amountParam = parseFloat(urlParams.get('amount') || '999');
+                const txnId = urlParams.get('transaction_id') || urlParams.get('spTxnId') || urlParams.get('client_txn_id') || 'SabPaisa Verified';
+
+                order = {
+                    id: orderId,
+                    date: new Date().toISOString(),
+                    status: 'completed',
+                    paymentMethod: 'sabpaisa',
+                    utr: txnId,
+                    customer: {
+                        name: 'Valued Customer',
+                        phone: '',
+                        address: 'SabPaisa PG Redirect',
+                        city: '',
+                        state: '',
+                        pin: ''
+                    },
+                    items: [],
+                    total: amountParam
+                };
+            }
+
+            // Asynchronously sync order details from Firestore in background (non-blocking)
+            (async function syncOrderDataInBackground() {
                 try {
-                    // 1. Try to fetch from Firestore first (if enabled)
-                    const db = await initFirebase();
+                    const db = await Promise.race([
+                        initFirebase(),
+                        new Promise((_, reject) => setTimeout(() => reject('timeout'), 1200))
+                    ]);
                     if (db) {
                         const doc = await db.collection('orders').doc(orderId).get();
-                        if (doc.exists) {
-                            order = doc.data();
-                            console.log(`[Firebase] Recovered order ${orderId} from Firestore.`);
+                        if (doc.exists && doc.data()) {
+                            const remoteOrder = doc.data();
+                            if (remoteOrder.items && remoteOrder.items.length > 0) {
+                                order.items = remoteOrder.items;
+                                order.customer = remoteOrder.customer || order.customer;
+                                const currentPgStatus = (urlParams.get('status') || '').toUpperCase();
+                                if (currentPgStatus.includes('SUCCESS') || currentPgStatus === '0000') {
+                                    renderSuccessUI(order);
+                                }
+                            }
                         }
                     }
-                } catch (err) {
-                    console.warn("Firestore recovery failed or disabled:", err);
-                }
-
-                // 2. If not found in Firestore, directly reconstruct a minimal order object (no status check query required!)
-                if (!order) {
-                    const amountParam = parseFloat(urlParams.get('amount') || '999');
-                    const txnId = urlParams.get('transaction_id') || urlParams.get('spTxnId') || urlParams.get('client_txn_id') || 'SabPaisa Verified';
-
-                    order = {
-                        id: orderId,
-                        date: new Date().toISOString(),
-                        status: 'pending',
-                        paymentMethod: 'sabpaisa',
-                        utr: txnId,
-                        customer: {
-                            name: 'Valued Customer',
-                            phone: '',
-                            address: 'SabPaisa PG Redirect',
-                            city: '',
-                            state: '',
-                            pin: ''
-                        },
-                        items: [], // Reconstructed orders don't have items metadata
-                        total: amountParam
-                    };
-                    console.log(`[Instant Confirmation] Reconstructed minimal order for ${orderId} without backend API check.`);
-                }
-
-                // 3. Cache the recovered order in local storage and database so it is remembered
-                if (order) {
-                    if (typeof window.saveOrder === 'function') {
-                        await window.saveOrder(order);
-                    } else {
-                        const localOrders = getOrders();
-                        localOrders.push(order);
-                        localStorage.setItem('ikko_orders', JSON.stringify(localOrders));
-                    }
-                    // Re-read orders to get proper indexing
-                    const updatedOrders = getOrders();
-                    orderIndex = updatedOrders.findIndex(o => o.id === orderId);
-                }
-            } else {
-                order = orders[orderIndex];
-            }
+                } catch(e){}
+            })();
 
             // Render different layouts depending on verified status
             function renderSuccessUI(order) {
