@@ -621,8 +621,12 @@
                     clearCart();
                 }
 
+                // Render Success UI immediately (0.00 seconds)
+                renderSuccessUI(order);
+
+                // Save order asynchronously in background
                 if (typeof window.saveOrder === 'function') {
-                    await window.saveOrder(order);
+                    window.saveOrder(order);
                 } else {
                     const localOrders = getOrders();
                     if (orderIndex === -1) {
@@ -632,8 +636,6 @@
                     }
                     localStorage.setItem('ikko_orders', JSON.stringify(localOrders));
                 }
-
-                renderSuccessUI(order);
                 return;
             }
 

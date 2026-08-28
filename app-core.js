@@ -1483,7 +1483,7 @@ async function saveOrder(order) {
     }
     localStorage.setItem('ikko_orders', JSON.stringify(orders));
 
-    // Sync to Server Backend Database
+    // Sync to Server Backend Database (non-blocking)
     try {
         fetch('/api/admin-orders', {
             method: 'POST',
@@ -1492,16 +1492,21 @@ async function saveOrder(order) {
         }).catch(err => console.error("Server order sync error:", err));
     } catch(e){}
     
-    // Sync to Firestore if enabled
-    try {
-        const db = await initFirebase();
-        if (db) {
-            await db.collection('orders').doc(order.id).set(cleanUndefinedFields(order));
-            console.log(`[Firebase] Order ${order.id} saved/updated in Firestore.`);
+    // Sync to Firestore if enabled (non-blocking background task with timeout race)
+    (async () => {
+        try {
+            const db = await Promise.race([
+                initFirebase(),
+                new Promise((_, reject) => setTimeout(() => reject('timeout'), 1000))
+            ]);
+            if (db) {
+                await db.collection('orders').doc(order.id).set(cleanUndefinedFields(order));
+                console.log(`[Firebase] Order ${order.id} saved/updated in Firestore.`);
+            }
+        } catch (e) {
+            console.warn("Firestore background save warning:", e);
         }
-    } catch (e) {
-        console.error("Failed to save order to Firestore:", e);
-    }
+    })();
 }
 window.saveOrder = saveOrder;
 
