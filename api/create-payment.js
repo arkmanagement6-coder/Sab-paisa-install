@@ -119,7 +119,7 @@ module.exports = async (req, res) => {
             .digest('hex');
 
         // Customer Email: Use entered email or phone fallback
-        const finalCustomerEmail = (customerEmail && customerEmail.includes('@')) ? customerEmail : `${customerPhone}@ikkodigital.store`;
+        const finalCustomerEmail = (customerEmail && customerEmail.includes('@')) ? customerEmail : `${customerPhone}@arkdigital.store`;
 
         const sabpaisaPayloadObj = {
             clientCode: clientCode,
