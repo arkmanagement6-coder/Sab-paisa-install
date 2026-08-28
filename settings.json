@@ -1,9 +1,9 @@
 {
-  "ccavenueEnabled": true,
-  "ccavenueMerchantId": "4445524",
-  "ccavenueAccessCode": "AVTA92NE51BK54ATKB",
-  "ccavenueWorkingKey": "AEE54FF9EA969DED8B505C982FC74CEA",
-  "ccavenueMode": "live",
+  "sabpaisaEnabled": true,
+  "sabpaisaClientCode": "ARKM1",
+  "sabpaisaApiKey": "sp_P4FN07lSTKNxqbLdT2SN5ZvKCzBTxasI0PgsMaM7_Og",
+  "sabpaisaSecretKey": "sec_C-0PTD_nPJ2Q4j7JDGDqhmqQLYyNEXTLkiJgp_dAAMU",
+  "sabpaisaEndpoint": "https://merchant-api.sabpaisa.in/api/v2/payments",
   "firebaseEnabled": true,
   "firebaseConfig": {
     "apiKey": "AIzaSyAmxUfqwJjdy1AZ3iqrHCK7DV7cY15ksZM",

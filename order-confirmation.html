@@ -320,7 +320,7 @@
                 `).join('');
 
                 const formattedSubtotal = formatPrice(order.total);
-                let paymentText = order.paymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'CCAvenue PG Payment';
+                let paymentText = order.paymentMethod === 'cod' ? 'Cash on Delivery (COD)' : 'SabPaisa PG Payment';
                 let statusText = order.paymentMethod === 'cod' ? 'Awaiting Delivery' : 'Paid & Confirmed';
 
                 card.innerHTML = `

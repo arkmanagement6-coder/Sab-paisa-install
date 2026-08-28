@@ -452,7 +452,7 @@
             const proceedBtn = document.getElementById('btn-proceed-to-pay');
             if (proceedBtn) {
                 proceedBtn.disabled = true;
-                proceedBtn.innerText = 'Connecting CCAvenue Gateway... ⏳';
+                proceedBtn.innerText = 'Connecting SabPaisa Gateway... ⏳';
             }
 
             const total = getCartTotal();
@@ -463,7 +463,7 @@
                 id: orderId,
                 date: new Date().toISOString(),
                 status: 'pending_payment',
-                paymentMethod: 'ccavenue',
+                paymentMethod: 'sabpaisa',
                 utr: 'Pending Payment',
                 customer: {
                     name: cust.name || 'Customer',
@@ -494,7 +494,7 @@
                 }
             } catch(e){}
 
-            // CCAvenue Gateway Integration
+            // SabPaisa Gateway Integration
             const confirmationUrl = `${window.location.origin}/order-confirmation.html?orderId=${encodeURIComponent(orderId)}&amount=${encodeURIComponent(total)}`;
 
             try {
@@ -517,33 +517,14 @@
                 });
 
                 const data = await response.json();
-                if (data.success && data.encRequest && data.accessCode) {
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = data.formUrl || 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction';
-                    
-                    const encInput = document.createElement('input');
-                    encInput.type = 'hidden';
-                    encInput.name = 'encRequest';
-                    encInput.value = data.encRequest;
-                    form.appendChild(encInput);
-
-                    const accessInput = document.createElement('input');
-                    accessInput.type = 'hidden';
-                    accessInput.name = 'access_code';
-                    accessInput.value = data.accessCode;
-                    form.appendChild(accessInput);
-
-                    document.body.appendChild(form);
-                    form.submit();
-                } else if (data.redirectUrl) {
+                if (data.redirectUrl) {
                     window.location.href = data.redirectUrl;
                 } else {
-                    console.warn("CCAvenue API returned fallback:", data.message);
+                    console.warn("SabPaisa API returned fallback:", data.message);
                     window.location.href = confirmationUrl;
                 }
             } catch (err) {
-                console.error("CCAvenue Gateway error:", err);
+                console.error("SabPaisa Gateway error:", err);
                 window.location.href = confirmationUrl;
             }
         }

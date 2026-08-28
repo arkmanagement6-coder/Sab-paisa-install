@@ -1,19 +1,29 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
 
-function encryptCCAvenue(plainText, workingKey) {
-    try {
-        const key = crypto.createHash('md5').update(workingKey).digest(); // 16-byte Buffer
-        const iv = Buffer.from([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
-        const cipher = crypto.createCipheriv('aes-128-cbc', key, iv);
-        let encoded = cipher.update(plainText, 'utf8', 'hex');
-        encoded += cipher.final('hex');
-        return encoded;
-    } catch(err) {
-        console.error('[CCAvenue Encrypt Error]', err);
-        throw err;
-    }
+function makeHttpRequest(url, method, headers, postData) {
+    return new Promise((resolve, reject) => {
+        const parsedUrl = new URL(url);
+        const options = {
+            hostname: parsedUrl.hostname,
+            port: parsedUrl.port || 443,
+            path: parsedUrl.pathname + parsedUrl.search,
+            method: method,
+            headers: headers
+        };
+
+        const req = https.request(options, (res) => {
+            let body = '';
+            res.on('data', chunk => body += chunk);
+            res.on('end', () => resolve({ statusCode: res.statusCode, body }));
+        });
+
+        req.on('error', err => reject(err));
+        if (postData) req.write(postData);
+        req.end();
+    });
 }
 
 module.exports = async (req, res) => {
@@ -57,7 +67,7 @@ module.exports = async (req, res) => {
             amount,
             customerName = 'Valued Customer',
             customerPhone = '9999999999',
-            customerEmail = 'customer@luckydigitalmedia.in',
+            customerEmail,
             redirectUrl
         } = body;
 
@@ -67,11 +77,11 @@ module.exports = async (req, res) => {
             return;
         }
 
-        // Read CCAvenue credentials from settings.json
+        // Read SabPaisa credentials from settings.json
         let settings = {
-            ccavenueMerchantId: '4445524',
-            ccavenueAccessCode: 'AVTA92NE51BK54ATKB',
-            ccavenueWorkingKey: 'AEE54FF9EA969DED8B505C982FC74CEA'
+            sabpaisaMerchantId: 'ARKM1',
+            sabpaisaApiKey: 'sp_P4FN07lSTKNxqbLdT2SN5ZvKCzBTxasI0PgsMaM7_Og',
+            sabpaisaSecretKey: 'sec_C-0PTD_nPJ2Q4j7JDGDqhmqQLYyNEXTLkiJgp_dAAMU'
         };
 
         const settingsPath = path.join(process.cwd(), 'settings.json');
@@ -79,7 +89,7 @@ module.exports = async (req, res) => {
             try {
                 const raw = fs.readFileSync(settingsPath, 'utf8');
                 const parsed = JSON.parse(raw);
-                if (parsed.ccavenueMerchantId) {
+                if (parsed.sabpaisaApiKey || parsed.sabpaisaMerchantId) {
                     settings = { ...settings, ...parsed };
                 }
             } catch (err) {
@@ -87,45 +97,74 @@ module.exports = async (req, res) => {
             }
         }
 
-        const merchantId = settings.ccavenueMerchantId || '4445524';
-        const accessCode = settings.ccavenueAccessCode || 'AVTA92NE51BK54ATKB';
-        const workingKey = settings.ccavenueWorkingKey || 'AEE54FF9EA969DED8B505C982FC74CEA';
+        const clientCode = settings.sabpaisaMerchantId || settings.sabpaisaClientCode || 'ARKM1';
+        const apiKey = settings.sabpaisaApiKey || 'sp_P4FN07lSTKNxqbLdT2SN5ZvKCzBTxasI0PgsMaM7_Og';
+        const secretKey = settings.sabpaisaSecretKey || 'sec_C-0PTD_nPJ2Q4j7JDGDqhmqQLYyNEXTLkiJgp_dAAMU';
 
         const protocol = req.headers['x-forwarded-proto'] || 'https';
         const host = req.headers['host'] || 'www.ikkodigital.store';
         const baseUrl = `${protocol}://${host}`;
-        const ccavResponseUrl = `${baseUrl}/api/ccav-response`;
+        
+        const confirmationUrl = redirectUrl || `${baseUrl}/order-confirmation.html?orderId=${encodeURIComponent(orderId)}&amount=${encodeURIComponent(amount)}`;
 
-        const numericAmount = parseFloat(amount).toFixed(2);
+        const numericAmount = parseFloat(amount);
+        const amountInPaise = Math.round(numericAmount * 100);
+        const timestamp = Math.floor(Date.now() / 1000);
 
-        function cleanParam(str, fallback = 'N/A') {
-            if (!str) return fallback;
-            return String(str).replace(/[&=?#%]/g, ' ').trim() || fallback;
-        }
+        // Checksum formula: clientCode|orderId|amountInPaise|currency|timestamp
+        const message = `${clientCode}|${orderId}|${amountInPaise}|INR|${timestamp}`;
+        const checksum = crypto
+            .createHmac('sha256', secretKey)
+            .update(message)
+            .digest('hex');
 
-        const querystring = require('querystring');
-        const paramsObj = {
-            merchant_id: merchantId,
-            order_id: String(orderId),
+        // Customer Email: Use entered email or phone fallback
+        const finalCustomerEmail = (customerEmail && customerEmail.includes('@')) ? customerEmail : `${customerPhone}@luck1.com`;
+
+        const sabpaisaPayloadObj = {
+            clientCode: clientCode,
+            merchantId: clientCode,
+            merchantTxnId: String(orderId),
+            clientTxnId: String(orderId),
+            amount: amountInPaise,
             currency: 'INR',
-            amount: numericAmount,
-            redirect_url: ccavResponseUrl,
-            cancel_url: ccavResponseUrl,
-            language: 'EN',
-            billing_name: cleanParam(customerName, 'Customer'),
-            billing_address: cleanParam(body.customerAddress, 'Address'),
-            billing_city: cleanParam(body.customerCity, 'City'),
-            billing_state: cleanParam(body.customerState, 'State'),
-            billing_zip: cleanParam(body.customerPin, '110001'),
-            billing_country: 'India',
-            billing_tel: cleanParam(customerPhone, '9999999999'),
-            billing_email: cleanParam(customerEmail, 'customer@luckydigitalmedia.in')
+            customerName: customerName,
+            customerEmail: finalCustomerEmail,
+            customerMobile: customerPhone,
+            payerName: customerName,
+            payerEmail: finalCustomerEmail,
+            payerMobile: customerPhone,
+            returnUrl: confirmationUrl,
+            callbackUrl: confirmationUrl,
+            timestamp: timestamp,
+            checksum: checksum,
+            channelId: 'W',
+            mcc: 5399
         };
 
-        const ccavParams = querystring.stringify(paramsObj);
+        const sabpaisaPayloadStr = JSON.stringify(sabpaisaPayloadObj);
 
-        console.log(`[CCAvenue] Initiating checkout pay request for Order ${orderId}`);
-        const encRequest = encryptCCAvenue(ccavParams, workingKey);
+        console.log(`[SabPaisa V2] Creating payment link for Order ${orderId}, amount ₹${numericAmount}`);
+        const sabpaisaRes = await makeHttpRequest(
+            'https://merchant-api.sabpaisa.in/api/v2/payments',
+            'POST',
+            {
+                'Content-Type': 'application/json',
+                'X-Api-Key': apiKey,
+                'X-Merchant-Id': clientCode,
+                'Content-Length': Buffer.byteLength(sabpaisaPayloadStr)
+            },
+            sabpaisaPayloadStr
+        );
+
+        let sabpaisaData = {};
+        try {
+            sabpaisaData = JSON.parse(sabpaisaRes.body);
+        } catch(e) {
+            console.error('[SabPaisa API Parse Error]', sabpaisaRes.body);
+        }
+
+        const checkoutUrl = sabpaisaData.checkoutUrl || sabpaisaData.paymentUrl || (sabpaisaData.data && sabpaisaData.data.paymentUrl) || '';
 
         // Save order to Server Backend Admin Orders database automatically
         try {
@@ -136,13 +175,13 @@ module.exports = async (req, res) => {
                     id: orderId,
                     date: new Date().toISOString(),
                     status: 'pending_payment',
-                    paymentMethod: 'ccavenue',
+                    paymentMethod: 'sabpaisa',
                     utr: 'Pending',
-                    total: parseFloat(amount) || 999,
+                    total: numericAmount,
                     customer: {
                         name: customerName,
                         phone: customerPhone,
-                        email: customerEmail,
+                        email: finalCustomerEmail,
                         address: body.customerAddress || 'Checkout Customer',
                         city: body.customerCity || '',
                         state: body.customerState || '',
@@ -161,10 +200,10 @@ module.exports = async (req, res) => {
         try {
             sendMetaCapiAddPaymentInfo({
                 orderId: orderId,
-                amount: amount,
+                amount: numericAmount,
                 customerName: customerName,
                 customerPhone: customerPhone,
-                customerEmail: customerEmail,
+                customerEmail: finalCustomerEmail,
                 ipAddress: req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || req.socket.remoteAddress,
                 userAgent: req.headers['user-agent'] || ''
             });
@@ -172,18 +211,28 @@ module.exports = async (req, res) => {
             console.error('[Meta CAPI Direct Error]', capiErr);
         }
 
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({
-            success: true,
-            gateway: 'ccavenue',
-            formUrl: 'https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction',
-            encRequest: encRequest,
-            accessCode: accessCode
-        }));
+        if (checkoutUrl) {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({
+                success: true,
+                gateway: 'sabpaisa',
+                redirectUrl: checkoutUrl,
+                paymentUrl: checkoutUrl
+            }));
+        } else {
+            console.warn('[SabPaisa API] No checkoutUrl in response, falling back:', sabpaisaRes.body);
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({
+                success: false,
+                message: sabpaisaData.message || 'Payment link generation failed',
+                redirectUrl: confirmationUrl
+            }));
+        }
 
     } catch (err) {
-        console.error('[CCAvenue] Internal server error:', err);
+        console.error('[SabPaisa] Internal server error:', err);
         res.statusCode = 500;
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify({ success: false, message: 'Internal server error: ' + err.message }));
@@ -227,7 +276,7 @@ function sendMetaCapiAddPaymentInfo(orderData) {
                     event_time: eventTime,
                     event_id: eventId,
                     action_source: 'website',
-                    event_source_url: 'https://www.luckydigitalmedia.in/checkout.html',
+                    event_source_url: 'https://www.ikkodigital.store/checkout.html',
                     user_data: userData,
                     custom_data: {
                         currency: 'INR',
@@ -239,7 +288,6 @@ function sendMetaCapiAddPaymentInfo(orderData) {
             ]
         });
 
-        const https = require('https');
         const req = https.request({
             hostname: 'graph.facebook.com',
             path: `/v19.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`,
