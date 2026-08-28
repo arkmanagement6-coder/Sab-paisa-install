@@ -168,6 +168,7 @@ module.exports = async (req, res) => {
         const clientSecret = sabpaisaData.clientSecret || (sabpaisaData.data && sabpaisaData.data.clientSecret) || '';
 
         if (checkoutUrl && clientSecret && !checkoutUrl.includes('clientSecret=')) {
+            checkoutUrl = checkoutUrl.replace(/\?+$/, '');
             const sep = checkoutUrl.includes('?') ? '&' : '?';
             checkoutUrl = `${checkoutUrl}${sep}clientSecret=${encodeURIComponent(clientSecret)}`;
         }
