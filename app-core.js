@@ -62,8 +62,16 @@
 
 // Expose global helper to track purchase event dynamically on demand (Client Pixel + Server CAPI)
 window.trackPurchaseEvent = function(order) {
-    if (!order) return;
+    if (!order || !order.id) return;
     
+    // Prevent duplicate fires for the exact same orderId during a single page view session
+    window.firedPurchaseOrderIds = window.firedPurchaseOrderIds || {};
+    if (window.firedPurchaseOrderIds[order.id]) {
+        console.log(`[Meta Pixel Deduplication] Order ${order.id} purchase event was already sent in this view session.`);
+        return;
+    }
+    window.firedPurchaseOrderIds[order.id] = true;
+
     // Initialize diagnostic status object
     window.pixelStatus = window.pixelStatus || {};
     window.pixelStatus.orderId = order.id;
@@ -147,25 +155,6 @@ window.trackPurchaseEvent = function(order) {
 };
 
 const INITIAL_PRODUCTS = [
-  {
-    "id": "8270415000000_demo",
-    "category": "tablets",
-    "price": "Rs. 1.00",
-    "badge": "DEMO PRODUCT",
-    "title": "₹1 LIVE DEMO TEST PRODUCT - Apple iPad Air 11″ (M2) Test Order",
-    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
-    "images": [
-      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
-    ],
-    "url": "/product.html?id=8270415000000_demo",
-    "stockStatus": "in-stock",
-    "handle": "demo-1rs-product",
-    "comparePrice": "Rs. 999.00",
-    "specs": [
-      { "name": "Brand", "value": "Test Demo" },
-      { "name": "Price", "value": "Rs. 1.00" }
-    ]
-  },
   {
     "id": "8270415000000",
     "paymentLink": "https://rzp.io/rzp/tHlmofq",
@@ -1307,35 +1296,8 @@ async function syncProductsBackground(forceSync = false) {
 }
 
 function ensureDemoProductPresent(products) {
-    if (!Array.isArray(products)) products = [];
-    const demoObj = {
-        "id": "8270415000000_demo",
-        "category": "tablets",
-        "price": "Rs. 1.00",
-        "badge": "DEMO PRODUCT",
-        "title": "₹1 LIVE DEMO TEST PRODUCT - Apple iPad Air 11″ (M2) Test Order",
-        "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
-        "images": [
-            "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
-        ],
-        "url": "/product.html?id=8270415000000_demo",
-        "stockStatus": "in-stock",
-        "handle": "demo-1rs-product",
-        "comparePrice": "Rs. 999.00",
-        "specs": [
-            { "name": "Brand", "value": "Test Demo" },
-            { "name": "Price", "value": "Rs. 1.00" }
-        ]
-    };
-
-    const exists = products.some(p => String(p.id) === '8270415000000_demo');
-    if (!exists) {
-        products.unshift(demoObj);
-    } else {
-        const idx = products.findIndex(p => String(p.id) === '8270415000000_demo');
-        products[idx] = demoObj;
-    }
-    return products;
+    if (!Array.isArray(products)) return [];
+    return products.filter(p => String(p.id) !== '8270415000000_demo');
 }
 
 // Product Database Helpers (Firestore Async with local Cache fallback)

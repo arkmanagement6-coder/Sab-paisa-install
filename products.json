@@ -1,24 +1,5 @@
 [
   {
-    "id": "8270415000000_demo",
-    "category": "tablets",
-    "price": "Rs. 1.00",
-    "badge": "DEMO PRODUCT",
-    "title": "₹1 LIVE DEMO TEST PRODUCT - Apple iPad Air 11″ (M2) Test Order",
-    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
-    "images": [
-      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
-    ],
-    "url": "/product.html?id=8270415000000_demo",
-    "stockStatus": "in-stock",
-    "handle": "demo-1rs-product",
-    "comparePrice": "Rs. 999.00",
-    "specs": [
-      { "name": "Brand", "value": "Test Demo" },
-      { "name": "Price", "value": "Rs. 1.00" }
-    ]
-  },
-  {
     "id": "8270415000000",
     "paymentLink": "https://rzp.io/rzp/tHlmofq",
     "category": "tablets",
