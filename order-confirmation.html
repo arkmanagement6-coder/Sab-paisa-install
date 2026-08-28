@@ -667,9 +667,11 @@
             checkPaymentStatus(orderId, 1, 3);
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
+        if (document.readyState === 'loading') {
+            window.addEventListener('DOMContentLoaded', renderConfirmation);
+        } else {
             renderConfirmation();
-        });
+        }
     </script>
 </body>
 </html>
