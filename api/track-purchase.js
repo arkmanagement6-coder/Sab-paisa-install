@@ -77,6 +77,10 @@ module.exports = async (req, res) => {
         if (fbp) userData.fbp = fbp;
         if (fbc) userData.fbc = fbc;
 
+        const protocol = req.headers['x-forwarded-proto'] || 'https';
+        const host = req.headers['host'] || 'www.ikkodigital.store';
+        const eventSourceUrl = `${protocol}://${host}/order-confirmation.html`;
+
         // Prepare Meta Conversions API (CAPI) Payload
         const payload = {
             data: [
@@ -85,7 +89,7 @@ module.exports = async (req, res) => {
                     event_time: eventTime,
                     event_id: eventId,
                     action_source: 'website',
-                    event_source_url: 'https://www.luckydigitalmedia.in/order-confirmation.html',
+                    event_source_url: eventSourceUrl,
                     user_data: userData,
                     custom_data: {
                         currency: 'INR',

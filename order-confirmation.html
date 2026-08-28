@@ -17,6 +17,30 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1039324625032380');
     fbq('track', 'PageView');
+
+    // Immediate Purchase Pixel Fire for Verified SabPaisa SUCCESS Redirects
+    (function() {
+        try {
+            const params = new URLSearchParams(window.location.search);
+            const status = (params.get('status') || params.get('sabPaisaStatus') || params.get('statusCode') || params.get('spRespCode') || '').toUpperCase();
+            const respMsg = (params.get('respMsg') || params.get('responseMessage') || '').toUpperCase();
+            const orderId = params.get('orderId') || params.get('merchant_txn_id') || params.get('clientTxnId') || '';
+            const amountVal = parseFloat(params.get('amount') || '999') || 999;
+
+            const isSuccess = status.includes('SUCCESS') || status === '0000' || respMsg.includes('SUCCESS');
+            if (isSuccess && orderId) {
+                const eventId = 'order_' + orderId;
+                fbq('track', 'Purchase', {
+                    value: amountVal,
+                    currency: 'INR',
+                    content_type: 'product'
+                }, { eventID: eventId });
+                console.log('[Meta Pixel Immediate Head] Purchase event tracked for order:', orderId, 'Value:', amountVal);
+            }
+        } catch(e) {
+            console.error('[Meta Pixel Immediate Error]', e);
+        }
+    })();
     </script>
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1039324625032380&ev=PageView&noscript=1"
