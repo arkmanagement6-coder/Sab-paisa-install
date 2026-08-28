@@ -109,7 +109,7 @@ window.trackPurchaseEvent = function(order) {
                 amount: totalVal,
                 customerName: cust.name || 'Valued Customer',
                 customerPhone: cust.phone || '',
-                customerEmail: cust.email || `${cust.phone || 'customer'}@luckydigitalmedia.in`,
+                customerEmail: cust.email || `${cust.phone || 'customer'}@ikkodigital.store`,
                 items: order.items || [],
                 userAgent: navigator.userAgent
             })
