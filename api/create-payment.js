@@ -121,6 +121,8 @@ module.exports = async (req, res) => {
         // Customer Email: Use entered email or phone fallback
         const finalCustomerEmail = (customerEmail && customerEmail.includes('@')) ? customerEmail : `${customerPhone}@arkdigital.store`;
 
+        const webhookUrl = `${baseUrl}/api/sabpaisa-webhook`;
+
         const sabpaisaPayloadObj = {
             clientCode: clientCode,
             merchantId: clientCode,
@@ -135,7 +137,7 @@ module.exports = async (req, res) => {
             payerEmail: finalCustomerEmail,
             payerMobile: customerPhone,
             returnUrl: confirmationUrl,
-            callbackUrl: confirmationUrl,
+            callbackUrl: webhookUrl,
             timestamp: timestamp,
             checksum: checksum,
             channelId: 'W',
