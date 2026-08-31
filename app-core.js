@@ -185,12 +185,30 @@ const INITIAL_PRODUCTS = [
     "handle": "redmagic-astra-2-tablet",
     "comparePrice": "Rs. 35,699.00",
     "specs": [
-      { "name": "Brand", "value": "REDMAGIC" },
-      { "name": "Processor", "value": "Snapdragon 8 Elite Gen 5 & RedCore R4" },
-      { "name": "Display", "value": "9.06-inch 2.4K OLED (185Hz, 1600 Nits)" },
-      { "name": "Cooling System", "value": "AquaCore Cooling 2.0 & Liquid Metal 3.0" },
-      { "name": "Battery & Fast Charge", "value": "8,300mAh with 75W Fast Charging" },
-      { "name": "Memory & Storage", "value": "Up to 16GB RAM + 512GB Storage" }
+      {
+        "name": "Brand",
+        "value": "REDMAGIC"
+      },
+      {
+        "name": "Processor",
+        "value": "Snapdragon 8 Elite Gen 5 & RedCore R4"
+      },
+      {
+        "name": "Display",
+        "value": "9.06-inch 2.4K OLED (185Hz, 1600 Nits)"
+      },
+      {
+        "name": "Cooling System",
+        "value": "AquaCore Cooling 2.0 & Liquid Metal 3.0"
+      },
+      {
+        "name": "Battery & Fast Charge",
+        "value": "8,300mAh with 75W Fast Charging"
+      },
+      {
+        "name": "Memory & Storage",
+        "value": "Up to 16GB RAM + 512GB Storage"
+      }
     ],
     "description": "<p>This pocket-sized powerhouse packs a punch with its brilliant 9.06″ 2.4K 185Hz OLED display and visible AquaCore Liquid Cooling system. Powered by Snapdragon 8 Elite Gen 5 and RedCore R4 co-processor, it delivers flagship speed for gaming, creative work, and productivity.</p><ul style=\"margin: 15px 0 25px 20px; line-height: 1.8;\"><li><strong>Compact & Ergonomic:</strong> Crafted with a premium metal finish for effortless grip.</li><li><strong>Snapdragon 8 Elite Gen 5 & RedCore R4:</strong> Extreme processing power with up to 16GB RAM & 512GB Storage.</li><li><strong>185Hz 2.4K OLED Display:</strong> Ultra-smooth visuals with up to 1,600 nits peak brightness.</li><li><strong>AquaCore Cooling 2.0:</strong> Liquid Metal 3.0 & large vapor chamber for sustained performance.</li><li><strong>8,300mAh Battery:</strong> 75W fast charging with dual USB-C ports.</li></ul><div style=\"margin: 25px 0; text-align: center;\"><img src=\"Image/REDMAGIC Astra 2 Tablet/6.webp\" style=\"max-width: 100%; border-radius: 12px; margin-bottom: 20px;\" alt=\"Snapdragon 8 Elite Performance\"><img src=\"Image/REDMAGIC Astra 2 Tablet/7.webp\" style=\"max-width: 100%; border-radius: 12px; margin-bottom: 20px;\" alt=\"AquaCore Liquid Cooling\"><img src=\"Image/REDMAGIC Astra 2 Tablet/8.webp\" style=\"max-width: 100%; border-radius: 12px; margin-bottom: 20px;\" alt=\"185Hz OLED Display\"><img src=\"Image/REDMAGIC Astra 2 Tablet/11.webp\" style=\"max-width: 100%; border-radius: 12px; margin-bottom: 20px;\" alt=\"8,300mAh Battery\"></div>"
   },
@@ -386,14 +404,9 @@ const INITIAL_PRODUCTS = [
     "description": "<h1>General Specifications</h1>\n<table class=\"specs-table\" style=\"width:100%; border-collapse:collapse; margin: 15px 0;\">\n  <tbody>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Model Number</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">MK8F3HN/A</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Model Name</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">iPad mini (6th Gen)</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Ideal Usage</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Entertainment, For Kids, Reading and Browsing</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Color</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Space Grey</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Connectivity</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Wi-Fi+5G</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">OS</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">iOS</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Operating System Version</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">15</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Voice Call</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">No</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Video Call</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Yes</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Supported Network</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">5G, 4G LTE, UMTS, GSM</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Processor Type</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">A15 Bionic Chip with 64-bit Architecture</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Display Size</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">21.08 cm (8.3 inch)</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Sales Package</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">iPad Mini, USB-C Charge Cable (1 metre), 20W USB-C Power Adapter</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Display Resolution</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">2266 x 1488 Pixels</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Primary Camera</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">12 megapixels</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Internal Storage</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">256 GB</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Sim Size</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Nano Sim</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Multi-touch</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Yes</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Sensors</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Touch ID Sensor, Three-axis Gyro Sensor, Accelerometer, Barometer, Ambient Light Sensor</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Sim Type</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Single Sim</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Battery Type</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Lithium Polymer</td>\n    </tr>\n\n  </tbody>\n</table>\n\n<h1>Multimedia Features</h1>\n<table class=\"specs-table\" style=\"width:100%; border-collapse:collapse; margin: 15px 0;\">\n  <tbody>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Secondary Camera</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">12 Megapixels</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Video Recording Resolution</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">4K (at 24 fps, 25 fps, 30 fps or 60 fps), 1080p (at 25 fps, 30 fps or 60 fps), 720p (at 30 fps), Slow-motion Video Support for 1080p (at 120 fps or 240 fps) pixels</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Video Recording</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Yes</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Full HD Recording</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Yes</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">HD Recording</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Yes</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Other Camera Features</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Rear Camera: Wide Camera, f/1.8 Aperture, Digital Zoom upto 5x, Five-element Lens, Quad-LED True Tone Flash, Autofocus with Focus Pixels, Panorama (up to 63MP), Smart HDR 3, Wide Colour Capture for Photos and Live Photos, Advanced Red-eye Correction, Photo Geotagging, Auto Image Stabilisation, Burst Mode, Image formats captured: HEIF and JPEG, Slow-motion Video Support for 1080p at 120 fps or 240 fps, Time-lapse Video with Stabilisation, Extended Dynamic Range for Video upto 30 fps, Cinematic Video Stabilisation (4K, 1080p and 720p), Continuous Autofocus Video, Playback Zoom, Video Formats Recorded: HEVC and H.264; Secondary Camera: Ultra Wide Front Camera, 122 Degree Field of View, f/2.4 Aperture, Smart HDR 3, 1080p HD Video Recording at 25 fps, 30 fps or 60 fps, Time-lapse Video with Stabilisation, Extended Dynamic Range for Video Upto 30 fps, Cinematic Video Stabilisation (1080p and 720p), Wide Colour Capture for Photos and Live Photos, Lens Correction, Retina Flash, Auto Image Stabilisation, Burst Mode</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Digital Zoom</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">5x</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">2G</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Yes</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">3G</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Yes</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">GPRS</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Yes</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Bluetooth Version</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">v5.0</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Browser</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Safari</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Wi-fi Version</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">802.11 ax (Wi-Fi 6)</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Full HD Playback</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Yes</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">HD Playback</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Yes</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Video Playback</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Yes</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Audio Formats Supported</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">AAC-LC, HE-AAC, HE-AAC v2, Protected AAC, MP3, Linear PCM, Apple Lossless, FLAC, Dolby Digital (AC-3), Dolby Digital Plus (E-AC-3), Dolby Atmos and Audible</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">GPS Support</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Yes</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Warranty</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">1 Year</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Warranty Summary</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">1 Year Warranty</td>\n    </tr>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Warranty Period</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">1 Year</td>\n    </tr>\n\n  </tbody>\n</table>",
     "url": "/products/apple-ipad-mini-6th-gen-256-gb-rom-8-3-inch-with-wi-fi-5g",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/3_512x512.jpg?v=1781259492",
-      "https://look-10287.myshopify.com/cdn/shop/files/1_512x512.jpg?v=1781259492",
-      "Image/Apple%20iPad%20mini%20(6th%20Gen)%20256%20GB%20ROM%208.3%20inch%20with%20Wi-Fi%2B5G/2_869x869.webp",
-      "Image/Apple%20iPad%20mini%20(6th%20Gen)%20256%20GB%20ROM%208.3%20inch%20with%20Wi-Fi%2B5G/4_869x869.webp",
-      "Image/Apple%20iPad%20mini%20(6th%20Gen)%20256%20GB%20ROM%208.3%20inch%20with%20Wi-Fi%2B5G/5_547cc859-8e23-4c45-8556-c9726f67dc61_869x869.webp",
-      "Image/Apple%20iPad%20mini%20(6th%20Gen)%20256%20GB%20ROM%208.3%20inch%20with%20Wi-Fi%2B5G/6_869x869.webp"
+      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
     ],
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/3_512x512.jpg?v=1781259492",
+    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
     "title": "Apple iPad mini (6th Gen) 256 GB ROM 8.3 inch with Wi-Fi+5G",
     "badge": ""
   },
@@ -407,13 +420,9 @@ const INITIAL_PRODUCTS = [
     "badge": "",
     "title": "Apple iPad (10th Generation): with A14 Bionic chip, 256GB, Wi-Fi 6, 12MP front/12MP Back Camera, Touch ID, All-Day Battery Life-Pink",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/222_a31333ca-5a60-4f70-8cf4-f8d0ab6e9ae1_512x512.jpg?v=1781259494",
-      "https://look-10287.myshopify.com/cdn/shop/files/111_5d8330f6-2140-4f2d-89ab-ff89dfbfbc93_512x512.jpg?v=1781259494",
-      "Image/Apple%20iPad%20(10th%20Generation)%20with%20A14%20Bionic%20chip,%20256GB,%20Wi-Fi%206,%2012MP%20front12MP%20Back%20Camera,%20Touch%20ID,%20All-Day%20Battery%20Life-Pink/2_c28939b4-ce02-4685-be4a-03f16a0123d0_869x869.webp",
-      "Image/Apple%20iPad%20(10th%20Generation)%20with%20A14%20Bionic%20chip,%20256GB,%20Wi-Fi%206,%2012MP%20front12MP%20Back%20Camera,%20Touch%20ID,%20All-Day%20Battery%20Life-Pink/5_36170484-27ca-49a7-9c46-00159c951e29_150x150_crop_center.avif",
-      "Image/Apple%20iPad%20(10th%20Generation)%20with%20A14%20Bionic%20chip,%20256GB,%20Wi-Fi%206,%2012MP%20front12MP%20Back%20Camera,%20Touch%20ID,%20All-Day%20Battery%20Life-Pink/4_22e8c211-6655-48e3-8a56-d47a1a194eb8_869x869.jpg"
+      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
     ],
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/222_a31333ca-5a60-4f70-8cf4-f8d0ab6e9ae1_512x512.jpg?v=1781259494",
+    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
     "price": "Rs. 999.00",
     "category": "tablets",
     "paymentLink": "https://rzp.io/rzp/tHlmofq",
@@ -439,17 +448,10 @@ const INITIAL_PRODUCTS = [
     "category": "smart-phone",
     "url": "/products/mindone-pro-card-sized-ai-smartphone-copy",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/ikko-mindone-pro-black1_512x512.png?v=1781259499",
-      "https://look-10287.myshopify.com/cdn/shop/files/ikko-mindone-pro-white_2_512x512.png?v=1781259499",
-      "Image/MindOne%20Pro%20Card-Sized%20AI%20Smartphone/ikko-mindone-pro-black2_800x800.webp",
-      "Image/MindOne%20Pro%20Card-Sized%20AI%20Smartphone/ikko-mindone-pro-white_back-1_800x800.webp",
-      "Image/MindOne%20Pro%20Card-Sized%20AI%20Smartphone/MindOnepro__flipcameraslide2___iKKO_869x695.webp",
-      "Image/MindOne%20Pro%20Card-Sized%20AI%20Smartphone/ikko-mindone-flip-camera_800x800.webp",
-      "Image/MindOne%20Pro%20Card-Sized%20AI%20Smartphone/ikko-mindone-in-hands_800x800.webp",
-      "Image/MindOne%20Pro%20Card-Sized%20AI%20Smartphone/ikko-mind-one-ai-phone-card-sized-2000-01-1_869x869.webp",
-      "Image/MindOne%20Pro%20Card-Sized%20AI%20Smartphone/ikko-mind-one-ai-phone-card-sized-2000-04_869x869.webp"
+      "Image/MindOne Pro Card-Sized AI Smartphone/1.webp",
+      "Image/MindOne Pro Card-Sized AI Smartphone/2.webp"
     ],
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/ikko-mindone-pro-black1_512x512.png?v=1781259499",
+    "image": "Image/MindOne Pro Card-Sized AI Smartphone/1.webp",
     "title": "MindOne Pro Card-Sized AI Smartphone",
     "badge": "",
     "description": "This pocket-sized powerhouse packs a punch with its brilliant AMOLED display and a clever 180° rotating 50MP Sony camera. Navigating your world is a breeze thanks to the seamless blend of Android 15 and the specialized iKKO AI OS. Stay connected anywhere with built-in global internet that keeps your favorite AI tools at your fingertips. It’s the tiny tech companion that proves great things really do come in small, card-sized packages.\n\n<strong>Processor</strong>\n\n<ul>\n  <li>MediaTek MT8781\nOcta-core CPU (2× Cortex-A76 @ 2.2GHz + 6× Cortex-A55 @ 2.0GHz)\nMemory\n</li>\n</ul>\n<ul>\n  <li>8GB RAM\n256GB internal storage\nOperating System</li>\n</ul>\n\n<ul>\n  <li>Android 15\niKKO AI OS\nProcessor\n</li>\n</ul>\n\n<ul>\n  <li>MediaTek MT8781\nOcta-core CPU (2× Cortex-A76 @ 2.2GHz + 6× Cortex-A55 @ 2.0GHz)\nMemory</li>\n</ul>\n\n<ul>\n  <li>8GB RAM\n256GB internal storage\nOperating System\n</li>\n</ul>\n\n<ul>\n  <li>Android 15\nDisplay</li>\n</ul>\n\n<ul>\n  <li>AMOLED\n1240 × 1080 resolution\n90Hz refresh rate\n16.7 million colors\nDC Dimming\nSapphire Glass (9H hardness) on Pro model\nCamera\n</li>\n</ul>\n\n<ul>\n  <li>50MP Sony sensor (1/1.56\")\nf/1.88 aperture, OIS, LED flash\nH.265 video, 1440p @ 30fps\nSupports 180° flip angle</li>\n</ul>\n\n<table class=\"specs-table\" style=\"width:100%; border-collapse:collapse; margin: 15px 0;\">\n  <tbody>\n    <tr>\n      <td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Operating System</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Android 15 + iKKO AI OS</td></tr><tr>\n<td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Camera</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">50MP 180° rotating Sony camera</td></tr>\n<tr>\n<td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Display Type</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">AMOLED Display</td>\n</tr><tr>\n<td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Connectivity</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Built-in Global Internet</td>\n</tr><tr>\n<td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Form Factor</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Card-Sized Compact Design</td>\n</tr><tr>\n<td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Material</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">Glass and Metal Alloy (estimated: true)</td>\n</tr><tr>\n<td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Dimensions</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">3.4 x 2.1 x 0.4 inches (estimated: true)</td>\n</tr><tr>\n<td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Weight</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">2.2 lbs</td>\n</tr><tr>\n<td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Warranty</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">1-year manufacturer warranty</td>\n</tr><tr>\n<td style=\"border:1px solid #cbd5e1; padding:8px; font-weight:bold;\">Special Feature</td>\n      <td style=\"border:1px solid #cbd5e1; padding:8px;\">AI tool integration</td>\n    </tr>\n  </tbody>\n</table>\n\n<h2>Yes, it's that compact, Only 8.9mm thin.</h2>\nOnly 8.9mm thin. Just 86×72mm. AMOLED display — protected by Sapphire Glass. We know many of you miss smaller phones, but still want something smart, stylish, and capable. That's why we set out to create one that's both ultra-portable and modern.\n\n<h2>Sapphire Glass Display</h2>\nMindOne (Pro Model) features a full Sapphire Glass screen (9H hardness), tougher than regular tempered glass. We've thickened the glass and added precision curved edges to make it even more resistant to cracks and drops. It won't scratch. It won't crack easily. That means no screen protectors, no worries!\n\n<h2>How Small is MindOne?</h2>\nMindOne never weighs you down. It’s perfect as a second phone or your go-to everyday device: smart, light, and essential.\n\n<h2>Sony 50MP Flip Camera</h2>\nMindOne packs a 50MP Sony 1/1.56” sensor with custom OIS and a bright F1.88 aperture, specs you'd normally see on a rear camera. But this one flips.\n\nUp for selfies\nDown for shots\nLocks at any angle\nProtected by scratch-resistant Sapphire Glass for long-term durability\n\n<h2>Android 15</h2>\nWe support at least 3 major Android upgrades and 5 years of security patches, so your device stays secure and up to date for the long haul.",
@@ -463,14 +465,9 @@ const INITIAL_PRODUCTS = [
     "handle": "apple-ipad-air-11-m2-liquid-retina-display-256gb-landscape-12mp-front-camera-12mp-back-camera-wi-fi-6e-touch-id-all-day-battery-life-gray",
     "comparePrice": "Rs. 59,900.00",
     "description": "<h2>About this item</h2>\n<ul>\n  <li><strong>WHY IPAD AIR</strong> — iPad Air is powerful, versatile and comes in a choice of two sizes. Featuring a stunning Liquid Retina display and the amazing performance of the M2 chip, along with Touch ID, advanced cameras, superfast Wi-Fi 6E and a USB-C connector. Plus powerful productivity features in iPadOS and next-generation Apple Pencil Pro experience.</li>\n  <li><strong>LIQUID RETINA DISPLAY</strong> — The gorgeous Liquid Retina display features advanced technologies like P3 wide colour, True Tone and ultra-low reflectivity, which make everything look stunning.</li>\n  <li><strong>PERFORMANCE AND STORAGE</strong> — The M2 chip lets you multitask smoothly between powerful apps and play graphics-intensive games. And with all-day battery life, you can keep working and playing wherever you go. Choose up to 1TB of storage depending on the room you need for apps, music, movies and more.</li>\n  <li><strong>IPADOS + APPS</strong> — iPadOS makes iPad more productive, intuitive and versatile. With iPadOS, run multiple apps at once, use Apple Pencil to write in any text field with Scribble, and edit and share photos. Stage Manager makes multitasking easy with resizable, overlapping apps and external display support. iPad Air comes with essential apps like Safari, Messages and Keynote, with over a million more apps available on the App Store.</li>\n  <li><strong>APPLE PENCIL AND MAGIC KEYBOARD</strong> — Apple Pencil Pro transforms iPad Air into an immersive drawing canvas and the world’s best note‑taking device. Apple Pencil (USB-C) is also compatible with iPad Air. Magic Keyboard features a great typing experience and a built‑in trackpad, while doubling as a protective cover for iPad.</li>\n  <li><strong>ADVANCED CAMERAS</strong> — iPad Pro features a landscape 12MP Ultra Wide front camera that supports Centre Stage for video conferencing or epic Portrait mode selfies. The 12MP Wide back camera with adaptive True Tone flash is great for capturing photos or 4K video with ProRes support. Four studio-quality microphones and a four-speaker audio system provide rich audio. And AR experiences are enhanced with the LiDAR Scanner to capture a depth map of any space.</li>\n  <li><strong>CONNECTIVITY</strong> — Wi-Fi 6E gives you fast wireless connections for quick transfers of photos, documents and large video files. And when you’re away from Wi-Fi, superfast 5G gives you the flexibility to stay connected in more places.* Connect to external displays, drives and more using the USB-C connector with support for Thunderbolt / USB 4.</li>\n  <li><strong>UNLOCK WITH FACE ID</strong> — Unlock your iPad Pro, sign in to apps and more — all with just a glance.*</li>\n  <li><strong>LEGAL DISCLAIMERS</strong> — This is a summary of the main product features. See below to learn more.</li>\n</ul>",
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/22_87148f00-12f9-4e5e-9951-8717bdcb21de_512x512.jpg?v=1781259482",
+    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/22_87148f00-12f9-4e5e-9951-8717bdcb21de_512x512.jpg?v=1781259482",
-      "https://look-10287.myshopify.com/cdn/shop/files/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_512x512.jpg?v=1781259481",
-      "Image/Apple%20iPad%20Air%2011%E2%80%B3%20(M2)%20Liquid%20Retina%20Display%2C%20256GB%2C%20Landscape%2012MP%20Front%20Camera%20%2012MP%20Back%20Camera%2C%20Wi-Fi%206E%2C%20Touch%20ID%2C%20All-Day%20Battery%20Life-Gray/2_f84a81b2-c4ae-4742-baa9-c33c367e2bc1_679x679.webp",
-      "Image/Apple%20iPad%20Air%2011%E2%80%B3%20(M2)%20Liquid%20Retina%20Display%2C%20256GB%2C%20Landscape%2012MP%20Front%20Camera%20%2012MP%20Back%20Camera%2C%20Wi-Fi%206E%2C%20Touch%20ID%2C%20All-Day%20Battery%20Life-Gray/3_7613bf5b-b1ed-4a3a-a721-0409829268cf_679x679.webp",
-      "Image/Apple%20iPad%20Air%2011%E2%80%B3%20(M2)%20Liquid%20Retina%20Display%2C%20256GB%2C%20Landscape%2012MP%20Front%20Camera%20%2012MP%20Back%20Camera%2C%20Wi-Fi%206E%2C%20Touch%20ID%2C%20All-Day%20Battery%20Life-Gray/4_16843c15-81b3-47d1-837f-4fd3306ae717_679x679.jpg",
-      "Image/Apple%20iPad%20Air%2011%E2%80%B3%20(M2)%20Liquid%20Retina%20Display%2C%20256GB%2C%20Landscape%2012MP%20Front%20Camera%20%2012MP%20Back%20Camera%2C%20Wi-Fi%206E%2C%20Touch%20ID%2C%20All-Day%20Battery%20Life-Gray/5_1a378377-d486-4f64-b137-6a7161cfc80d_679x679.webp"
+      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
     ],
     "title": "Apple iPad Air 11″ (M2): Liquid Retina Display, 256GB, Landscape 12MP Front Camera / 12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray",
     "badge": "",
@@ -489,10 +486,9 @@ const INITIAL_PRODUCTS = [
     "id": "8270415000001",
     "url": "/products/apple-ipad-10th-generation-with-a14-bionic-chip-27-69-cm-10-9-liquid-retina-display-64gb-wi-fi-6-12mp-front-12mp-back-camera-touch-id-all-day-battery-life-pink",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/2222_9f2c1eaf-edd4-4fec-b4fb-8ae9127af22b_512x512.jpg?v=1781259483",
-      "https://look-10287.myshopify.com/cdn/shop/files/1111_6c1f79dc-8a5a-4a8d-bd47-f36a7591c618_512x512.jpg?v=1781259483"
+      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
     ],
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/2222_9f2c1eaf-edd4-4fec-b4fb-8ae9127af22b_512x512.jpg?v=1781259483",
+    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
     "badge": "",
     "title": "Apple iPad (10th Generation): with A14 Bionic chip, 256GB, Wi-Fi 6, 12MP front/12MP Back Camera, Touch ID, All-Day Battery Life-Yellow",
     "description": ".",
@@ -513,10 +509,9 @@ const INITIAL_PRODUCTS = [
     "stockStatus": "out-of-stock",
     "comparePrice": "Rs. 33,900.00",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/22_c4018750-ed95-469f-823b-be23e178e304_512x512.jpg?v=1781259484",
-      "https://look-10287.myshopify.com/cdn/shop/files/11_3288dcab-ee13-4d9a-95cd-e9b2f7711971_512x512.jpg?v=1781259484"
+      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
     ],
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/22_c4018750-ed95-469f-823b-be23e178e304_512x512.jpg?v=1781259484",
+    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
     "badge": "",
     "title": "Apple iPad (10th Generation): with A14 Bionic chip, 256GB, Wi-Fi 6, 12MP front/12MP Back Camera, Touch ID, All-Day Battery Life-Silver",
     "url": "/products/apple-ipad-10th-generation-with-a14-bionic-chip-27-69-cm-10-9-liquid-retina-display-64gb-wi-fi-6-12mp-front-12mp-back-camera-touch-id-all-day-battery-life-silver"
@@ -529,10 +524,9 @@ const INITIAL_PRODUCTS = [
     "comparePrice": "Rs. 33,900.00",
     "title": "Apple iPad (10th Generation): with A14 Bionic chip, 256GB, Wi-Fi 6, 12MP front/12MP Back Camera, Touch ID, All-Day Battery Life-Blue",
     "badge": "",
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/6_2aa85041-5111-4c0d-809c-9065a678e369_512x512.webp?v=1781259485",
+    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/6_2aa85041-5111-4c0d-809c-9065a678e369_512x512.webp?v=1781259485",
-      "https://look-10287.myshopify.com/cdn/shop/files/1_f41f3d5f-ada1-4e80-af35-0a9e6a44c042_512x512.webp?v=1781259485"
+      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
     ],
     "url": "/products/apple-ipad-10th-generation-with-a14-bionic-chip-27-69-cm-10-9-liquid-retina-display-64gb-wi-fi-6-12mp-front-12mp-back-camera-touch-id-all-day-battery-life",
     "category": "tablets",
@@ -552,10 +546,9 @@ const INITIAL_PRODUCTS = [
     "title": "Apple iPad Pro 13″ (M4): Ultra Retina XDR Display, 512GB, 12MP Front Camera / 12MP Back Camera, LiDAR Scanner, Wi-Fi 6E + 5G Cellular with eSIM, All-Day Battery Life, Standard Glass — Space Black",
     "badge": "",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/2_c198a4d5-844f-486d-91d2-897053138cca_512x512.jpg?v=1781259487",
-      "https://look-10287.myshopify.com/cdn/shop/files/1_09ec4f7e-a578-443a-a9f6-8797d1410070_512x512.jpg?v=1781259487"
+      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
     ],
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/2_c198a4d5-844f-486d-91d2-897053138cca_512x512.jpg?v=1781259487"
+    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
   },
   {
     "id": "8270415000006",
@@ -569,10 +562,9 @@ const INITIAL_PRODUCTS = [
     "url": "/products/apple-ipad-air-5th-gen-256-gb-rom-10-9-inch-with-wi-fi-5g",
     "title": "Apple iPad Air (5th gen) 256 GB ROM 10.9 Inch with Wi-Fi+5G",
     "badge": "",
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/2_cd196f0b-3a1d-440f-8443-55d07c764b30_512x512.jpg?v=1781259490",
+    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/2_cd196f0b-3a1d-440f-8443-55d07c764b30_512x512.jpg?v=1781259490",
-      "https://look-10287.myshopify.com/cdn/shop/files/1_47eed24d-bcca-4417-b2cb-5c753994cbcc_512x512.jpg?v=1781259490"
+      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
     ]
   },
   {
@@ -592,14 +584,9 @@ const INITIAL_PRODUCTS = [
     "description": "<h2>About this item</h2>\n<ul>\n  <li>WHY IPAD AIR — iPad Air is powerful, versatile and comes in a choice of two sizes. Featuring a stunning Liquid Retina display and the amazing performance of the M2 chip, along with Touch ID, advanced cameras, superfast Wi-Fi 6E and a USB-C connector. Plus powerful productivity features in iPadOS and next-generation Apple Pencil Pro experience.</li>\n\n<li>LIQUID RETINA DISPLAY — The gorgeous Liquid Retina display features advanced technologies like P3 wide colour, True Tone and ultra-low reflectivity, which make everything look stunning.</li>\n\n<li>PERFORMANCE AND STORAGE — The M2 chip lets you multitask smoothly between powerful apps and play graphics-intensive games. And with all-day battery life, you can keep working and playing wherever you go. Choose up to 1TB of storage depending on the room you need for apps, music, movies and more.</li>\n<li>IPADOS + APPS — iPadOS makes iPad more productive, intuitive and versatile. With iPadOS, run multiple apps at once, use Apple Pencil to write in any text field with Scribble, and edit and share photos. Stage Manager makes multitasking easy with resizable, overlapping apps and external display support. iPad Air comes with essential apps like Safari, Messages and Keynote, with over a million more apps available on the App Store.</li>\n\n<li>APPLE PENCIL AND MAGIC KEYBOARD — Apple Pencil Pro transforms iPad Air into an immersive drawing canvas and the world’s best note‑taking device. Apple Pencil (USB-C) is also compatible with iPad Air. Magic Keyboard features a great typing experience and a built‑in trackpad, while doubling as a protective cover for iPad.</li>\n<li>ADVANCED CAMERAS — iPad Pro features a landscape 12MP Ultra Wide front camera that supports Centre Stage for video conferencing or epic Portrait mode selfies. The 12MP Wide back camera with adaptive True Tone flash is great for capturing photos or 4K video with ProRes support. Four studio-quality microphones and a four-speaker audio system provide rich audio. And AR experiences are enhanced with the LiDAR Scanner to capture a depth map of any space.</li>\n<li>CONNECTIVITY — Wi-Fi 6E gives you fast wireless connections for quick transfers of photos, documents and large video files. And when you’re away from Wi-Fi, superfast 5G gives you the flexibility to stay connected in more places.* Connect to external displays, drives and more using the USB-C connector with support for Thunderbolt / USB 4.</li>\n\n<li>UNLOCK WITH FACE ID — Unlock your iPad Pro, sign in to apps and more — all with just a glance.* </li>\n\n<li>LEGAL DISCLAIMERS — This is a summary of the main product features. See below to learn more.</li>\n\n</ul>",
     "title": "Apple iPad Air 11″ (M2): Liquid Retina Display, 256GB, Landscape 12MP Front Camera / 12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Blue",
     "badge": "",
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/6_dc993d36-9204-4c33-8520-c41d38d722e2_512x512.jpg?v=1781259496",
+    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/6_dc993d36-9204-4c33-8520-c41d38d722e2_512x512.jpg?v=1781259496",
-      "https://look-10287.myshopify.com/cdn/shop/files/1_fdfa7194-7b60-405f-80e5-e5408bd66469_512x512.jpg?v=1781259495",
-      "https://picsum.photos/600/400",
-      "https://picsum.photos/600/400",
-      "https://picsum.photos/600/400",
-      "https://picsum.photos/600/400"
+      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
     ],
     "url": "/products/boult-audio-ufo-truly-wireless-in-ear-earbuds-with-48h-playtime-built-in-app-support-45ms-low-latency-gaming-4-mics-enc-breathing-leds-13mm-bass-drivers-ear-buds-tws-made-in-india"
   },
@@ -612,10 +599,9 @@ const INITIAL_PRODUCTS = [
     "title": "Airdopes 411 ANC with 10mm Drivers, ASAPTM Charge Technology, Up to 25dB ANC, ENx™ Technology, 17.5 Hours Playback",
     "badge": "",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/main3_53b8f759-5b8e-4a66-8938-907d45f55b62_512x512.png?v=1781259431",
-      "https://look-10287.myshopify.com/cdn/shop/files/main1_91fb2fa5-866e-428d-9cdc-7a85f1b4e21b_512x512.png?v=1781259431"
+      "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/main3_53b8f759-5b8e-4a66-8938-907d45f55b62_600x.png"
     ],
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/main3_53b8f759-5b8e-4a66-8938-907d45f55b62_512x512.png?v=1781259431",
+    "image": "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/main3_53b8f759-5b8e-4a66-8938-907d45f55b62_600x.png",
     "url": "/products/airdopes-411-anc-with-10mm-drivers-asaptm-charge-technology-up-to-25db-anc-enx%E2%84%A2-technology-17-5-hours-playback",
     "category": "audio",
     "price": "Rs. 999.00",
@@ -631,10 +617,9 @@ const INITIAL_PRODUCTS = [
     "title": "boAt Airdopes 175 - 10mm drivers, Quad mics with ENx™️ Technology, Bluetooth v5.2, IPX4 Sweat & Water Resistance, ASAP Fast Charge",
     "badge": "",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/A175Packaging.1807_512x512.png?v=1781259432",
-      "https://look-10287.myshopify.com/cdn/shop/files/A175Packaging.1804_512x512.png?v=1781259433"
+      "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/A175Packaging.1807_600x.png"
     ],
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/A175Packaging.1807_512x512.png?v=1781259432",
+    "image": "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/A175Packaging.1807_600x.png",
     "price": "Rs. 999.00",
     "category": "audio",
     "paymentLink": "https://rzp.io/rzp/tHlmofq"
@@ -652,18 +637,17 @@ const INITIAL_PRODUCTS = [
     "title": "boAt Airdopes 148 with 8mm Drivers, IWP & ENxTM Technology, ASAP Fast Charge, Upto 42 hours Playback, IPX4 Sweat & Water Resistance",
     "badge": "",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/back_4b76a852-bc9e-4196-b901-bc102ea6b447_512x512.png?v=1781259433",
-      "https://look-10287.myshopify.com/cdn/shop/files/grey_70f0bdb4-5141-4020-a62b-09a61d204eef_512x512.png?v=1781259434"
+      "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/back_4b76a852-bc9e-4196-b901-bc102ea6b447_600x.png"
     ],
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/back_4b76a852-bc9e-4196-b901-bc102ea6b447_512x512.png?v=1781259433"
+    "image": "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/back_4b76a852-bc9e-4196-b901-bc102ea6b447_600x.png"
   },
   {
     "id": "8270415000014",
     "title": "Airdopes 441 Pro Special Batman Edition - 2600 mAh Carry Case, 6mm Drivers, Upto 20H nonstop Music, IPX7 Sweat & Water Resistance",
     "badge": "",
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/AD441Pro-FI-DC_Batman02_512x512.png?v=1781259435",
+    "image": "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/AD441Pro-FI-DC_Batman02_600x.png",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/AD441Pro-FI-DC_Batman02_512x512.png?v=1781259435"
+      "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/AD441Pro-FI-DC_Batman02_600x.png"
     ],
     "url": "/products/airdopes-441-pro-special-batman-edition-2600-mah-carry-case-6mm-drivers-upto-20h-nonstop-music-ipx7-sweat-water-resistance",
     "stockStatus": "out-of-stock",
@@ -684,9 +668,9 @@ const INITIAL_PRODUCTS = [
     "badge": "",
     "title": "Airdopes 131 Batman DC Edition With 13 mm Drivers, Bluetooth v5.0, 650mAh pocket friendly Charging Case",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/03_7a776f40-34f7-4fc0-a708-bf715f327c6f_512x512.jpg?v=1781259435"
+      "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/03_7a776f40-34f7-4fc0-a708-bf715f327c6f_600x.jpg"
     ],
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/03_7a776f40-34f7-4fc0-a708-bf715f327c6f_512x512.jpg?v=1781259435",
+    "image": "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/03_7a776f40-34f7-4fc0-a708-bf715f327c6f_600x.jpg",
     "price": "Rs. 999.00",
     "category": "audio",
     "paymentLink": "https://rzp.io/rzp/tHlmofq"
@@ -701,10 +685,9 @@ const INITIAL_PRODUCTS = [
     "title": "boAt Airdopes 101 with Powerful 13mm drivers, Nonstop Music Up To 15 hours, Type-C Interface, One Touch Voice Assistant",
     "badge": "",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/101_512x512.png?v=1781259436",
-      "https://look-10287.myshopify.com/cdn/shop/files/product-Image_512x512.png?v=1781259436"
+      "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/101_600x.png"
     ],
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/101_512x512.png?v=1781259436",
+    "image": "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/101_600x.png",
     "price": "Rs. 999.00",
     "category": "audio",
     "paymentLink": "https://rzp.io/rzp/tHlmofq"
@@ -714,9 +697,9 @@ const INITIAL_PRODUCTS = [
     "paymentLink": "https://rzp.io/rzp/tHlmofq",
     "category": "audio",
     "price": "Rs. 999.00",
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/7f87efa7-f1a4-46c7-b77a-0cb200c34bd1_38d8c7b5-626e-4d36-9524-95da56324c64_512x512.png?v=1781259437",
+    "image": "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/7f87efa7-f1a4-46c7-b77a-0cb200c34bd1_38d8c7b5-626e-4d36-9524-95da56324c64_600x.png",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/7f87efa7-f1a4-46c7-b77a-0cb200c34bd1_38d8c7b5-626e-4d36-9524-95da56324c64_512x512.png?v=1781259437"
+      "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/7f87efa7-f1a4-46c7-b77a-0cb200c34bd1_38d8c7b5-626e-4d36-9524-95da56324c64_600x.png"
     ],
     "badge": "",
     "title": "boAt Airdopes 441 with 6mm Drivers, IPX7 Water & Sweat Resistance, 500mAh Charging Case, Nonstop Music Upto 20 Hours",
@@ -736,10 +719,9 @@ const INITIAL_PRODUCTS = [
     "stockStatus": "out-of-stock",
     "description": "<h1></h1>",
     "url": "/products/boat-airdopes-281-pro-enx%E2%84%A2-technology-with-4-mics-asap-charge-6mm-drivers-32-hours-nonstop-audio-bliss",
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/main4_5c4987b0-2e64-4225-af74-e8a76ce5ccfe_512x512.png?v=1781259438",
+    "image": "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/main4_5c4987b0-2e64-4225-af74-e8a76ce5ccfe_600x.png",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/main4_5c4987b0-2e64-4225-af74-e8a76ce5ccfe_512x512.png?v=1781259438",
-      "https://look-10287.myshopify.com/cdn/shop/files/main6_ff7bee5d-e843-4344-b504-c16bdd73f47f_512x512.png?v=1781259438"
+      "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/main4_5c4987b0-2e64-4225-af74-e8a76ce5ccfe_600x.png"
     ],
     "badge": "",
     "title": "boAt Airdopes 281 Pro - ENx™ Technology with 4 Mics, ASAP Charge, 6mm Drivers, 32 Hours Nonstop Audio Bliss"
@@ -752,10 +734,9 @@ const INITIAL_PRODUCTS = [
     "title": "boAt Airdopes 641 - BEAST™️ Mode for Gamers, 500mAh Pocket Friendly Charging Case, 6mm Dual Drivers, 30H Mountainous Playback",
     "badge": "",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/main-1_512x512.png?v=1781259439",
-      "https://look-10287.myshopify.com/cdn/shop/files/main-2_4defc6ba-35c9-4fcd-a1fc-3cbc4dc484e0_512x512.png?v=1781259439"
+      "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/main-1_600x.png"
     ],
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/main-1_512x512.png?v=1781259439",
+    "image": "https://cdn.shopify.com/s/files/1/0057/8938/4802/products/main-1_600x.png",
     "url": "/products/boat-airdopes-641-beast%E2%84%A2%EF%B8%8F-mode-for-gamers-500mah-pocket-friendly-charging-case-6mm-dual-drivers-30h-mountainous-playback",
     "handle": "boat-airdopes-641-beast-mode-for-gamers-500mah-pocket-friendly-charging-case-6mm-dual-drivers-30h-mountainous-playback",
     "stockStatus": "out-of-stock",
@@ -772,20 +753,18 @@ const INITIAL_PRODUCTS = [
     "handle": "apple-ipad-air-5th-gen-256-gb-rom-10-9-inch-with-wi-fi-5g",
     "comparePrice": "Rs. 62,649.00",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/2_cd196f0b-3a1d-440f-8443-55d07c764b30_512x512.jpg?v=1781259490",
-      "https://look-10287.myshopify.com/cdn/shop/files/1_47eed24d-bcca-4417-b2cb-5c753994cbcc_512x512.jpg?v=1781259490"
+      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
     ],
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/2_cd196f0b-3a1d-440f-8443-55d07c764b30_512x512.jpg?v=1781259490",
+    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
     "badge": "",
     "title": "Apple iPad Air (5th gen) 256 GB ROM 10.9 Inch with Wi-Fi+5G",
     "url": "/products/apple-ipad-air-5th-gen-256-gb-rom-10-9-inch-with-wi-fi-5g"
   },
   {
     "id": "8270415000025",
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/5_ab735dcb-c7a9-4839-8fdc-79d12c03c54c_512x512.jpg?v=1781259489",
+    "image": "Image/Samsung Galaxy Tab S10 Plus, S Pen in-Box, 31.5 cm (12.4 inch) Dynamic AMOLED 2X Display, 12 GB RAM, 256 GB Storage, Wi-Fi Tablet, Moonstone Gray/1_8ce7b027-7d00-4d28-b654-4eedcb1ffd7a_869x869.webp",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/5_ab735dcb-c7a9-4839-8fdc-79d12c03c54c_512x512.jpg?v=1781259489",
-      "https://look-10287.myshopify.com/cdn/shop/files/1_8ce7b027-7d00-4d28-b654-4eedcb1ffd7a_512x512.jpg?v=1781259489"
+      "Image/Samsung Galaxy Tab S10 Plus, S Pen in-Box, 31.5 cm (12.4 inch) Dynamic AMOLED 2X Display, 12 GB RAM, 256 GB Storage, Wi-Fi Tablet, Moonstone Gray/1_8ce7b027-7d00-4d28-b654-4eedcb1ffd7a_869x869.webp"
     ],
     "title": "Samsung Galaxy Tab S10 Plus, S Pen in-Box, 31.5 cm (12.4 inch) Dynamic AMOLED 2X Display, 12 GB RAM, 256 GB Storage, Wi-Fi Tablet, Moonstone Gray",
     "badge": "",
@@ -806,10 +785,9 @@ const INITIAL_PRODUCTS = [
     "handle": "apple-ipad-pro-13-m4-ultra-retina-xdr-display-512gb-12mp-front-camera-12mp-back-camera-lidar-scanner-wi-fi-6e-5g-cellular-with-esim-all-day-battery-life-standard-glass-space-black",
     "url": "/products/apple-ipad-pro-13-m4-ultra-retina-xdr-display-512gb-12mp-front-camera-12mp-back-camera-lidar-scanner-wi-fi-6e-5g-cellular-with-esim-all-day-battery-life-standard-glass-space-black",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/2_c198a4d5-844f-486d-91d2-897053138cca_512x512.jpg?v=1781259487",
-      "https://look-10287.myshopify.com/cdn/shop/files/1_09ec4f7e-a578-443a-a9f6-8797d1410070_512x512.jpg?v=1781259487"
+      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
     ],
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/2_c198a4d5-844f-486d-91d2-897053138cca_512x512.jpg?v=1781259487",
+    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
     "badge": "",
     "title": "Apple iPad Pro 13″ (M4): Ultra Retina XDR Display, 512GB, 12MP Front Camera / 12MP Back Camera, LiDAR Scanner, Wi-Fi 6E + 5G Cellular with eSIM, All-Day Battery Life, Standard Glass — Space Black",
     "price": "Rs. 999.00",
@@ -824,10 +802,9 @@ const INITIAL_PRODUCTS = [
     "description": "<h1></h1>",
     "title": "Apple iPad (10th Generation): with A14 Bionic chip, 256GB, Wi-Fi 6, 12MP front/12MP Back Camera, Touch ID, All-Day Battery Life-Blue",
     "badge": "",
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/6_2aa85041-5111-4c0d-809c-9065a678e369_512x512.webp?v=1781259485",
+    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/6_2aa85041-5111-4c0d-809c-9065a678e369_512x512.webp?v=1781259485",
-      "https://look-10287.myshopify.com/cdn/shop/files/1_f41f3d5f-ada1-4e80-af35-0a9e6a44c042_512x512.webp?v=1781259485"
+      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
     ],
     "url": "/products/apple-ipad-10th-generation-with-a14-bionic-chip-27-69-cm-10-9-liquid-retina-display-64gb-wi-fi-6-12mp-front-12mp-back-camera-touch-id-all-day-battery-life",
     "category": "tablets",
@@ -836,10 +813,9 @@ const INITIAL_PRODUCTS = [
   },
   {
     "id": "8270415000028",
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/22_c4018750-ed95-469f-823b-be23e178e304_512x512.jpg?v=1781259484",
+    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/22_c4018750-ed95-469f-823b-be23e178e304_512x512.jpg?v=1781259484",
-      "https://look-10287.myshopify.com/cdn/shop/files/11_3288dcab-ee13-4d9a-95cd-e9b2f7711971_512x512.jpg?v=1781259484"
+      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
     ],
     "title": "Apple iPad (10th Generation): with A14 Bionic chip, 256GB, Wi-Fi 6, 12MP front/12MP Back Camera, Touch ID, All-Day Battery Life-Silver",
     "badge": "",
@@ -856,10 +832,9 @@ const INITIAL_PRODUCTS = [
     "id": "8270415000029",
     "badge": "",
     "title": "Apple iPad (10th Generation): with A14 Bionic chip, 256GB, Wi-Fi 6, 12MP front/12MP Back Camera, Touch ID, All-Day Battery Life-Yellow",
-    "image": "https://look-10287.myshopify.com/cdn/shop/files/2222_9f2c1eaf-edd4-4fec-b4fb-8ae9127af22b_512x512.jpg?v=1781259483",
+    "image": "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp",
     "images": [
-      "https://look-10287.myshopify.com/cdn/shop/files/2222_9f2c1eaf-edd4-4fec-b4fb-8ae9127af22b_512x512.jpg?v=1781259483",
-      "https://look-10287.myshopify.com/cdn/shop/files/1111_6c1f79dc-8a5a-4a8d-bd47-f36a7591c618_512x512.jpg?v=1781259483"
+      "Image/Apple iPad Air 11″ (M2) Liquid Retina Display, 256GB, Landscape 12MP Front Camera  12MP Back Camera, Wi-Fi 6E, Touch ID, All-Day Battery Life-Gray/11_0ea24f3d-9bcd-4e5f-a894-b4f66903a3c8_679x679.webp"
     ],
     "url": "/products/apple-ipad-10th-generation-with-a14-bionic-chip-27-69-cm-10-9-liquid-retina-display-64gb-wi-fi-6-12mp-front-12mp-back-camera-touch-id-all-day-battery-life-pink",
     "description": "<h1></h1>",
@@ -871,6 +846,8 @@ const INITIAL_PRODUCTS = [
     "price": "Rs. 999.00"
   }
 ];
+
+
 
 // Database Initialization
 function dbInit() {
@@ -1348,6 +1325,15 @@ async function getProducts(forceSync = false) {
         try {
             let products = JSON.parse(cached);
             if (products && products.length > 0) {
+                // Invalidate stale cache if broken Shopify URLs exist or if new REDMAGIC product is missing
+                const hasBrokenUrls = products.some(p => p.image && p.image.includes('look-10287.myshopify.com'));
+                const hasNewProduct = products.some(p => String(p.id) === '9035609637021');
+
+                if (hasBrokenUrls || !hasNewProduct) {
+                    console.log("[Cache Invalidation] Old or broken product cache detected. Refreshing products from INITIAL_PRODUCTS.");
+                    products = (typeof INITIAL_PRODUCTS !== 'undefined') ? [...INITIAL_PRODUCTS] : products;
+                }
+
                 products = ensureDemoProductPresent(products);
                 localStorage.setItem('ikko_products', JSON.stringify(products));
                 // Trigger background sync only once per session to prevent hitting Firestore limits
