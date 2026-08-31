@@ -664,11 +664,8 @@
                 return;
             }
 
-            // Default for all SabPaisa Redirects: Render Success UI immediately
-            if (typeof clearCart === 'function') {
-                clearCart();
-            }
-            renderSuccessUI(order);
+            // Default for unverified redirects: Check SabPaisa Payment Status API first before rendering Success UI
+            checkPaymentStatus(orderId);
         }
 
         if (document.readyState === 'loading') {
