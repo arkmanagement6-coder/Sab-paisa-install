@@ -156,6 +156,45 @@ window.trackPurchaseEvent = function(order) {
 
 const INITIAL_PRODUCTS = [
   {
+    "id": "9035609637021",
+    "category": "tablets",
+    "price": "Rs. 899.00",
+    "badge": "NEW LAUNCH",
+    "title": "REDMAGIC Astra 2 Tablet - Compact Size. Flagship Power with Visible Liquid Cooling",
+    "image": "Image/REDMAGIC Astra 2 Tablet/1.webp",
+    "images": [
+      "Image/REDMAGIC Astra 2 Tablet/1.webp",
+      "Image/REDMAGIC Astra 2 Tablet/2.webp",
+      "Image/REDMAGIC Astra 2 Tablet/3.webp",
+      "Image/REDMAGIC Astra 2 Tablet/4.webp",
+      "Image/REDMAGIC Astra 2 Tablet/5.webp",
+      "Image/REDMAGIC Astra 2 Tablet/6.webp",
+      "Image/REDMAGIC Astra 2 Tablet/7.webp",
+      "Image/REDMAGIC Astra 2 Tablet/8.webp",
+      "Image/REDMAGIC Astra 2 Tablet/9.webp",
+      "Image/REDMAGIC Astra 2 Tablet/10.webp",
+      "Image/REDMAGIC Astra 2 Tablet/11.webp",
+      "Image/REDMAGIC Astra 2 Tablet/12.webp",
+      "Image/REDMAGIC Astra 2 Tablet/13.webp",
+      "Image/REDMAGIC Astra 2 Tablet/14.webp",
+      "Image/REDMAGIC Astra 2 Tablet/15.webp",
+      "Image/REDMAGIC Astra 2 Tablet/16.webp"
+    ],
+    "url": "/product.html?id=9035609637021",
+    "stockStatus": "in-stock",
+    "handle": "redmagic-astra-2-tablet",
+    "comparePrice": "Rs. 35,699.00",
+    "specs": [
+      { "name": "Brand", "value": "REDMAGIC" },
+      { "name": "Processor", "value": "Snapdragon 8 Elite Gen 5 & RedCore R4" },
+      { "name": "Display", "value": "9.06-inch 2.4K OLED (185Hz, 1600 Nits)" },
+      { "name": "Cooling System", "value": "AquaCore Cooling 2.0 & Liquid Metal 3.0" },
+      { "name": "Battery & Fast Charge", "value": "8,300mAh with 75W Fast Charging" },
+      { "name": "Memory & Storage", "value": "Up to 16GB RAM + 512GB Storage" }
+    ],
+    "description": "<ul><li>Compact, ergonomic, and crafted with a premium finish.</li><li>Snapdragon 8 Elite Gen 5, RedCore R4, up to 16GB RAM, and 512GB storage.</li><li>185Hz OLED display for ultra-smooth visuals.</li><li>AquaCore Cooling 2.0, Liquid Metal 3.0, and a large vapor chamber.</li><li>8,300mAh battery with up to 75W fast charging.</li><li>Dual USB-C ports, rich audio, and precise haptics.</li><li>Ready for every day—from gaming to productivity.</li></ul><p><b>What’s new with REDMAGIC Astra 2?</b><br>- More Powerful — Powered by the Snapdragon 8 Elite Gen 5 and REDCORE R4, delivering next-level performance for gaming, multitasking, and more.<br>- More Immersive — A 9.06-inch 2.4K OLED display with a blazing-fast 185Hz refresh rate and up to 1,600 nits of brightness delivers incredibly smooth, vivid visuals.<br>- Stay Cooler — The first tablet with visible liquid cooling, featuring Liquid Metal 3.0 and a large vapor chamber for efficient heat dissipation and sustained gaming performance.<br>- Play Longer — An 8,300mAh battery and up to 75W fast charging keep you gaming longer with less downtime.<br>- More Versatile — Dual USB-C ports support audio and up to 75W fast charging, while Bluetooth 6.0 delivers flexible, reliable connectivity.</p>"
+  },
+  {
     "id": "8270415000000",
     "paymentLink": "https://rzp.io/rzp/tHlmofq",
     "category": "tablets",
