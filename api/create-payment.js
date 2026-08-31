@@ -62,14 +62,12 @@ module.exports = async (req, res) => {
             });
         }
 
-        const {
-            orderId,
-            amount,
-            customerName = 'Valued Customer',
-            customerPhone = '9999999999',
-            customerEmail,
-            redirectUrl
-        } = body;
+        const rawPhone = body.customerPhone || body.phone || body.customerMobile || body.mobile || body.contactNo || '';
+        const cleanPhone = String(rawPhone).replace(/\D/g, '');
+        const customerPhone = (cleanPhone.length === 10) ? cleanPhone : (rawPhone || '9999999999');
+
+        const rawName = body.customerName || body.name || body.payerName || 'Valued Customer';
+        const customerName = String(rawName).trim();
 
         if (!orderId || !amount) {
             res.statusCode = 400;
@@ -133,9 +131,15 @@ module.exports = async (req, res) => {
             customerName: customerName,
             customerEmail: finalCustomerEmail,
             customerMobile: customerPhone,
+            mobile: customerPhone,
+            contactNo: customerPhone,
+            customerPhone: customerPhone,
+            phone: customerPhone,
             payerName: customerName,
             payerEmail: finalCustomerEmail,
             payerMobile: customerPhone,
+            udf1: customerPhone,
+            udf2: customerName,
             returnUrl: confirmationUrl,
             callbackUrl: webhookUrl,
             timestamp: timestamp,

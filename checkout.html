@@ -497,6 +497,9 @@
             // SabPaisa Gateway Integration
             const confirmationUrl = `${window.location.origin}/order-confirmation.html?orderId=${encodeURIComponent(orderId)}&amount=${encodeURIComponent(total)}`;
 
+            const rawPhone = (cust.phone || '').trim();
+            const validPhone = (rawPhone.length === 10 && !isNaN(rawPhone)) ? rawPhone : '9999999999';
+
             try {
                 const response = await fetch('/api/create-payment', {
                     method: 'POST',
@@ -506,8 +509,12 @@
                         amount: total,
                         redirectUrl: confirmationUrl,
                         customerName: cust.name || 'Valued Customer',
-                        customerPhone: cust.phone || '9999999999',
-                        customerEmail: (cust.email && cust.email.includes('@')) ? cust.email : `${cust.phone || '9999999999'}@arkdigital.store`,
+                        customerPhone: validPhone,
+                        phone: validPhone,
+                        mobile: validPhone,
+                        customerMobile: validPhone,
+                        contactNo: validPhone,
+                        customerEmail: (cust.email && cust.email.includes('@')) ? cust.email : `${validPhone}@arkdigital.store`,
                         customerAddress: cust.address || '',
                         customerCity: cust.city || '',
                         customerState: cust.state || '',
