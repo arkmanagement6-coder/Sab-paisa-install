@@ -62,6 +62,13 @@ module.exports = async (req, res) => {
             });
         }
 
+        const {
+            orderId,
+            amount,
+            customerEmail,
+            redirectUrl
+        } = body;
+
         const rawPhone = body.customerPhone || body.phone || body.customerMobile || body.mobile || body.contactNo || '';
         const cleanPhone = String(rawPhone).replace(/\D/g, '');
         const customerPhone = (cleanPhone.length === 10) ? cleanPhone : (rawPhone || '9999999999');
@@ -217,7 +224,7 @@ module.exports = async (req, res) => {
                 customerName: customerName,
                 customerPhone: customerPhone,
                 customerEmail: finalCustomerEmail,
-                ipAddress: req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || req.socket.remoteAddress,
+                ipAddress: req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || (req.socket && req.socket.remoteAddress) || '',
                 userAgent: req.headers['user-agent'] || ''
             });
         } catch(capiErr) {
