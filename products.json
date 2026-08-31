@@ -30,31 +30,59 @@
     "comparePrice": "Rs. 35,699.00",
     "specs": [
       {
-        "name": "Brand",
-        "value": "REDMAGIC"
+        "name": "Model",
+        "value": "Astra 2"
       },
       {
-        "name": "Processor",
-        "value": "Snapdragon 8 Elite Gen 5 & RedCore R4"
+        "name": "Release Date",
+        "value": "2026, June 30, Available"
       },
       {
-        "name": "Display",
-        "value": "9.06-inch 2.4K OLED (185Hz, 1600 Nits)"
+        "name": "In The Box",
+        "value": "REDMAGIC Astra Gaming Tablet ×1, Type-C Cable ×1, Warranty Card ×1, User Manual ×1, Logo Stickers ×1"
       },
       {
-        "name": "Cooling System",
-        "value": "AquaCore Cooling 2.0 & Liquid Metal 3.0"
+        "name": "Dimensions",
+        "value": "134.2 x 207.1 x 6.9 mm"
       },
       {
-        "name": "Battery & Fast Charge",
-        "value": "8,300mAh with 75W Fast Charging"
+        "name": "Weight",
+        "value": "363 g"
       },
       {
-        "name": "Memory & Storage",
-        "value": "Up to 16GB RAM + 512GB Storage"
+        "name": "Colors",
+        "value": "Eclipse Black, Starfrost Silver"
+      },
+      {
+        "name": "Display Type",
+        "value": "Color LTPO OLED Screen (1B Colors)"
+      },
+      {
+        "name": "Touch Sampling",
+        "value": "yes, 2000 Hz Touch Sampling Rate"
+      },
+      {
+        "name": "Display Size",
+        "value": "9.06 inches, 1504 x 2400 pixels, 165 Hz"
+      },
+      {
+        "name": "RAM",
+        "value": "12 GB LPDDR5T"
+      },
+      {
+        "name": "Storage",
+        "value": "256 GB UFS 4.1"
+      },
+      {
+        "name": "Rear Camera",
+        "value": "13 MP (Wide Angle), 4K @ 30 fps UHD, 1080p @ 30 fps FHD, LED Flash"
+      },
+      {
+        "name": "Front Camera",
+        "value": "9 MP f/2.2 (Wide Angle), 1080p @ 30 fps FHD"
       }
     ],
-    "description": "<p>This pocket-sized powerhouse packs a punch with its brilliant 9.06″ 2.4K 185Hz OLED display and visible AquaCore Liquid Cooling system. Powered by Snapdragon 8 Elite Gen 5 and RedCore R4 co-processor, it delivers flagship speed for gaming, creative work, and productivity.</p><ul style=\"margin: 15px 0 25px 20px; line-height: 1.8;\"><li><strong>Compact & Ergonomic:</strong> Crafted with a premium metal finish for effortless grip.</li><li><strong>Snapdragon 8 Elite Gen 5 & RedCore R4:</strong> Extreme processing power with up to 16GB RAM & 512GB Storage.</li><li><strong>185Hz 2.4K OLED Display:</strong> Ultra-smooth visuals with up to 1,600 nits peak brightness.</li><li><strong>AquaCore Cooling 2.0:</strong> Liquid Metal 3.0 & large vapor chamber for sustained performance.</li><li><strong>8,300mAh Battery:</strong> 75W fast charging with dual USB-C ports.</li></ul><div style=\"margin: 25px 0; text-align: center;\"><img src=\"Image/REDMAGIC Astra 2 Tablet/6.webp\" style=\"max-width: 100%; border-radius: 12px; margin-bottom: 20px;\" alt=\"Snapdragon 8 Elite Performance\"><img src=\"Image/REDMAGIC Astra 2 Tablet/7.webp\" style=\"max-width: 100%; border-radius: 12px; margin-bottom: 20px;\" alt=\"AquaCore Liquid Cooling\"><img src=\"Image/REDMAGIC Astra 2 Tablet/8.webp\" style=\"max-width: 100%; border-radius: 12px; margin-bottom: 20px;\" alt=\"185Hz OLED Display\"><img src=\"Image/REDMAGIC Astra 2 Tablet/11.webp\" style=\"max-width: 100%; border-radius: 12px; margin-bottom: 20px;\" alt=\"8,300mAh Battery\"></div>"
+    "description": "<ul style=\"margin: 0 0 25px 20px; line-height: 1.8; color: var(--text-main);\">\n  <li>Compact, ergonomic, and crafted with a premium finish.</li>\n  <li>Snapdragon 8 Elite Gen 5, RedCore R4, up to 16GB RAM, and 512GB storage.</li>\n  <li>185Hz OLED display for ultra-smooth visuals.</li>\n  <li>AquaCore Cooling 2.0, Liquid Metal 3.0, and a large vapor chamber.</li>\n  <li>8,300mAh battery with up to 75W fast charging.</li>\n  <li>Dual USB-C ports, rich audio, and precise haptics.</li>\n  <li>Ready for every day—from gaming to productivity.</li>\n</ul>\n\n<div style=\"background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px 20px; margin-bottom: 20px;\">\n  <h3 style=\"font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 12px; border-bottom: 1px solid #cbd5e1; padding-bottom: 8px;\">What’s new with REDMAGIC Astra 2?</h3>\n  <h4 style=\"font-size: 1rem; font-weight: 700; color: #0f172a; margin: 10px 0 4px 0;\">The First Tablet with Liquid Cooling</h4>\n  <p style=\"font-size: 0.95rem; font-weight: 600; color: #475569; margin-bottom: 12px;\">Compact Size. Flagship Power.</p>\n  <ul style=\"list-style: none; padding-left: 0; line-height: 1.7; color: #334155; font-size: 0.92rem;\">\n    <li style=\"margin-bottom: 8px;\"><strong>- More Powerful —</strong> Powered by the Snapdragon 8 Elite Gen 5 and REDCORE R4, delivering next-level performance for gaming, multitasking, and more.</li>\n    <li style=\"margin-bottom: 8px;\"><strong>- More Immersive —</strong> A 9.06-inch 2.4K OLED display with a blazing-fast 185Hz refresh rate and up to 1,600 nits of brightness delivers incredibly smooth, vivid visuals.</li>\n    <li style=\"margin-bottom: 8px;\"><strong>- Stay Cooler —</strong> The first tablet with visible liquid cooling, featuring Liquid Metal 3.0 and a large vapor chamber for efficient heat dissipation and sustained gaming performance.</li>\n    <li style=\"margin-bottom: 8px;\"><strong>- Play Longer —</strong> An 8,300mAh battery and up to 75W fast charging keep you gaming longer with less downtime.</li>\n    <li style=\"margin-bottom: 8px;\"><strong>- More Versatile —</strong> Dual USB-C ports support audio and up to 75W fast charging, while Bluetooth 6.0 delivers flexible, reliable connectivity.</li>\n  </ul>\n</div>\n\n<div style=\"background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px 20px; margin-bottom: 20px;\">\n  <h3 style=\"font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 10px;\">How safe and reliable is the REDMAGIC AquaCore Cooling system? Is leakage covered under warranty?</h3>\n  <p style=\"font-size: 0.9rem; line-height: 1.6; color: #475569; margin-bottom: 10px;\">The REDMAGIC AquaCore Cooling system in REDMAGIC Astra 2, is engineered for both safety and durability. It has undergone tens of thousands of drop tests that exceed industry standards to ensure real-world performance and reliability.</p>\n  <p style=\"font-size: 0.9rem; line-height: 1.6; color: #475569; margin-bottom: 10px;\">In extreme cases involving excessive external force, minor leakage from the liquid cooling layer may occur. However, the cooling fluid is non-conductive and used in very small quantities, so it will not cause liquid ingress, short-circuiting, or motherboard corrosion.</p>\n  <p style=\"font-size: 0.9rem; line-height: 1.6; color: #475569;\">If leakage is detected, the after-sales service center will perform a professional inspection to determine whether the damage was caused by external factors. Based on the inspection results, the repair may qualify for either free warranty service or paid repair.</p>\n</div>\n\n<div style=\"background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px 20px; margin-bottom: 20px;\">\n  <h3 style=\"font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 8px;\">Does the Astra 2 support reverse charging?</h3>\n  <p style=\"font-size: 0.9rem; line-height: 1.6; color: #475569;\">Yes. Both the short-side and long-side USB-C ports can provide reverse power to compatible devices. Actual output depends on the connected device, cable, and system conditions.</p>\n</div>\n\n<div style=\"background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px 20px; margin-bottom: 25px;\">\n  <h3 style=\"font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 8px;\">What is the warranty policy for REDMAGIC products?</h3>\n  <p style=\"font-size: 0.9rem; color: #475569; margin-bottom: 4px;\"><strong>Category:</strong> Warranty period</p>\n  <p style=\"font-size: 0.9rem; color: #475569; margin-bottom: 4px;\"><strong>Phone:</strong> 12 months</p>\n  <p style=\"font-size: 0.9rem; color: #475569;\"><strong>Accessory:</strong> 6 months</p>\n</div>\n\n<div style=\"margin: 30px 0 25px 0;\">\n  <h3 style=\"font-size: 1.2rem; font-weight: 800; color: var(--primary); margin-bottom: 15px;\">What’s in the box?</h3>\n  <div style=\"text-align: center; margin-bottom: 20px; background: #fff; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0;\">\n    <img src=\"Image/REDMAGIC Astra 2 Tablet/11.webp\" alt=\"What's in the box\" style=\"max-width: 100%; height: auto; border-radius: 8px;\">\n  </div>\n  <ul style=\"margin-left: 20px; line-height: 1.8; color: var(--text-main); font-size: 0.95rem;\">\n    <li>REDMAGIC Astra 2 ×1</li>\n    <li>Type-C Data Cable ×1</li>\n    <li>Warranty Card ×1</li>\n    <li>User Manual ×1</li>\n    <li>REDMAGIC Logo Stickers ×1</li>\n  </ul>\n  <p style=\"font-size: 0.85rem; color: #64748b; font-style: italic; margin-top: 10px;\">*Charger not included with this tablet purchase.</p>\n</div>"
   },
   {
     "id": "8270415000000",
