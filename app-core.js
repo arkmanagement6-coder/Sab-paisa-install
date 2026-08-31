@@ -1347,9 +1347,23 @@ function ensureDemoProductPresent(products) {
 }
 
 // Product Database Helpers (Firestore Async with local Cache fallback)
+const CURRENT_PRODUCTS_VERSION = 'v201.0';
+
 async function getProducts(forceSync = false) {
+    const cachedVersion = localStorage.getItem('ikko_products_version');
     const cached = localStorage.getItem('ikko_products');
     const alreadySynced = sessionStorage.getItem('ikko_products_synced');
+
+    // Invalidate stale cache if version mismatch
+    if (cachedVersion !== CURRENT_PRODUCTS_VERSION) {
+        console.log(`[Cache Invalidation] Version mismatch (${cachedVersion} vs ${CURRENT_PRODUCTS_VERSION}). Purging stale product cache.`);
+        localStorage.removeItem('ikko_products');
+        localStorage.setItem('ikko_products_version', CURRENT_PRODUCTS_VERSION);
+        if (typeof INITIAL_PRODUCTS !== 'undefined') {
+            localStorage.setItem('ikko_products', JSON.stringify(INITIAL_PRODUCTS));
+            return ensureDemoProductPresent([...INITIAL_PRODUCTS]);
+        }
+    }
 
     if (cached && !forceSync) {
         try {
