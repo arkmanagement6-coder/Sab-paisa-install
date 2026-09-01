@@ -763,6 +763,8 @@
                                       (o.paymentMethod === 'cod' ? 'COD' : 
                                       (o.paymentMethod === 'upi' ? 'UPI QR' : o.paymentMethod || 'SabPaisa')))));
 
+                const isConfirmed = (o.status === 'completed' || o.status === 'paid' || o.status === 'confirmed') && o.utr && o.utr !== 'Pending Payment' && o.utr !== 'Pending';
+
                 const customerHtml = `
                     <strong>${o.customer.name}</strong><br>
                     📞 ${o.customer.phone}<br>
@@ -771,7 +773,7 @@
                         <div style="margin-top: 6px; padding: 4px 8px; background-color: #ebf8ff; color: #2b6cb0; font-size: 0.8rem; border-radius: 4px; font-weight: 700; border: 1px solid #bee3f8; display: inline-block;">
                             📦 Cash on Delivery (COD)
                         </div>
-                    ` : (o.utr ? `
+                    ` : (isConfirmed ? `
                         <div style="margin-top: 6px; padding: 4px 8px; background-color: #c6f6d5; color: #22543d; font-size: 0.8rem; border-radius: 4px; font-weight: 700; border: 1px solid #9ae6b4; display: inline-block;">
                             ✅ Payment Confirmed (${providerLabel} Ref: ${o.utr})
                         </div>
