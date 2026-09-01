@@ -36,19 +36,31 @@ module.exports = async (req, res) => {
 
     try {
         let bodyData = {};
-        if (req.body) {
-            if (typeof req.body === 'string') {
-                try {
-                    bodyData = JSON.parse(req.body);
-                } catch(e) {
-                    const querystring = require('querystring');
-                    bodyData = querystring.parse(req.body);
-                }
-            } else {
-                bodyData = req.body;
+        if (typeof req.body === 'string') {
+            try { bodyData = JSON.parse(req.body); } catch(e) {
+                const querystring = require('querystring');
+                bodyData = querystring.parse(req.body);
             }
-        } else if (req.query) {
-            bodyData = req.query;
+        } else if (req.body && Object.keys(req.body).length > 0) {
+            bodyData = req.body;
+        } else {
+            // Buffer stream parsing for Vercel POST body
+            await new Promise((resolve) => {
+                let raw = '';
+                req.on('data', chunk => raw += chunk);
+                req.on('end', () => {
+                    if (raw) {
+                        try { bodyData = JSON.parse(raw); } catch (e) {
+                            const querystring = require('querystring');
+                            bodyData = querystring.parse(raw);
+                        }
+                    }
+                    resolve();
+                });
+            });
+        }
+        if (req.query && Object.keys(req.query).length > 0) {
+            bodyData = { ...req.query, ...bodyData };
         }
 
         console.log('[SabPaisa Webhook Notification Received]', JSON.stringify(bodyData));

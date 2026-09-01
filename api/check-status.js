@@ -3,44 +3,72 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 
-// Helper to make HTTPS requests
-function makeRequest(url, method, headers = {}, postData = null) {
-    return new Promise((resolve, reject) => {
-        const urlObj = new URL(url);
-        const reqHeaders = { ...headers };
-        if (postData) {
-            reqHeaders['Content-Length'] = Buffer.byteLength(postData);
-        }
+const PIXEL_ID = '1561333291845790';
+const ACCESS_TOKEN = 'EAAO6ZBHaaGy4BSS7QW0hkQZB1u9BqsnYtZBU8fA4oZCEzHOhLIJSpTseCMTuKuyRo337vlggyxgZAi8Ij96xsGSntthgxNnpe5qDN2pLJBFNQOEfKiWg540SOfuQWuen5DECb9nyiKzJGuqBhTaOgZBOMzjhZCaLzMLg5CKKZB90RFaxT3513axglcI1evDyeQZDZD';
+
+function sha256(str) {
+    if (!str) return undefined;
+    const cleaned = String(str).trim().toLowerCase();
+    if (!cleaned) return undefined;
+    return crypto.createHash('sha256').update(cleaned).digest('hex');
+}
+
+function sendStatusCapiPurchase(orderId, amountVal, req) {
+    try {
+        const numericAmount = parseFloat(amountVal) || 999;
+        const protocol = req.headers['x-forwarded-proto'] || 'https';
+        const host = req.headers['host'] || 'www.ikkodigital.store';
+        const eventId = `order_${orderId}`;
+
+        const payload = {
+            data: [
+                {
+                    event_name: 'Purchase',
+                    event_time: Math.floor(Date.now() / 1000),
+                    event_id: eventId,
+                    action_source: 'website',
+                    event_source_url: `${protocol}://${host}/order-confirmation.html`,
+                    user_data: {
+                        client_ip_address: req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || (req.socket && req.socket.remoteAddress) || '',
+                        client_user_agent: req.headers['user-agent'] || '',
+                        country: [sha256('in')]
+                    },
+                    custom_data: {
+                        currency: 'INR',
+                        value: numericAmount,
+                        order_id: String(orderId),
+                        content_type: 'product'
+                    }
+                }
+            ]
+        };
+
+        const postData = JSON.stringify(payload);
+        const capiUrl = `https://graph.facebook.com/v19.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`;
+        const urlObj = new URL(capiUrl);
+
         const options = {
             hostname: urlObj.hostname,
             path: urlObj.pathname + urlObj.search,
-            method: method,
-            headers: reqHeaders
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(postData)
+            }
         };
 
-        const req = https.request(options, (res) => {
-            let data = '';
-            res.on('data', (chunk) => {
-                data += chunk;
-            });
-            res.on('end', () => {
-                resolve({
-                    statusCode: res.statusCode,
-                    headers: res.headers,
-                    body: data
-                });
-            });
+        console.log(`[Status CAPI Backup] Sending Meta CAPI Purchase for Order ${orderId}, Value: ₹${numericAmount}`);
+        const capiReq = https.request(options, (capiRes) => {
+            let body = '';
+            capiRes.on('data', chunk => body += chunk);
+            capiRes.on('end', () => console.log(`[Status CAPI Backup] Meta Response: ${capiRes.statusCode}`));
         });
-
-        req.on('error', (e) => {
-            reject(e);
-        });
-
-        if (postData) {
-            req.write(postData);
-        }
-        req.end();
-    });
+        capiReq.on('error', err => console.error('[Status CAPI Backup Error]', err));
+        capiReq.write(postData);
+        capiReq.end();
+    } catch(e) {
+        console.error('[Status CAPI Backup Error]', e);
+    }
 }
 
 module.exports = async (req, res) => {
@@ -137,6 +165,8 @@ module.exports = async (req, res) => {
         let mappedStatus = 'FAILED';
         if (responseState.toUpperCase() === 'SUCCESS' || responseCode === '0000') {
             mappedStatus = 'SUCCESS';
+            // Backup Server-to-Server Meta CAPI Purchase Event Triggering
+            sendStatusCapiPurchase(orderId, statusData.amount || amount, req);
         } else if (responseState.toUpperCase() === 'PROCESSING' || responseCode === '0100') {
             mappedStatus = 'PROCESSING';
         }
