@@ -261,8 +261,8 @@ module.exports = async (req, res) => {
 
 function sendMetaCapiAddPaymentInfo(orderData) {
     try {
-        const PIXEL_ID = '1561333291845790';
-        const ACCESS_TOKEN = 'EAAO6ZBHaaGy4BSS7QW0hkQZB1u9BqsnYtZBU8fA4oZCEzHOhLIJSpTseCMTuKuyRo337vlggyxgZAi8Ij96xsGSntthgxNnpe5qDN2pLJBFNQOEfKiWg540SOfuQWuen5DECb9nyiKzJGuqBhTaOgZBOMzjhZCaLzMLg5CKKZB90RFaxT3513axglcI1evDyeQZDZD';
+        const PIXEL_ID = '1689062582803331';
+        const ACCESS_TOKEN = 'EAAWHEZBHIqBIBSTP4iOlsOS59SG0RAavLwaMVOCqZCgww3pCZArnRvFqBloLGgj0lZAZAbVn2KV2q3CaiNmmVVgdnaOqclGsmXhdV1oJWDKpF7zMRIsCMkxw2jDEDG70PC7r5M5uwJCZBvM2WG59fZCVPsDuYhLMTuvaNtrrMY5GeRL8GgnDdQKbgDtvxYwZCYWg3AZDZD';
         
         const sha256 = (str) => str ? crypto.createHash('sha256').update(String(str).trim().toLowerCase()).digest('hex') : undefined;
         const sha256Phone = (phone) => {
