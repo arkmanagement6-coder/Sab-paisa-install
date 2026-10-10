@@ -132,27 +132,15 @@ module.exports = async (req, res) => {
             clientCode: clientCode,
             merchantId: clientCode,
             merchantTxnId: String(orderId),
-            clientTxnId: String(orderId),
             amount: amountInPaise,
             currency: 'INR',
             customerName: customerName,
             customerEmail: finalCustomerEmail,
             customerMobile: customerPhone,
-            mobile: customerPhone,
-            contactNo: customerPhone,
-            customerPhone: customerPhone,
-            phone: customerPhone,
-            payerName: customerName,
-            payerEmail: finalCustomerEmail,
-            payerMobile: customerPhone,
-            udf1: customerPhone,
-            udf2: customerName,
             returnUrl: confirmationUrl,
             callbackUrl: webhookUrl,
             timestamp: timestamp,
-            checksum: checksum,
-            channelId: 'W',
-            mcc: 5399
+            checksum: checksum
         };
 
         const sabpaisaPayloadStr = JSON.stringify(sabpaisaPayloadObj);
