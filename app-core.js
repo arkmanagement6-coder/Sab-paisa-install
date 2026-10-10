@@ -21,10 +21,7 @@
         // Track page-specific actions dynamically
         const path = window.location.pathname.toLowerCase();
         
-        // Track Checkout Page (InitiateCheckout)
-        if (path.includes('checkout.html') || path.endsWith('/checkout') || path.includes('/checkout?')) {
-            fbq('track', 'InitiateCheckout');
-        }
+        // Track Checkout Page handled dynamically in checkout.html with rich item details
         
         // Track Product Page (ViewContent)
         if (path.includes('product.html') || path.endsWith('/product') || path.includes('/product?')) {
