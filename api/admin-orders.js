@@ -1,12 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 
+const os = require('os');
+
 // Memory store backup for serverless lifecycle
 let memoryOrders = [];
 
 // Try loading existing orders from server scratch store
 const getOrdersFilePath = () => {
-    return path.join('/tmp', 'server_orders.json');
+    const tmpDir = process.env.VERCEL ? '/tmp' : os.tmpdir();
+    return path.join(tmpDir, 'server_orders.json');
 };
 
 const readServerOrders = () => {

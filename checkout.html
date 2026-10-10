@@ -524,15 +524,23 @@
                 });
 
                 const data = await response.json();
-                if (data.redirectUrl) {
+                if (data.success && data.redirectUrl && data.redirectUrl.startsWith('http') && data.redirectUrl.includes('sabpaisa')) {
                     window.location.href = data.redirectUrl;
                 } else {
                     console.warn("SabPaisa API returned fallback:", data.message);
-                    window.location.href = confirmationUrl;
+                    alert("SabPaisa Gateway temporary issue: " + (data.message || 'Please try clicking Proceed again.'));
+                    if (proceedBtn) {
+                        proceedBtn.disabled = false;
+                        proceedBtn.innerHTML = 'Proceed <span>›</span>';
+                    }
                 }
             } catch (err) {
                 console.error("SabPaisa Gateway error:", err);
-                window.location.href = confirmationUrl;
+                alert("Connection error to SabPaisa Gateway. Please click Proceed again to retry.");
+                if (proceedBtn) {
+                    proceedBtn.disabled = false;
+                    proceedBtn.innerHTML = 'Proceed <span>›</span>';
+                }
             }
         }
 

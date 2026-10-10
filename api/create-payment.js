@@ -241,13 +241,12 @@ module.exports = async (req, res) => {
                 paymentUrl: checkoutUrl
             }));
         } else {
-            console.warn('[SabPaisa API] No checkoutUrl in response, falling back:', sabpaisaRes.body);
-            res.statusCode = 200;
+            console.warn('[SabPaisa API] No checkoutUrl in response:', sabpaisaRes.body);
+            res.statusCode = 400;
             res.setHeader('Content-Type', 'application/json');
             res.end(JSON.stringify({
                 success: false,
-                message: sabpaisaData.message || 'Payment link generation failed',
-                redirectUrl: confirmationUrl
+                message: sabpaisaData.message || (sabpaisaData.error && sabpaisaData.error.message) || 'Payment link generation failed'
             }));
         }
 
