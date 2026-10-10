@@ -2,7 +2,7 @@
 
 // Meta Pixel Initialization & Tracking Logic
 (function() {
-    const pixelId = '1689062582803331';
+    const pixelId = '2199158620637192';
     
     // Initialize standard Meta Pixel tracking snippet
     !function(f,b,e,v,n,t,s)
